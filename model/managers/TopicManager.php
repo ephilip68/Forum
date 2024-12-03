@@ -18,8 +18,8 @@ class TopicManager extends Manager{
     public function findTopicsByCategory($id) {
 
         $sql = "SELECT * 
-                FROM ".$this->tableName." t 
-                WHERE t.category_id = :id";
+                FROM ".$this->tableName." 
+                WHERE category_id = :id";
        
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return  $this->getMultipleResults(

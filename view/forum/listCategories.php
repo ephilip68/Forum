@@ -1,6 +1,5 @@
 <?php
-    $categories = $result["data"]['categories']; 
-    var_dump($categories);
+    $categories = $result["data"]['category']; 
 ?>
 
 <h1>Liste des catégories</h1>
