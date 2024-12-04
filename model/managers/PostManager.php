@@ -26,5 +26,6 @@ class PostManager extends Manager{
             DAO::select($sql, ['id' => $id]), 
             $this->className
         );
+        
     }
 }

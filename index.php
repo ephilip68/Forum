@@ -53,6 +53,7 @@ if($action == "ajax"){ //si l'action était ajax
     echo $result;
 }
 else{
+
     ob_start();//démarre un buffer (tampon de sortie)
     $meta_description = $result['meta_description'];
     /* la vue s'insère dans le buffer qui devra être vidé au milieu du layout */
@@ -63,4 +64,5 @@ else{
     ob_end_clean();
     /* j'affiche le template principal (layout) */
     include VIEW_DIR."layout.php";
+    
 }

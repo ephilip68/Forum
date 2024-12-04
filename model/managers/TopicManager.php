@@ -15,7 +15,7 @@ class TopicManager extends Manager{
     }
 
     // récupérer tous les topics d'une catégorie spécifique (par son id)
-    public function findTopicsByCategory($id) {
+    public function findTopicsByCategory($id){
 
         $sql = "SELECT * 
                 FROM ".$this->tableName." 

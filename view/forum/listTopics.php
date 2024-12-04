@@ -8,8 +8,10 @@
 <h1>Liste des topics</h1>
 
 <?php
-foreach($topics as $topic){ ?>
-    <p><a href="#"><?= $topic ?></a> par <?= $topic->getId() ?></p>
-    <?= $post->getTitle() ?>
+foreach($topics as $topic){?>
 
-<?php }
+    <p><a href="index.php?ctrl=forum&action=listPostsByTopic&id=<?= $topic->getId() ?>"><?php echo $topic->getTitle()?></a> par <?= $topic->getUser()->getNickName() ?></p>
+<?php } ?>
+
+<a href="index.php?ctrl=forum&action=addTopicForm">Ajouter Sujet</a>
+ 

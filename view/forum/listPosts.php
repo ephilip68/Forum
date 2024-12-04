@@ -9,6 +9,8 @@ $posts = $result["data"]["posts"];
 
 <?php
     foreach($posts as $post){ ?>
-        <p><a href="#"><?= $post ?></a> par <?= $post->getId() ?></p>
+        <p><a href="#><?= $post->getId() ?>"><?php echo $topic->getTitle()?></a> par <?= $post->getUser()->getNickName() ?></p>
+        <p><?= $post->getCreationDate() ?></p>
         <p><?= $post->getText() ?></p>
+ 
 <?php }
