@@ -129,40 +129,32 @@ class ForumController extends AbstractController implements ControllerInterface{
             // FILTER_SANITIZA_STRING supprime une chaîne de caractère de toute présence de caractères spéciaux et balise HTML potentielle ou encodes
             $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $message = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $category = filter_input(INPUT_POST, "category_id", FILTER_SANITIZE_NUMBER_INT);
+            $categoryId = filter_input(INPUT_POST, "category_id", FILTER_SANITIZE_NUMBER_INT);
             // $creationDate = filter_input(INPUT_POST, "creationDate", FILTER_SANITIZE_NUMBER_INT);
             // $closed = filter_input(INPUT_POST, "closed", FILTER_SANITIZE_NUMBER_INT);
 
-            if($title && $message && $category){
-                // $categoryManager = new CategoryManager();
+            if($title && $message && $categoryId){
+
+                $userManager = new UserManager();
+                
+                $userId = $userManager->getId();
 
                 $topicManager = new TopicManager();
 
-                $userManager = new UserManager();
+                $data = ['title'=>$title, "user_id"=>$user, "category_id"=>$categoryId, "creationDate"=>$creationDate];
 
-                $userId = $userManager->getId();
-
-                $data = ['title'=>$title, "user_id"=>$user, "category_id"=>$category, "creationDate"=>$creationDate];
-
-                $topicManager->add($data);
-
+                $topicId = $topicManager->add($data);
+                
                 $postManager = new PostManager();
 
-                $data = ['text'=>$message, 'creationDate'=>$creationDate, 'user_id'=>$userId, 'topic_id'=>$topicManager];
+                $data = ['text'=>$message, 'creationDate'=>$creationDate, 'user_id'=>$userId, 'topic_id'=>$topicId];
 
                 $postManager->add($data);
                 
                 return [
 
                     "view" => VIEW_DIR."forum/addTopicForm.php",
-                    "meta_description" => "Page ajouter sujet ",
-                    "data" => [
-                        "title" => $title,
-                        "user_id" => $userId,
-                        "category_id" => $category,
-                        "creationDate" => $creationDate,
-                        "topic_id" => $topicManager
-                    ]
+                    "meta_description" => "Page ajouter sujet : ".$categoryId
                     
                 ];
             }
