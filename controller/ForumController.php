@@ -25,9 +25,10 @@ class ForumController extends AbstractController implements ControllerInterface{
             "view" => VIEW_DIR."forum/listCategories.php",
             "meta_description" => "Liste des catégories du forum",
             "data" => [
-                "category" => $category
-            ]
 
+                "category" => $category
+
+            ]
         ];
     }
 
@@ -39,11 +40,14 @@ class ForumController extends AbstractController implements ControllerInterface{
         $topics = $topicManager->findTopicsByCategory($id);
 
         return [
+
             "view" => VIEW_DIR."forum/listTopics.php",
             "meta_description" => "Liste des topics par catégorie : ".$category,
             "data" => [
+
                 "category" => $category,
                 "topics" => $topics
+
             ]
         ];
     }
@@ -66,22 +70,12 @@ class ForumController extends AbstractController implements ControllerInterface{
             "view" => VIEW_DIR."forum/listPosts.php",
             "meta_description" => "Liste des posts du forum",
             "data" => [
+
                 "topic" => $topic,
                 "posts" => $posts
-            ]
-            
+
+            ]   
         ];
-    }
-
-    public function addCategoryForm(){
-
-        return [
-
-            "view" => VIEW_DIR."forum/addCategoryForm.php",
-            "meta_description" => "Liste des posts du forum"
-            
-        ];
-
     }
 
     public function addCategory(){
@@ -102,61 +96,77 @@ class ForumController extends AbstractController implements ControllerInterface{
 
                 return [
 
-                    "view" => VIEW_DIR."forum/addCategoryForm.php",
+                    "view" => VIEW_DIR."forum/listCategories.php",
                     "meta_description" => "Page ajouter categotie",
                     
                 ];
             }
-
         }    
     }
 
-    public function addTopicForm(){
-
-        return [
-
-            "view" => VIEW_DIR."forum/addTopicForm.php",
-            "meta_description" => "Page ajouter topic"
-            
-        ];                                                          
-    }
-
-    public function addTopic($idCategory){
-
+    public function addTopicToCategory($id){
+        
         if(isset($_POST["submit"])){
             
             // La fonction filter_input() permet de valider ou nettoyer chaque donnée transmise par le formulaire en utilisant divers filtres
             // FILTER_SANITIZA_STRING supprime une chaîne de caractère de toute présence de caractères spéciaux et balise HTML potentielle ou encodes
             $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $message = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $categoryId = filter_input(INPUT_POST, "category_id", FILTER_SANITIZE_NUMBER_INT);
+            $messages = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $categoryId = $_GET['id'];
             // $creationDate = filter_input(INPUT_POST, "creationDate", FILTER_SANITIZE_NUMBER_INT);
             // $closed = filter_input(INPUT_POST, "closed", FILTER_SANITIZE_NUMBER_INT);
 
-            if($title && $message && $categoryId){
-
-                $userManager = new UserManager();
-                
-                $userId = $userManager->getId();
+            if($title && $messages ){
 
                 $topicManager = new TopicManager();
-
-                $data = ['title'=>$title, "user_id"=>$user, "category_id"=>$categoryId, "creationDate"=>$creationDate];
-
-                $topicId = $topicManager->add($data);
-                
                 $postManager = new PostManager();
 
-                $data = ['text'=>$message, 'creationDate'=>$creationDate, 'user_id'=>$userId, 'topic_id'=>$topicId];
+                $dataTopic = ['title'=>$title, 'category_id'=> $categoryId];
+                
+                
+                $topics = $topicManager->add($dataTopic);
+                // var_dump($topics);
+                // die;
+             
+                
+                $dataPost = ['text' => $messages];
+                // var_dump($dataPost);
+                // die;
+
+                $posts = $postManager->add($dataPost);
+                // var_dump($posts);
+                // die;
+            }
+        }    
+    }
+
+    public function addPostToTopic($id){
+
+        if(isset($_POST["submit"])){
+            
+            // La fonction filter_input() permet de valider ou nettoyer chaque donnée transmise par le formulaire en utilisant divers filtres
+            // FILTER_SANITIZA_STRING supprime une chaîne de caractère de toute présence de caractères spéciaux et balise HTML potentielle ou encodes
+            $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            // $message = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $topicId = $_GET['id'];
+            // $creationDate = filter_input(INPUT_POST, "creationDate", FILTER_SANITIZE_NUMBER_INT);
+            // $closed = filter_input(INPUT_POST, "closed", FILTER_SANITIZE_NUMBER_INT);
+
+            if($text){
+
+                $postManager = new PostManager();
+
+                $data = ['text'=>$text, 'topic_id'=> $topicId];
 
                 $postManager->add($data);
-                
+
                 return [
 
-                    "view" => VIEW_DIR."forum/addTopicForm.php",
-                    "meta_description" => "Page ajouter sujet : ".$categoryId
-                    
+                    "view" => VIEW_DIR."forum/listPostsByTopic&id.php",
+                    "meta_description" => "Liste des posts du forum",
+ 
                 ];
+
             }
         }    
     }
