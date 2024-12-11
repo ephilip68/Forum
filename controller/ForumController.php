@@ -111,25 +111,26 @@ class ForumController extends AbstractController implements ControllerInterface{
             // La fonction filter_input() permet de valider ou nettoyer chaque donnée transmise par le formulaire en utilisant divers filtres
             // FILTER_SANITIZA_STRING supprime une chaîne de caractère de toute présence de caractères spéciaux et balise HTML potentielle ou encodes
             $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $messages = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $message = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $categoryId = $_GET['id'];
             // $creationDate = filter_input(INPUT_POST, "creationDate", FILTER_SANITIZE_NUMBER_INT);
             // $closed = filter_input(INPUT_POST, "closed", FILTER_SANITIZE_NUMBER_INT);
 
-            if($title && $messages ){
+            if($title && $message){
 
                 $topicManager = new TopicManager();
-                $postManager = new PostManager();
+                
 
-                $dataTopic = ['title'=>$title, 'category_id'=> $categoryId];
+                $dataTopic = ['title'=>$title, 'category_id'=>$categoryId];
                 
                 
                 $topics = $topicManager->add($dataTopic);
                 // var_dump($topics);
                 // die;
              
-                
-                $dataPost = ['text' => $messages];
+                $postManager = new PostManager();
+
+                $dataPost = ['text' => $message, 'topic_id' => $topics];
                 // var_dump($dataPost);
                 // die;
 

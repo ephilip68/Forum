@@ -16,15 +16,19 @@ final class User extends Entity{
     private $avatar;
     private $email;
 
-    public function __construct($data){         
-        $this->hydrate($data);        
+    public function __construct($data){   
+
+        $this->hydrate($data);   
+
     }
 
     /**
      * Get the value of id
      */ 
     public function getId(){
+
         return $this->id;
+
     }
 
     /**
@@ -33,15 +37,19 @@ final class User extends Entity{
      * @return  self
      */ 
     public function setId($id){
+
         $this->id = $id;
         return $this;
+
     }
 
     /**
      * Get the value of nickName
      */ 
     public function getNickName(){
+
         return $this->nickName;
+
     }
 
     /**
@@ -50,21 +58,26 @@ final class User extends Entity{
      * @return  self
      */ 
     public function setNickName($nickName){
+
         $this->nickName = $nickName;
 
         return $this;
+
     }
 
-    public function __toString() {
+    public function __toString(){
+
         return $this->nickName;
+
     }
 
     /**
      * Get the value of password
      */ 
-    public function getPassword()
-    {
+    public function getPassword(){
+
         return $this->password;
+
     }
 
     /**
@@ -72,19 +85,21 @@ final class User extends Entity{
      *
      * @return  self
      */ 
-    public function setPassword($password)
-    {
+    public function setPassword($password){
+
         $this->password = $password;
 
         return $this;
+
     }
 
     /**
      * Get the value of dateInscription
      */ 
-    public function getDateInscription()
-    {
+    public function getDateInscription(){
+
         return $this->dateInscription;
+
     }
 
     /**
@@ -92,19 +107,21 @@ final class User extends Entity{
      *
      * @return  self
      */ 
-    public function setDateInscription($dateInscription)
-    {
+    public function setDateInscription($dateInscription){
+
         $this->dateInscription = $dateInscription;
 
         return $this;
+
     }
 
     /**
      * Get the value of avatar
      */ 
-    public function getAvatar()
-    {
+    public function getAvatar(){
+
         return $this->avatar;
+
     }
 
     /**
@@ -112,19 +129,21 @@ final class User extends Entity{
      *
      * @return  self
      */ 
-    public function setAvatar($avatar)
-    {
+    public function setAvatar($avatar){
+
         $this->avatar = $avatar;
 
         return $this;
+
     }
 
     /**
      * Get the value of email
      */ 
-    public function getEmail()
-    {
+    public function getEmail(){
+
         return $this->email;
+
     }
 
     /**
@@ -132,10 +151,11 @@ final class User extends Entity{
      *
      * @return  self
      */ 
-    public function setEmail($email)
-    {
+    public function setEmail($email){
+
         $this->email = $email;
 
         return $this;
+        
     }
 }
