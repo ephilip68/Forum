@@ -64,7 +64,7 @@ final class User extends Entity{
         return $this;
 
     }
-
+jç_çè
     public function __toString(){
 
         return $this->nickName;
