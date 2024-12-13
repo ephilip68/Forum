@@ -14,5 +14,15 @@ class UserManager extends Manager{
         parent::connect();
     }
 
+    public function findOneByEmail($email)
+    {
+        $sql = "SELECT * 
+                FROM " . $this->tableName . " u 
+                WHERE u.email = :email";
  
+        return $this->getOneOrNullResult(
+            DAO::select($sql, ['email' => $email], false),
+            $this->className
+        );
+    }
 }
