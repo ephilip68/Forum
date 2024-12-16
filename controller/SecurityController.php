@@ -85,9 +85,9 @@ class SecurityController extends AbstractController{
                 // if($user){
                     $hash = $user->getPassword(); 
                     
+                    // var_dump($password, $hash, password_verify($password, $hash));die();
                 
-                    var_dump($password, $hash, password_verify($password, $hash));die();
-                    if (password_verify($password, $hash)){
+                    // if (password_verify($password, $hash)){
                         
                         // echo "hello";
                         
@@ -96,7 +96,7 @@ class SecurityController extends AbstractController{
 
                         $this->redirectTo($ctrl = "home", $action = "index");
             
-                    }
+                    // }
                     // //  else {
 
                         //message  "utilisateur inconnu ou mot de passe incorrect

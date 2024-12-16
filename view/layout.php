@@ -6,10 +6,59 @@
         <meta name="description" content="<?= $meta_description ?>">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script src="https://cdn.tiny.cloud/1/zg3mwraazn1b2ezih16je1tc6z7gwp5yd4pod06ae5uai8pa/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+        <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/css/uikit.min.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="<?= PUBLIC_DIR ?>/css/style.css">
+        <script src="public/js/script.js"></script>
         <title>FORUM</title>
     </head>
+    <header class="header">
+        <div class="headerContent d-flex">
+            <div class="logo">
+                <img src="public/img/logo-erwin.png" alt="" width="150px" heigh="50px">
+            </div>
+            <div class="center">
+                <div class="scroller">
+                    <ul class="menu list-unstyled">
+                        <a href="#"><li class="menuList"><i class="fa-solid fa-house"></i>Accueil</li></a>
+                        <a href="#"><li class="menuList"><i class="fa-solid fa-message"></i>Messagerie</li></a>
+                        <a href="#"><li class="menuList"><i class="fa-solid fa-bell"></i>Notifications</li></a>
+                        <a href="#"><li class="menuList"><i class="fa-solid fa-pen-to-square"></i>Communauté</li></a>
+                    </ul>
+                </div>
+            </div>
+            <div class="burgerList">
+                <button class="burger"><span class="bar"></span></button>
+            </div>
+            <nav class="navbar">
+                <ul class="menuBurger list-unstyled">
+                    <?php
+                        // si l'utilisateur est connecté 
+                        if(App\Session::getUser()){
+                            ?>
+                            <li><a href="index.php?ctrl=security&action=profile"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser()?></a></li>
+                            <li><a href="#">Paramètres</a></li>
+                            <li><a href="index.php?ctrl=security&action=logout">Déconnexion</a></li>
+                            <?php
+                        }
+                        else{
+                            ?>
+                            <li><a href="index.php?ctrl=security&action=login">Connexion</a></li>
+                            <li><a href="index.php?ctrl=security&action=register">Inscription</a></li>
+                            <!-- <a href="index.php?ctrl=forum&action=index">Liste des catégories</a>
+                            <a href="index.php?ctrl=publication&action=index">Liste des publications</a> -->
+                        <?php
+                        }
+                    ?> 
+                </ul>
+            </nav>
+        </div>
+    </header>
     <body>
         <div id="wrapper"> 
             <div id="mainpage">
@@ -17,8 +66,9 @@
                 <h3 class="message" style="color: red"><?= App\Session::getFlash("error") ?></h3>
                 <h3 class="message" style="color: green"><?= App\Session::getFlash("success") ?></h3>
                 <header>
+                    
                     <nav>
-                        <div id="nav-left">
+                        <div id="">
                             <a href="/">Accueil</a>
                             <?php
                             // if(App\Session::isAdmin()){
@@ -29,23 +79,7 @@
                         ?>
                         </div>
                         <div id="nav-right">
-                        <?php
-                            // si l'utilisateur est connecté 
-                            if(App\Session::getUser()){
-                                ?>
-                                <a href="index.php?ctrl=security&action=profile"><span class="fas fa-user"></span>&nbsp;<?= App\Session::getUser()?></a>
-                                <a href="index.php?ctrl=security&action=logout">Déconnexion</a>
-                                <?php
-                            }
-                            else{
-                                ?>
-                                <a href="index.php?ctrl=security&action=login">Connexion</a>
-                                <a href="index.php?ctrl=security&action=register">Inscription</a>
-                                <a href="index.php?ctrl=forum&action=index">Liste des catégories</a>
-                                <a href="index.php?ctrl=publication&action=index">Liste des publications</a>
-                            <?php
-                            }
-                        ?>
+                        
                         </div>
                     </nav>
                 </header>
@@ -54,9 +88,9 @@
                     <?= $page ?>
                 </main>
             </div>
-            <footer>
+            <!-- <footer>
                 <p>&copy; <?= date_create("now")->format("Y") ?> - <a href="#">Règlement du forum</a> - <a href="#">Mentions légales</a></p>
-            </footer>
+            </footer> -->
         </div>
         <script
             src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -91,6 +125,8 @@
                 });
             })
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
         <script src="<?= PUBLIC_DIR ?>/js/script.js"></script>
     </body>
 </html>
