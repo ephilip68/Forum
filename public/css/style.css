@@ -6,46 +6,76 @@
 
 }
 
+.list-unstyled {
+    
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    
+}
+
+/****************************************************************** BODY *******************************************************************/
+
 body{
-
-    background-color: #f6f6f6;
+    
     height: 150vh;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    background-color: #f6f6f6;
+    
+}
+
+/****************************************************************** CONTAINER *******************************************************************/
+
+#container{
+    
+    width: 100%;
+    position: relative;
 
 }
 
-#connexion {
+/*======================================================================== SECTION CONNEXION ========================================================================================*/
 
-    background-color: #011A46;
+/****************************************************************** BODY REGISTER/LOGIN *******************************************************************/
+
+.connexion {
+    
     height: 100vh;
-
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    background-color: #011A46;
+    
 }
+
+/****************************************************************** REGISTER *******************************************************************/
+
+/****************** Register Content ******************/
 
 .Content {
 
     width: 100%;
-    
-    
     display: flex;
     flex-direction: column;
+    text-align: center;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    font-family: "Merriweather", sans-serif;
-    font-weight: 500;
     
 }
+
+/********************* FormBox *********************/
 
 .formBox {
     
     width: 40%;
-    height: 650px;
-    background: linear-gradient(0deg, rgba(1,26,70,1) 0%, rgba(10,77,193,1) 100%);
-    border: 1px solid white;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, .1); 
+    height: 570px;
+    background: white;
     border-radius: 15px;
-    padding: 2em 2em;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, .1); 
+    padding: 2.5em 2em 0 2em;
     
 }
+
+/********************* Title *********************/
 
 .title {
 
@@ -56,14 +86,66 @@ body{
     
 }
 
+h1{
+
+    font-family: "Inter", sans-serif;
+    font-weight: bold; 
+    font-size: 2em;
+    color: #011A46;
+      
+}
+
+/********************* Corner Border ********************/
+
+#content {
+
+    width: 65%; 
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+
+}
+
+#content:after, #content>:first-child:after {
+
+    width: 40px; 
+    height: 30px;
+    position: absolute; 
+    content:' ';
+    border-color :#011A46; 
+    border-style: solid; 
+
+}
+
+#content:after {
+
+    top: -10%;
+    right: 0;
+    border-width: 4px 4px 0 0;
+
+}
+
+#content>:first-child:after {
+
+    bottom: 20%;
+    left: 0;
+    border-width: 0 0 4px 4px; 
+
+}
+
+/******************** Formulaire *******************/
+
 form.formulaire {
+
+    width: 100%; 
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%; 
-    margin-top: 1.5em; 
-  
+    margin-top: 1em; 
+
 }
 
 .input {
@@ -71,46 +153,49 @@ form.formulaire {
     width: 80%;
     height: 55px;
     background: none;
-    border: 1px solid white;
+    color: #011A46;
+    border: 1px solid #011A46;
     border-radius: 5px;
-    padding: 1em 4em;
-    color: white;
-    font-size: 1em;
-    margin-top: 1.5em;
-    font-family: "Merriweather", sans-serif;
+    font-family: "Inter", sans-serif;
     font-weight: 500;
+    font-size: 1em;
+    padding: 1em 4em;
+    margin-top: 1em;
     
 }
 
 .submit {
 
-    background: rgba(10,77,193,1);
-    border: none;
     width: 80%;
-    height: 55px;
-    border-radius: 25px;
-    text-align: center;
+    height: 50px;
+    background: rgba(10,77,193,1);
     color: white;
-    font-size: 1.3em;
-    font-family: "Merriweather", sans-serif;
+    border: none;
+    border-radius: 25px;
+    font-family: "Inter", sans-serif;
     font-weight: 500;
-    margin-top: 2em;
+    font-size: 1.3em;
+    text-align: center;
+    margin-top: 1.5em;
     
 }
 
 .submit:hover{
 
-    cursor: pointer;
     background: rgb(10, 44, 193);
+    cursor: pointer;
 
 }
+
+/******************** Icone *********************/
 
 .user{
 
     position: absolute;
     left: 12%;
     top: 10.3%;
-    color: white;
+    color: rgba(10,77,193,1);
+
 }
 
 .envelope{
@@ -118,7 +203,7 @@ form.formulaire {
     position: absolute;
     left: 12%;
     top: 29.7%;
-    color: white;
+    color: rgba(10,77,193,1);
 
 }
 
@@ -127,7 +212,7 @@ form.formulaire {
     position: absolute;
     left: 12%;
     top: 48.5%;
-    color: white;
+    color: rgba(10,77,193,1);
 
 }
 
@@ -136,168 +221,241 @@ form.formulaire {
     position: absolute;
     left: 12%;
     top: 67.6%;
-    color: white;
+    color: rgba(10,77,193,1);
+    
 }
+
+/****************** Inscrivez-vous/Se connecter *****************/
 
 .connecter{
 
+    width: 100%;
     display: flex;
     justify-content: center;
-    width: 100%;
-    gap: 10px;
+    gap: 6px;
     margin-top: 2em;
     
 }
 
-.connecter p {
-
-    color: white;
-
-}
+.connecter p {color: #011A46;}
 
 .connecter a {
 
     color: rgba(116,212,253,1);
     font-weight: 700;
     text-decoration: none;
+     
+}
+
+.connecter a:hover { color: rgba(10,77,193,1);}
+
+/***************************************************************** LOGIN **************************************************************************/
+
+/******************* FormBox *********************/
+
+.formBox2 {
+    
+    width: 40%;
+    height: 610px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, .1); 
+    padding: 2.5em 2em 0 2em;
     
 }
 
+/********************** Se Connecter à Google *********************/
 
-h1{
+.forget{
 
-    color: white;
-    font-family: "Merriweather", sans-serif;
-    font-weight: bold; 
-      
+    width: 80%;
+    height: 50px;
+    background: rgba(116,212,253,1);
+    border: none;
+    border-radius: 25px;
+    align-content: center;
+    margin-top: 2.5em;
+
 }
 
-#content {
+.googleConnect {
 
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+}
+
+.forget img{ width: 20px;}
+
+.forget a {
+
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 1.5em;
+    color: #011A46;
+    text-decoration: none;
+
+}
+
+/********************** Divider ********************/
+
+.separation { position: relative; margin-top: 1em;}
+
+.separation span {font-size: 1em; color: #011A46;}
+
+.divider3 {
+
+    position: absolute;
+    width: 35%;
+    top: 50%;
+    left: 10.5%;
+    border-bottom: 1px solid #011A46;
+
+}
+
+.divider4 {
+
+    position: absolute;
+    width: 35%;
+    top: 50%;
+    right: 10.5%;
+    border-bottom: 1px solid #011A46;
+    
+}
+
+/*********** Formulaire ***********/
+
+form.formulaire2 {
+    
+    width: 100%; 
     position: relative;
     display: flex;
     flex-direction: column;
-    text-align: center;
     align-items: center;
-    width: 65%; 
-
+      
 }
 
-#content:after, #content>:first-child:after {
+.input2 {
 
-    position: absolute; 
-    content:' ';
-    width: 60px; 
-    height: 50px;
-    border-color :white; 
-    border-style: solid; 
-
-}
-
-#content:after {
-
-    top: -20%;
-    right: 0;
-    border-width: 4px 4px 0 0;
-
-}
-
-#content>:first-child:after {
-
-    bottom: 5%;
-    left: 0;
-    border-width: 0 0 4px 4px; 
-
-}
-
-#container{
+    width: 80%;
+    height: 55px;
+    background: none;
+    color: #011A46;
+    border: 1px solid #011A46;
+    border-radius: 5px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 1em;
+    text-align: center;
+    padding: 1em 4em;
+    margin-top: 1em;
     
-    position: relative;
-    width: 100%;
+}
+
+/*********** Mot de passe oublié ***********/
+
+.forget2{
+
+    width: 80%;
+    height: 50px;
+    background: #011A46;
+    border: none;
+    border-radius: 25px;
+    align-content: center;
+    margin-top: 1.5em;
 
 }
 
-.list-unstyled {
+.forget2 a {
 
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 1.3em;
+    color: white;
+    text-decoration: none;
+    
 }
-  
+/*============================================================================== LAYOUT ==============================================================================================*/
+
+/***************************************************************** NAVBAR **************************************************************************/
+
+/*********** D-Flex ***********/
+
 .d-flex {
-
+    
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
 
 }
 
+/*********** Header  ***********/
+
 .header {
 
-    background: linear-gradient(90deg, rgba(116,212,253,1) 0%, rgba(10,77,193,1) 100%);;
+    width: 100%;
     position: sticky;
     top: 0;
     z-index: 1;
-    width: 100%;
+    background: linear-gradient(90deg, rgba(116,212,253,1) 0%, rgba(10,77,193,1) 100%);;
     padding: 1em 2em;
 
 }
 
-.logo {
+/*********** Logo ***********/
 
-    width: 12%;
-    margin-left: 1em;  
-     
-}
+.logo { width: 15%; margin-left: 1em;}
 
-.center{
+/*********** Menu ***********/
 
-    width: 50%;
+.center{ width: 50%;}
 
-}
-
-.scroller{
-
-    text-align: center;
-    
-}
+.scroller{ text-align: center;}
 
 .menu {
 
+    width: 90%;
     display: inline-flex;
     justify-content: space-between; 
-    width: 75%;
 
 }
 
-.header i {
+.menu i {
 
-    color: #000;
     font-size: 1.1em;
+    color: #000;
     padding-right: 1em;
 
 }
 
-.header a{
+.menu a{
 
     color: #000;
     text-decoration: none;
-    font-family: "Merriweather", sans-serif;
     font-weight:600;
+    
 
 }
 
-.menuList:hover {
+.menuList {
 
-    color: #FFF;
+    width: 18%;
+    display: flex;
+    text-align: center;
+    align-items: center;
 
 }
+
+.menu:hover { color: #FFF;}
+
+/*********** Menu Burger ***********/
 
 .header .burgerList {
 
-    font-family: "Merriweather", sans-serif;
     font-size: 2rem;
     letter-spacing: 2px;
     display: inline-flex;
@@ -308,68 +466,6 @@ h1{
 
 }
 
-nav {
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: fixed;
-    top: 80px;
-    right: 0;
-    width: 0;
-    overflow: hidden;
-    opacity: 0;
-    height: calc(10vh - 10px);
-    background-color: rgb(255, 255, 255);
-    
-    transition: all .6s ease-out;
-
-}
-
-.show-nav nav {
-
-    opacity: 1;
-    width: 8%;
-    height: 10%;
-    right: .5%;
-    z-index: 2;
-
-}
-
-.show-nav nav li a:hover {
-
-    color: rgba(10,77,193,1);
-    transform: scale(1.1);
-    text-decoration: none;
-
-}
-
-.show-nav .burger .bar {
-
-    width: 0;
-
-}
-
-.burger .bar::before,
-.burger .bar::after {
-
-    transition: all .2s ease-out;
-
-}
-
-.show-nav .burger .bar::before {
-
-    transform: rotate(-45deg);
-
-}
-
-.show-nav .burger .bar::after {
-
-    transform: rotate(45deg);
-
-}
-  
 .burger {
 
     background: none;
@@ -402,56 +498,94 @@ nav {
 
 }
   
-.burger .bar::before {
-
-    transform: translateY(-8px);
-
-}
+.burger .bar::before { transform: translateY(-8px);}
   
-.burger .bar::after {
+.burger .bar::after { transform: translateY(8px);}
 
-    transform: translateY(8px);
+/*********** Show Nav Menu Burger ***********/
 
-}
+nav {
 
-.grid{
-
+    position: fixed;
+    top: 80px;
+    right: 0;
+    width: 0;
     display: flex;
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    height: calc(10vh - 10px);
+    background-color: rgb(255, 255, 255);
+    
+    transition: all .6s ease-out;
 
 }
+
+.show-nav nav {
+
+    width: 8%;
+    height: 10%;
+    right: .5%;
+    z-index: 2;
+    opacity: 1;
+
+}
+
+.show-nav nav a:hover {
+
+    transform: scale(1.1);
+    text-decoration: none;
+
+}
+
+.show-nav .burger .bar { width: 0;}
+
+.burger .bar::before,
+.burger .bar::after { transition: all .2s ease-out;}
+
+.show-nav .burger .bar::before { transform: rotate(-45deg);}
+
+.show-nav .burger .bar::after { transform: rotate(45deg);}
+
+/*============================================================================== SECTION ACCUEIL ====================================================================================*/
+
+/*********** Grid ***********/
+
+.grid{  width: 100%; display: flex;}
+
+/***************************************************************** NAV **************************************************************************/
+
+/*********** Nav Menu ***********/
 
 #navMenu{
 
     width: 20%;
+    position: fixed;
     display: block;
     align-items: center;
-    position: fixed;
     padding-left: 2.5em;
     
 }
 
+/*********** List Nav ***********/
+
 .listNav {
 
+    width: 100%;  
+    height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 500px;
-    width: 100%;  
 
 }
 
-.listNav:hover{
+.listNav:hover{ border-right: 5px solid #cacaca;}
 
-    border-right: 5px solid #cacaca;
-   
-}
+.listNav a { text-decoration: none;}
 
-.listNav a {
-
-    text-decoration: none;
-
-}
+/*********** List Content ***********/
 
 .listContent{
 
@@ -463,52 +597,59 @@ nav {
 
 .listContent span{
 
-    color: #151C27;
     width: 50%;
-    justify-content: center; 
-    font-size: 1.2em;
-    padding-left: 1.3em;
-    font-family: "Merriweather", sans-serif;
     font-weight: 500;
+    font-size: 1.2em;
+    color: #151C27;
+    justify-content: center; 
+    padding-left: 1.3em;
 
 }
 
+
+.listContent i{
+
+    width: 10%;
+    font-size: 1.5em;
+    color: rgba(10,77,193,1);
+    border-left: none;
+    padding-left: .5em;
+
+}
+
+.listContent:hover{
+    
+    background-color:#cacaca; 
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+
+/*********** Nav Divider ***********/
+
 .divider{
 
-    border-bottom: 1px solid #918e8e;
     width: 94%;
+    border-bottom: 1px solid #918e8e;
     margin-left: .8em;
     list-style: none;
     
 }
 
-.listContent i{
+/***************************************************************** PUBLICATIONS **************************************************************************/
 
-   color: rgba(10,77,193,1);
-   border-left: none;
-   width: 10%;
-   padding-left: .5em;
-   font-size: 1.5em;
-
-}
-
-.listContent:hover{
-
-    background-color:#cacaca; 
-    border-radius: 5px;
-    cursor: pointer;
-
-}
-
-#navList{
-
+/*********** Publication ***********/
+#publication{
+    
     width: 50%; 
+    position: absolute;
+    left: 34.5%; 
     justify-content: center; 
     align-items: center;
-    position: absolute;
-    left: 33.9%; 
     
 }
+
+/*********** Publication Content ***********/
 
 .publicationContent {
 
@@ -516,12 +657,14 @@ nav {
     height: 135px;
     background-color: white;
     border-radius: 15px;
-    padding: 1em 1em;
     box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);  
+    padding: 1em 1em;
     
 }
 
-.publication {
+/*********** Publication Liste ***********/
+
+.publicationList {
 
     width: 100%;
     height: 40px;
@@ -530,13 +673,9 @@ nav {
   
 }
 
-.publication figure{
+.publicationList figure{ width: 7%;}
 
-    width: 7%;
-
-}
-
-.publication img{
+.publicationList img{
 
     width: 40px;
     height: 40px;
@@ -544,27 +683,27 @@ nav {
 
 }
 
+/*********** Write Someting ***********/
+
 .writeSomething{
 
     width: 92%;
     padding: 0 1em;
     background: #f3f3f3;
     color: #918e8e;
-    font-size: 1em;
     border-radius: 30px;
     border: none;
-    cursor: pointer;
-    text-align: justify;
-    font-family: "Merriweather", sans-serif;
+    font-family: "Inter", sans-serif;
     font-weight: 400;
+    font-size: 1em;
+    text-align: justify;
+    cursor: pointer;
 
 }
 
-.writeSomething:hover{
+.writeSomething:hover{ background: #cacaca;}
 
-    background: #cacaca;
-
-}
+/*********** Publication Divider ***********/
 
 .divider2 {
 
@@ -573,6 +712,8 @@ nav {
     width: 100%;
 
 }
+
+/*********** Publication Icone ***********/
 
 .publicationIcone{
 
@@ -585,7 +726,7 @@ nav {
     
 }
 
-.icone{
+.icone {
 
     display: flex;
     align-items: center;
@@ -593,67 +734,66 @@ nav {
     width: 20%;
     gap: 10px;
     color: #151C27;
-    font-family: "Merriweather", sans-serif;
     font-weight: 500;
-
+    
 }
 
-.icone i {
+.icone i { font-size: 1.3em;}
 
-    font-size: 1.3em;
-}
+/***************************************************************** CARDS **************************************************************************/
+
+/*********** Card ***********/
 
 #card {
 
-  
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
     width: 20%;
     position: absolute;
     position: fixed;
     right: 2%;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
 
 }
+
+/*********** Sujets Récent ***********/
 
 .card1 {
 
     width: 90%;
     height: 250px;
     background-color: white;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);
     border-radius: 15px;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);
     padding: .5em 2em;
 
 }
 
 h2{
 
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
     font-size: 1.5em;
     text-align: justify;
     color: #151C27;
-    font-family: "Merriweather", sans-serif;
-    font-weight: 600;
+
 }
+
+/*********** Amis en Ligne ***********/
 
 .card2 {
 
     width: 90%;
     height: 350px;
     background: linear-gradient(0deg, rgba(1,26,70,1) 0%, rgba(10,77,193,1) 100%);
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);
     border-radius: 15px;
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);
     padding: .5em 2em;
 
 }
 
-.card2 h2 {
-
-    color: white;
-
-}
+.card2 h2 { color: white;}
 
 
 

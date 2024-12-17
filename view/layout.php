@@ -12,10 +12,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/css/uikit.min.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="<?= PUBLIC_DIR ?>/css/style.css">
         <script src="public/js/script.js"></script>
-        <title>FORUM</title>
+        <title>SportLink</title>
     </head>
     <header class="header">
         <div class="headerContent d-flex">
@@ -25,10 +25,10 @@
             <div class="center">
                 <div class="scroller">
                     <ul class="menu list-unstyled">
-                        <a href="#"><li class="menuList"><i class="fa-solid fa-house"></i>Accueil</li></a>
+                        <a href="index.php?ctrl=home&action=home"><li class="menuList"><i class="fa-solid fa-house"></i>Accueil</li></a>
                         <a href="#"><li class="menuList"><i class="fa-solid fa-message"></i>Messagerie</li></a>
                         <a href="#"><li class="menuList"><i class="fa-solid fa-bell"></i>Notifications</li></a>
-                        <a href="#"><li class="menuList"><i class="fa-solid fa-pen-to-square"></i>Communauté</li></a>
+                        <a href="index.php?ctrl=forum"><li class="menuList"><i class="fa-solid fa-pen-to-square"></i>Communauté</li></a>
                     </ul>
                 </div>
             </div>

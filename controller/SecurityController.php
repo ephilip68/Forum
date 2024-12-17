@@ -109,14 +109,21 @@ class SecurityController extends AbstractController{
                 }
             }
         // } 
-    // Par défaut j'affiche le formulaire d'inscription
-    return [
+        // Par défaut j'affiche le formulaire d'inscription
+        return [
 
-        "view" => VIEW_DIR."reseauSocial/login.php",
-        "meta_description" => "Formulaire de connexion"
-       
-   ];   
+            "view" => VIEW_DIR."reseauSocial/login.php",
+            "meta_description" => "Formulaire de connexion"
+        
+        ];   
+    }
+
+    public function logout () {
+    
+        session_unset();
+    
+        $this->redirectTo($ctrl = "home", $action = "index");
+        
     }
 }
-//     // public function logout () {
  

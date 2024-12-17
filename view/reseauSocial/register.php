@@ -1,5 +1,5 @@
 
-<body id="connexion"> 
+<body class="connexion"> 
     <div class="Content">
         <div class="formBox">
             <div class="title">
