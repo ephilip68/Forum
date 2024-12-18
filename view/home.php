@@ -4,7 +4,24 @@
 // var_dump($_SESSION);
 ?>
 
-<div id="container">
+<body class="connexion"> 
+    <div class="grid">
+        <div class="left">
+            <figure class="left-logo">
+                <img src="" alt="Logo SportLink">
+            </figure>
+        </div>
+        <div class="right">
+            <div class="welcomeTitle">
+                <h1>Bienvenue sur SportLink !</h1>
+                <p>"Le réseau social des sportifs"</p>
+            </div>
+            
+        </div>
+    </div>
+</body>
+
+<!-- <div id="container">
 
     <div class="grid">
         <div class="grid-item" id="navMenu">
@@ -77,4 +94,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

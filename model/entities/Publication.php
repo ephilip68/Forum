@@ -12,7 +12,7 @@ final class Publication extends Entity{
     private $id;
     private $content;
     private $publicationDate;
-    private $image;
+    private $photo;
     private $video;
     private $user_id;
 
@@ -92,9 +92,9 @@ final class Publication extends Entity{
     /**
      * Get the value of image
      */ 
-    public function getImage(){
+    public function getPhoto(){
 
-        return $this->image;
+        return $this->photo;
 
     }
 
@@ -103,9 +103,9 @@ final class Publication extends Entity{
      *
      * @return  self
      */ 
-    public function setImage($image){
+    public function setPhoto($photo){
 
-        $this->image = $image;
+        $this->photo = $photo;
 
         return $this;
 

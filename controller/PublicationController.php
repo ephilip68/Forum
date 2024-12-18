@@ -20,7 +20,7 @@ class PublicationController extends AbstractController implements ControllerInte
         // le controller communique avec la vue "listPublication" (view) pour lui envoyer la liste des publications (data)
         return [
 
-            "view" => VIEW_DIR."reseauSocial/listPublications.php",
+            "view" => VIEW_DIR."reseauSocial/homePublications.php",
             "meta_description" => "Liste des publications Réseau Social",
             "data" => [
 
@@ -36,29 +36,82 @@ class PublicationController extends AbstractController implements ControllerInte
 
     public function addPublication(){
 
-        if(isset($_POST["submit"])){
+        // Vérifier si le formulaire a été soumis
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
             
             // La fonction filter_input() permet de valider ou nettoyer chaque donnée transmise par le formulaire en utilisant divers filtres
             // FILTER_SANITIZA_STRING supprime une chaîne de caractère de toute présence de caractères spéciaux et balise HTML potentielle ou encodes
             $content = filter_input(INPUT_POST, "content", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             
             if($content){
+                
+                if(isset($_FILES["photo"]) && $_FILES["photo"]["error"] == 0){
+                    $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png", "webp" => "image/webp");
+                    $filename = $_FILES["photo"]["name"];
+                    $filetype = $_FILES["photo"]["type"];
+                    $filesize = $_FILES["photo"]["size"];
 
+                    // var_dump($_FILES["photo"]);die;
+                    
+                    // Vérifie l'extension du fichier
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                    if(!array_key_exists($ext, $allowed)) die("Erreur : Veuillez sélectionner un format de fichier valide.");
+                    
+                    // Vérifie la taille du fichier - 5Mo maximum
+                    $maxsize = 5 * 1024 * 1024;
+                    if($filesize > $maxsize) die("Error: La taille du fichier est supérieure à la limite autorisée.");
+                    
+                    // Vérifie le type MIME du fichier
+                    if(in_array($filetype, $allowed)){
+                        
+                        // Vérifie si le fichier existe avant de le télécharger.
+                        if(file_exists("upload/" . $_FILES["photo"]["name"])){
+                            
+                            echo $_FILES["photo"]["name"] . " existe déjà.";
+                            
+                        } else{
+                            
+                            move_uploaded_file($_FILES["photo"]["tmp_name"], "public/upload/" . $_FILES["photo"]["name"]);
+                            echo "Votre fichier a été téléchargé avec succès.";
+                            
+                        } 
+
+                        
+                    } else{
+                        
+                        echo "Error: Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer.";
+                        
+                    }
+                    
+                    $publicationManager = new PublicationManager();
+                    $photo = $_FILES["photo"]["name"];
+                    $data = ['content'=>$content, 'photo'=>$photo];
+                    $publicationManager->add($data);
+
+                    var_dump($data);die;
+
+                } else{
+
+                    echo "Error: " . $_FILES["photo"]["error"];
+
+                }
+                
                 $publicationManager = new PublicationManager();
 
-                $data = ['content'=>$content];
-
+                
+                $data = ['content'=>$content ];
                 $publicationManager->add($data);
 
                 $this->redirectTo($ctrl = "publication", $action = "index");
 
                 return [
 
-                    "view" => VIEW_DIR."reseauSocial/listPublications.php",
+                    "view" => VIEW_DIR."reseauSocial/homePublications.php",
                     "meta_description" => "ajouter publication",
                     "data" => [
 
-                        "content" => $content
+                        "content" => $content,
+                        "photo" => $photo
         
                     ]
                 ];
@@ -76,7 +129,7 @@ class PublicationController extends AbstractController implements ControllerInte
 
         return [
 
-            "view" => VIEW_DIR."reseauSocial/listPublications.php",
+            "view" => VIEW_DIR."reseauSocial/homePublications.php",
             "meta_description" => "supprimer publication"
         ];
     }

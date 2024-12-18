@@ -104,6 +104,21 @@ class ForumController extends AbstractController implements ControllerInterface{
         }    
     }
 
+    public function deleteCategory($id){
+
+        $categoryManager = new CategoryManager();
+
+        $categoryManager->delete($id);
+
+        $this->redirectTo($ctrl = "forum", $action = "index");
+
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/listCategories.php",
+            "meta_description" => "supprimer categorie"
+        ];
+    }
+
     public function addTopicToCategory($id){
         
         if(isset($_POST["submit"])){
