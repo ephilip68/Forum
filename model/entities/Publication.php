@@ -154,4 +154,16 @@ final class Publication extends Entity{
         return $this;
         
     }
+
+    public function getFormattedPublicationDate() {
+
+        if ($this->publicationDate instanceof \DateTime) {
+            // Format personnalisé : 'd F Y at H:i'
+            return $this->getPublicationDate->format('l jS \of F Y h:i:s A');
+        }
+
+        return null; // Si creationDate n'est pas défini ou incorrect
+    }
+
 }
+

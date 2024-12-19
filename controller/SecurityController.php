@@ -31,7 +31,7 @@ class SecurityController extends AbstractController{
                 //Si l'utilisateur existe
                 if($user){
 
-                    $this->redirectTo($ctrl = "security", $action = "register");
+                    $this->redirectTo($ctrl = "home", $action = "index");
 
                 } else {
 
@@ -41,6 +41,8 @@ class SecurityController extends AbstractController{
                         $data = ['nickName'=>$pseudo, 'password'=>password_hash($pass1, PASSWORD_DEFAULT), 'email'=>$email];
 
                         $user = $userManager->add($data);
+
+                        
                     } else {
 
                         //message  "Les mots de passes ne sont pas identiques ou mot de passe trop court
@@ -51,12 +53,13 @@ class SecurityController extends AbstractController{
                 // problème de saisie
 
             }
+
         }
         
         // Par défaut j'affiche le formulaire d'inscription
         return [
 
-            "view" => VIEW_DIR."reseauSocial/register.php",
+            "view" => VIEW_DIR."home.php",
             "meta_description" => "Formulaire d'inscription"
             
         ];
@@ -82,7 +85,7 @@ class SecurityController extends AbstractController{
                 
                 
                 //Si l'utilisateur existe
-                // if($user){
+                if($user){
                     $hash = $user->getPassword(); 
                     
                     // var_dump($password, $hash, password_verify($password, $hash));die();
@@ -94,7 +97,7 @@ class SecurityController extends AbstractController{
                         Session::setUser($user);
                         // die;
 
-                        $this->redirectTo($ctrl = "home", $action = "index");
+                        $this->redirectTo("publication", "index");
             
                     // }
                     // //  else {
@@ -108,11 +111,11 @@ class SecurityController extends AbstractController{
                    //message  "utilisateur inconnu ou mod de passe incorrect
                 }
             }
-        // } 
+        } 
         // Par défaut j'affiche le formulaire d'inscription
         return [
 
-            "view" => VIEW_DIR."reseauSocial/login.php",
+            "view" => VIEW_DIR."reseauSocial/homePublications.php",
             "meta_description" => "Formulaire de connexion"
         
         ];   

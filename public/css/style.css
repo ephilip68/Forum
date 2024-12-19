@@ -36,6 +36,213 @@ body{
 
 /*======================================================================== SECTION CONNEXION ========================================================================================*/
 
+/****************************************************************** HOME BIENVENUE *******************************************************************/
+
+/********************************* Grid ***************************/
+
+.grid2{ width: 100%; display: flex; padding: 2.5em 0 3.5em 0;}
+
+/********************************* Grid Left ***************************/
+
+.left { width: 55%;}
+
+.left-logo img{ width: 100%;}
+
+/******************************** Grid Right *************************/
+
+.right { width: 30%; margin: 2em 0; position: relative;}
+
+/****************** Title ******************/
+
+.welcomeTitle { 
+
+    width: 100%; 
+    font-family: "Inter", sans-serif; 
+    text-align: left; 
+    display: flex; 
+    flex-direction: column; 
+
+}
+
+.welcomeTitle h1 {
+
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    font-size: 4em;
+    margin: 0;
+
+}
+
+.welcomeTitle p {
+
+    width: 80%;
+    color: white;
+    font-weight: 300;
+    font-size: 1.5em;
+
+}
+
+.titleInscription { width: 100%; text-align: left;}
+
+
+
+.titleInscription h3{
+
+    width: 50%;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 2.2em;
+    color: white;
+    margin-top: .5em;
+    
+}
+
+.titleInscription h4{
+
+    width: 60%;
+    font-family: "Inter", sans-serif;
+    color: white;
+    font-weight: 500;
+    font-size: 1.4em;
+    margin-top: 2.5em;
+    
+}
+
+/****************** S'inscrire avec Google ******************/
+
+.btnInscription {
+
+    width: 75%;
+    height: 50px;
+    background: white;
+    border: none;
+    border-radius: 25px;
+    align-content: center;
+    margin: 2em 0 .5em 0;
+
+}
+
+.btnInscription a {
+
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 1.2em;
+    color: #011A46;
+    text-decoration: none;
+
+}
+
+.btnInscription:hover { background: #ececec;}
+
+/****************** Divider ******************/
+
+.separation2 { width: 75% ;position: relative; margin-top: 1em; text-align: center;}
+
+.separation2 span { font-size: 1em; color: white;}
+
+.divider5 {
+
+    position: absolute;
+    width: 45%;
+    top: 50%;
+    left: 0%;
+    border-bottom: 1px solid white;
+
+}
+
+.divider6 {
+
+    position: absolute;
+    width: 45%;
+    top: 50%;
+    right: 0%;
+    border-bottom: 1px solid white;
+    
+}
+
+/****************** Button Sign in / Login ******************/
+
+.formInscription { width: 100%;}
+
+.submit2{
+
+    width: 75%;
+    height: 50px;
+    background: rgb(10, 44, 193);
+    border: none;
+    border-radius: 25px;
+    align-content: center;
+    margin-top: 1.5em;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 1.2em;
+    color: white;
+    text-decoration: none;
+
+}
+
+.submit3{
+
+    width: 75%;
+    height: 50px;
+    background:  none;
+    border: 1px solid white;
+    border-radius: 25px;
+    align-content: center;
+    margin-top: 1.5em;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 1.2em;
+    color: white;
+    text-decoration: none;
+
+}
+
+.submit2:hover { background: rgb(3, 25, 216);cursor: pointer;}
+
+.submit3:hover{
+
+    background: rgba(116,212,253,1);
+    color: #151C27;
+    border: none;
+    cursor: pointer;
+}
+
+/****************** Modal ******************/
+
+.uk-modal-dialog { top: 13.5%;border-radius: 15px;box-shadow: 0px 7px 7px rgba(0, 0, 0, .1); }
+
+.btn-close {
+
+    position: absolute;
+    top: .5%;
+    right: 2%;
+    font-size: 1.5em;
+    color: #151C27;
+
+}
+
+/****************************************************************** Footer *******************************************************************/
+
+footer {
+
+    border-top: 2px solid white; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 80px;
+
+}
+
+.footer{ width: 50%;height: 1000%;align-content: center;}
+
+.footer a, small { color: white;font-size: 1em;margin: 0 .5em;}
+
+.footer a:hover { color: none;}
+
 /****************************************************************** BODY REGISTER/LOGIN *******************************************************************/
 
 .connexion {
@@ -51,7 +258,7 @@ body{
 
 /****************** Register Content ******************/
 
-.Content {
+.modalContent {
 
     width: 100%;
     display: flex;
@@ -66,12 +273,7 @@ body{
 
 .formBox {
     
-    width: 40%;
-    height: 570px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, .1); 
-    padding: 2.5em 2em 0 2em;
+    width: 100%;
     
 }
 
@@ -121,7 +323,7 @@ h1{
 
 #content:after {
 
-    top: -10%;
+    top: -15%;
     right: 0;
     border-width: 4px 4px 0 0;
 
@@ -129,7 +331,7 @@ h1{
 
 #content>:first-child:after {
 
-    bottom: 20%;
+    bottom: 15%;
     left: 0;
     border-width: 0 0 4px 4px; 
 
@@ -161,8 +363,28 @@ form.formulaire {
     font-size: 1em;
     padding: 1em 4em;
     margin-top: 1em;
-    
+       
 }
+
+.input:focus{
+    
+    outline:none;
+    border-color:rgba(116,212,253,1);
+    box-shadow:0 0 10px rgba(116,212,253,1);
+
+}
+
+
+
+input::placeholder {
+
+    color: #011A46;
+    opacity: .5em;
+    
+    
+
+}
+
 
 .submit {
 
@@ -193,7 +415,7 @@ form.formulaire {
 
     position: absolute;
     left: 12%;
-    top: 10.3%;
+    top: 9.5%;
     color: rgba(10,77,193,1);
 
 }
@@ -202,7 +424,7 @@ form.formulaire {
 
     position: absolute;
     left: 12%;
-    top: 29.7%;
+    top: 29.5%;
     color: rgba(10,77,193,1);
 
 }
@@ -211,7 +433,7 @@ form.formulaire {
 
     position: absolute;
     left: 12%;
-    top: 48.5%;
+    top: 48.3%;
     color: rgba(10,77,193,1);
 
 }
@@ -220,7 +442,7 @@ form.formulaire {
 
     position: absolute;
     left: 12%;
-    top: 67.6%;
+    top: 67.8%;
     color: rgba(10,77,193,1);
     
 }
@@ -255,12 +477,7 @@ form.formulaire {
 
 .formBox2 {
     
-    width: 40%;
-    height: 610px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0px 7px 7px rgba(0, 0, 0, .1); 
-    padding: 2.5em 2em 0 2em;
+    width: 100%;
     
 }
 
@@ -278,6 +495,11 @@ form.formulaire {
 
 }
 
+.forget:hover{
+
+    background: rgb(72, 200, 255);
+}
+
 .googleConnect {
 
     width: 100%;
@@ -288,13 +510,13 @@ form.formulaire {
 
 }
 
-.forget img{ width: 20px;}
+.googleConnect img{ width: 20px; height: 20px;}
 
 .forget a {
 
     font-family: "Inter", sans-serif;
     font-weight: 600;
-    font-size: 1.5em;
+    font-size: 1.2em;
     color: #011A46;
     text-decoration: none;
 
@@ -344,7 +566,7 @@ form.formulaire2 {
     height: 55px;
     background: none;
     color: #151C27;
-    border: 1px solid #151C27;
+    border: 1px solid #011A46;
     border-radius: 5px;
     font-family: "Inter", sans-serif;
     font-weight: 500;
@@ -355,13 +577,23 @@ form.formulaire2 {
     
 }
 
+.input2:focus{
+    
+    outline:none;
+    border-color:rgba(116,212,253,1);
+    box-shadow:0 0 10px rgba(116,212,253,1);
+
+}
+
+
+
 /*********** Mot de passe oublié ***********/
 
 .forget2{
 
     width: 80%;
     height: 50px;
-    background: #151C27;
+    background: #011A46;
     border: none;
     border-radius: 25px;
     align-content: center;
@@ -369,11 +601,18 @@ form.formulaire2 {
 
 }
 
+.forget2:hover {
+
+    background: #151C27;
+    cursor: pointer;
+
+}
+
 .forget2 a {
 
     font-family: "Inter", sans-serif;
     font-weight: 500;
-    font-size: 1.3em;
+    font-size: 1.2em;
     color: white;
     text-decoration: none;
     
@@ -706,29 +945,9 @@ nav {
 
 .writeSomething:hover{ background: #cacaca;}
 
-.__remove-field{
-    position: relative;
-    top: -110px;
-    right: -80px;
-}
-
-.upload-area{
-    border-radius:3px;
-    margin: 0 auto;
-    text-align: center;
-    overflow: auto;
-}
-.upload-area:hover{
-    cursor: pointer;
-}
-.upload-area h4{
-    text-align: center;
-    font-weight: normal;
-    font-family: sans-serif;
-    color: darkslategray;
-}
-.fileUpload{
-    display: none;
+.card-img {
+    width: 100%;
+    
 }
 
 /*********** Publication Divider ***********/
@@ -769,6 +988,18 @@ nav {
 .icone i { font-size: 1.3em;}
 
 .icone a { color: #151C27;}
+
+/*********** Modal Ajouter Publication ***********/
+
+.modal-Form input{
+
+    width: 100%;
+    max-height: 150px;
+
+}
+
+
+
 
 /***************************************************************** CARDS **************************************************************************/
 

@@ -3,7 +3,7 @@
 
 ?>
 <?php
-include VIEW_DIR."nav.php";;
+include VIEW_DIR."template/nav.php";
 ?>
 
     <div class="grid">
@@ -48,7 +48,7 @@ include VIEW_DIR."nav.php";;
                     <figure>
                         <img src="public/img/R.jpg" alt="image utilisateur">
                     </figure>
-                    <button class="writeSomething" data-toggle="modal" data-target="#modelId"><a href="#"></a>Publier quelque chose !</button>
+                    <button class="writeSomething" type="button" uk-toggle="target: #modal-example3"><a href="#"></a>Publier quelque chose !</button>
                 </div>
                 <div class="divider2"></div>
                 <div class="publicationIcone">
@@ -67,32 +67,29 @@ include VIEW_DIR."nav.php";;
                 </div>
                 <div class="containerPublication">
                     <!-- Modal -->
-                    <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                    <div id="modal-example3" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Créer une publication</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                                    <h3 class="modal-title">Créer une publication</h3>
+                                    <hr>
+                                    <a class="btn-close uk-modal-close" ><i class="fa-solid fa-xmark"></i></a>
                                 </div>
                                 <div class="modal-body">
                                     <form action="index.php?ctrl=publication&action=addPublication" method="post" enctype="multipart/form-data">
-                                        <div class="add-dup-parent">
-                                            <div class="form-row mt-3 __add-fields">
-                                                <input name="content" id="content" value="Publier quelque chose !">
-                                                <div class="col-9">
-                                                    <div class="card form-image-preview">
-                                                        <input type="file" name="photo" class="fileUpload">
-                                                        <div class="card-body upload-area upload-file" id="uploadfile">
-                                                            <p class="card-text">
-                                                            <i class="fa fa-camera fa-lg" aria-hidden="true"></i> <br>
-                                                                Drag and Drop ou Télécharger Fichier
-                                                            </p>
-                                                            <img class="card-img-top" src="">
-                                                        </div>
-                                                    </div> 
-                                                </div>
+                                        <div class="modal-comment">
+                                            <div class="modal-Form">
+                                                <input name="content" id="content" placeholder="Publier quelque chose !">
+                                                <div uk-form-custom >
+                                                    <input type="file" name="photo" class="uk-link" onchange="previewPicture(this)" required >
+                                                    <div class="js-upload uk-placeholder uk-text-center">
+                                                        <span uk-icon="icon: cloud-upload"></span>
+                                                        <span class="uk-text-middle">Ajouter des photos/vidéos</span>
+                                                        <span class="link">ou faites glisser-déposer</span>
+                                                        <img src="#" alt="" id="image" style="margin-top: 20px;">
+                                                    </div>
+                                                </div> 
+                                                <progress id="js-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
                                             </div>
                                         </div>
                                         <br/>
@@ -109,6 +106,7 @@ include VIEW_DIR."nav.php";;
                 <?php
                     foreach($publications as $publication){ 
                         ?>
+                            <p><?=$publication->getFormattedPublicationDate()?></p>
                             <p><?=$publication->getContent()?></p>
                             <img src="public/upload/<?=$publication->getPhoto()?>" alt="" srcset="">
                             <p><a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?>">Supprimer</a></p>
@@ -126,6 +124,8 @@ include VIEW_DIR."nav.php";;
             </div>
         </div>
     </div>
+
+   
 
     <!-- default template for cloning -->
 
