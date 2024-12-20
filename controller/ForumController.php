@@ -17,7 +17,7 @@ class ForumController extends AbstractController implements ControllerInterface{
         $categoryManager = new CategoryManager();
 
         // récupérer la liste de toutes les catégories grâce à la méthode findAll de Manager.php (triés par nom)
-        $category = $categoryManager->findAll();
+        $categories = $categoryManager->findAll();
 
         // le controller communique avec la vue "listCategories" (view) pour lui envoyer la liste des catégories (data)
         return [
@@ -26,7 +26,7 @@ class ForumController extends AbstractController implements ControllerInterface{
             "meta_description" => "Liste des catégories du forum",
             "data" => [
 
-                "category" => $category
+                "categories" => $categories
 
             ]
         ];

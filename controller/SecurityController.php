@@ -5,6 +5,7 @@ use App\Session;
 use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\UserManager;
+use Model\Managers\PublicationManager;
 
 class SecurityController extends AbstractController{
 
@@ -83,7 +84,6 @@ class SecurityController extends AbstractController{
                 $user = $userManager->findOneByEmail($email);
                 
                 
-                
                 //Si l'utilisateur existe
                 if($user){
                     $hash = $user->getPassword(); 
@@ -128,5 +128,34 @@ class SecurityController extends AbstractController{
         $this->redirectTo($ctrl = "home", $action = "index");
         
     }
+
+    public function profile($id) {
+
+        $userManager = new UserManager();
+
+        $user = $userManager -> findOneById($id);
+
+        $friends = $userManager -> findFriendsByUser($id);
+        $publicationManager = new PublicationManager();
+
+        $publications = $publicationManager -> findPublicationsByUser($id);
+
+        return [
+
+            "view" => VIEW_DIR."security/profil.php",
+            "meta_description" => "Profil Utilisateur",
+
+            "data" => [
+
+            'user' => $user,
+            'friends' => $friends,
+            'publications' => $publications
+
+            ]
+        
+        ];   
+
+    }
+    
 }
  

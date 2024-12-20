@@ -14,18 +14,17 @@ class PublicationManager extends Manager{
         parent::connect();
     }
 
-    // // récupérer tous les topics d'une catégorie spécifique (par son id)
-    // public function findPostsByTopic($id) {
+    public function findPublicationsByUser($id){
 
-    //     $sql = "SELECT * 
-    //             FROM ".$this->tableName."  
-    //             WHERE topic_id = :id";
-       
-    //     // la requête renvoie plusieurs enregistrements --> getMultipleResults
-    //     return  $this->getMultipleResults(
-    //         DAO::select($sql, ['id' => $id]), 
-    //         $this->className
-    //     );
-        
-    // }
+        $sql = "SELECT p.id_publication, p.content, p.publicationDate, p.photo, p.video, p.user_id 
+                FROM " . $this->tableName . " p 
+                INNER JOIN user u ON p.user_id = u.id_user
+                WHERE u.id_user = :id";
+
+        return  $this->getMultipleResults(
+            DAO::select($sql, ['id' => $id]), 
+            $this->className
+        );
+
+    }
 }

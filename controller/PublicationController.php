@@ -3,6 +3,7 @@ namespace Controller;
 
 use App\AbstractController;
 use App\ControllerInterface;
+use App\Session;
 use Model\Managers\UserManager;
 use Model\Managers\PublicationManager;
 
@@ -50,8 +51,6 @@ class PublicationController extends AbstractController implements ControllerInte
                     $filename = $_FILES["photo"]["name"];
                     $filetype = $_FILES["photo"]["type"];
                     $filesize = $_FILES["photo"]["size"];
-
-                    // var_dump($_FILES["photo"]);die;
                     
                     // Vérifie l'extension du fichier
                     $ext = pathinfo($filename, PATHINFO_EXTENSION);
@@ -83,27 +82,22 @@ class PublicationController extends AbstractController implements ControllerInte
                         
                     }
                     
-                    $publicationManager = new PublicationManager();
-                    $photo = $_FILES["photo"]["name"];
-                    $data = ['content'=>$content, 'photo'=>$photo];
-                    $publicationManager->add($data);
 
-                    var_dump($data);die;
 
                 } else{
 
                     echo "Error: " . $_FILES["photo"]["error"];
 
                 }
-                
-                $publicationManager = new PublicationManager();
 
-                
-                $data = ['content'=>$content ];
+                $publicationManager = new PublicationManager();
+                $photo = $_FILES["photo"]["name"];
+                $userId = Session::getUser()->getId();
+                $data = ['content'=>$content, 'photo'=>$photo, 'user_id'=>$userId];
                 $publicationManager->add($data);
 
                 $this->redirectTo($ctrl = "publication", $action = "index");
-
+           
                 return [
 
                     "view" => VIEW_DIR."reseauSocial/homePublications.php",
@@ -111,7 +105,8 @@ class PublicationController extends AbstractController implements ControllerInte
                     "data" => [
 
                         "content" => $content,
-                        "photo" => $photo
+                        "photo" => $photo,
+                        "user_id" => $userId
         
                     ]
                 ];

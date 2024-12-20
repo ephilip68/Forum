@@ -1,9 +1,7 @@
 <?php
     $publications = $result["data"]["publications"];
-
-?>
-<?php
-include VIEW_DIR."template/nav.php";
+    
+    include VIEW_DIR."template/nav.php";
 ?>
 
     <div class="grid">
@@ -13,7 +11,7 @@ include VIEW_DIR."template/nav.php";
                 // si l'utilisateur est connecté 
                 if(App\Session::getUser()){
                 ?>
-                    <a href="index.php?ctrl=security&action=profile"><li class="listContent"><i class="fa-solid fa-user"></i><span><?= App\Session::getUser()?></span></li></a>
+                    <a href="index.php?ctrl=security&action=profile&id=<?=App\Session::getUser()->getId()?>"><li class="listContent"><i class="fa-solid fa-user"></i><span><?= App\Session::getUser()?></span></li></a>
                 <?php
                 }else{
                 ?>
@@ -79,9 +77,9 @@ include VIEW_DIR."template/nav.php";
                                     <form action="index.php?ctrl=publication&action=addPublication" method="post" enctype="multipart/form-data">
                                         <div class="modal-comment">
                                             <div class="modal-Form">
-                                                <input name="content" id="content" placeholder="Publier quelque chose !">
+                                                <input id="content" name="content" placeholder="Publier quelque chose !">
                                                 <div uk-form-custom >
-                                                    <input type="file" name="photo" class="uk-link" onchange="previewPicture(this)" required >
+                                                    <input type="file" name="photo" id="fileUpload" onchange="previewPicture(this)">
                                                     <div class="js-upload uk-placeholder uk-text-center">
                                                         <span uk-icon="icon: cloud-upload"></span>
                                                         <span class="uk-text-middle">Ajouter des photos/vidéos</span>
@@ -89,7 +87,6 @@ include VIEW_DIR."template/nav.php";
                                                         <img src="#" alt="" id="image" style="margin-top: 20px;">
                                                     </div>
                                                 </div> 
-                                                <progress id="js-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
                                             </div>
                                         </div>
                                         <br/>
@@ -106,10 +103,10 @@ include VIEW_DIR."template/nav.php";
                 <?php
                     foreach($publications as $publication){ 
                         ?>
-                            <p><?=$publication->getFormattedPublicationDate()?></p>
+                            <p><?=$publication->getPublicationDate()?></p>
                             <p><?=$publication->getContent()?></p>
                             <img src="public/upload/<?=$publication->getPhoto()?>" alt="" srcset="">
-                            <p><a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?>">Supprimer</a></p>
+                            <p><a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?> ">Supprimer</a></p>
                 <?php } ?>
                 </div>
             </div>

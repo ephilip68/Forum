@@ -14,8 +14,7 @@ class UserManager extends Manager{
         parent::connect();
     }
 
-    public function findOneByEmail($email)
-    {
+    public function findOneByEmail($email){
         $sql = "SELECT * 
                 FROM " . $this->tableName . " u 
                 WHERE u.email = :email";
@@ -25,4 +24,19 @@ class UserManager extends Manager{
             $this->className
         );
     }
+
+    public function findFriendsByUser($id){
+
+        $sql = "SELECT u.id_user, u.nickName 
+                FROM " . $this->tableName . " u 
+                INNER JOIN follow f ON u.id_user = f.user_id_1
+                WHERE f.user_id = :id";
+
+        return  $this->getMultipleResults(
+            DAO::select($sql, ['id' => $id]), 
+            $this->className
+        );
+
+    }
+
 }

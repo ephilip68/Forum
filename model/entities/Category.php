@@ -11,6 +11,7 @@ final class Category extends Entity{
 
     private $id;
     private $name;
+    private $image;
 
     // chaque entité aura le même constructeur grâce à la méthode hydrate (issue de App\Entity)
     public function __construct($data){ 
@@ -66,5 +67,25 @@ final class Category extends Entity{
 
         return $this->name;
 
+    }
+
+    /**
+     * Get the value of image
+     */ 
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set the value of image
+     *
+     * @return  self
+     */ 
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }

@@ -1,9 +1,9 @@
 <?php
-    $categories = $result["data"]['category']; 
+    $categories = $result["data"]['categories']; 
 ?>
 
 <?php
-include VIEW_DIR."nav.php";;
+include VIEW_DIR."template/nav.php";
 ?>
 
 <h1>Liste des catégories</h1>
