@@ -18,8 +18,8 @@ class PostManager extends Manager{
     public function findPostsByTopic($id) {
 
         $sql = "SELECT * 
-                FROM ".$this->tableName."  
-                WHERE topic_id = :id";
+        FROM ".$this->tableName."  
+        WHERE topic_id = :id";
        
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return  $this->getMultipleResults(

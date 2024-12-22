@@ -8,6 +8,7 @@ use Model\Managers\UserManager;
 class HomeController extends AbstractController implements ControllerInterface {
 
     public function index(){
+        
         return [
 
             "view" => VIEW_DIR."home.php",
@@ -17,6 +18,7 @@ class HomeController extends AbstractController implements ControllerInterface {
     }
         
     public function users(){
+
         $this->restrictTo("ROLE_USER");
 
         $manager = new UserManager();

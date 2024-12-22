@@ -16,46 +16,53 @@ class SecurityController extends AbstractController{
 
     public function register () {
 
+        // Vérifie si le formulaire a été soumis en testant si le bouton "submit" est présent
         if(isset($_POST["submit"])){
 
-            // Filtrer la saisie des champs du formulaire
-            $pseudo = filter_input(INPUT_POST, "nickName", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL);
-            $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        // Filtrer la saisie des champs du formulaire pour prévenir les attaques XSS et valider les données
+        // Ici on utilise FILTER_SANITIZE_FULL_SPECIAL_CHARS pour assainir les caractères spéciaux et HTML
+        $pseudo = filter_input(INPUT_POST, "nickName", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  
+        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL);  
+        $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  
+        $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  
 
-            
+            // Vérifie que tous les champs sont remplis
             if($pseudo && $email && $pass1 && $pass2){
                 
+                // Crée une instance de UserManager pour gérer les utilisateurs
                 $userManager = new UserManager();
-                
-                //Demander au user manager d'appeler la fonction findUserByEmail
+
+                // Demande au UserManager de chercher un utilisateur avec l'email fourni
                 $user = $userManager->findOneByEmail($email);
-           
-                //Si l'utilisateur existe
+        
+                // Si un utilisateur avec cet email existe déjà
                 if($user){
 
+                    // Redirige vers la page d'accueil si l'email est déjà pris (utilisateur existe déjà)
                     $this->redirectTo($ctrl = "home", $action = "index");
 
                 } else {
 
-                    // Insertion de l'user dans la base de donnée
-                    if($pass1 = $pass2 && strlen($pass1) >= 5){
+                    // Si les mots de passe sont identiques et que le mot de passe est suffisamment long
+                    if($pass1 === $pass2 && strlen($pass1) >= 5){
 
+                        // Prépare les données de l'utilisateur à insérer dans la base de données
+                        // Le mot de passe est hashé avec password_hash pour sécuriser le stockage
                         $data = ['nickName'=>$pseudo, 'password'=>password_hash($pass1, PASSWORD_DEFAULT), 'email'=>$email];
 
+                        // Ajoute l'utilisateur dans la base de données via UserManager
                         $user = $userManager->add($data);
 
-                        
+
                     } else {
 
-                        //message  "Les mots de passes ne sont pas identiques ou mot de passe trop court
+                    echo "Les mots de passe ne sont pas identiques ou sont trop courts.";
                     }    
                 } 
             } else{
 
-                // problème de saisie
-
+            echo "Tous les champs doivent être remplis.";
+            
             }
 
         }
@@ -74,47 +81,46 @@ class SecurityController extends AbstractController{
         if(isset($_POST["submit"])){
 
             // Filtrer la saisie des champs du formulaire
-            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL);
-            // $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $password = $_POST['password'];
-
-            // Si les filtres sont validés
+            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL); // Assainir l'email
+            $password = $_POST['password'];  // Récupère le mot de passe entré par l'utilisateur
+    
+            // Vérifie que l'email et le mot de passe sont valides
             if($email && $password){
                 
                 $userManager = new UserManager();
                 
-                //Demander au user manager d'appeler la fonction findUserByEmail
+                // Recherche l'utilisateur avec l'email fourni
                 $user = $userManager->findOneByEmail($email);
                 
-                
-                //Si l'utilisateur existe
+                // Si l'utilisateur existe dans la base de données
                 if($user){
-                    $hash = $user->getPassword(); 
                     
-                    // var_dump($password, $hash, password_verify($password, $hash));die();
-                
-                    // if (password_verify($password, $hash)){
+                    // Récupère le mot de passe hashé de l'utilisateur
+                    $hash = $user->getPassword();
+    
+                    // Vérifie si le mot de passe fourni correspond au mot de passe hashé
+                    if (password_verify($password, $hash)){
                         
-                        // echo "hello";
-                        
+                        // Si le mot de passe est valide, on initialise la session utilisateur
                         Session::setUser($user);
-                        // die;
 
+                        // Redirige vers la page des publications après connexion
                         $this->redirectTo("publication", "index");
-            
-                    // }
-                    // //  else {
-
-                        //message  "utilisateur inconnu ou mot de passe incorrect
-                        
-                //     }
-
-                // }else{
-
-                   //message  "utilisateur inconnu ou mod de passe incorrect
+                    }
+                    else {
+                        // Mot de passe incorrect, vous pouvez afficher un message d'erreur à l'utilisateur
+                        echo "Mot de passe incorrect.";
+                    }
+                } else {
+                    // L'email n'existe pas dans la base de données, afficher un message d'erreur
+                    echo "Utilisateur inconnu.";
                 }
+            } else {
+                // Si l'email ou le mot de passe n'est pas rempli, afficher un message d'erreur
+                echo "Veuillez remplir tous les champs.";
             }
-        } 
+        }
+
         // Par défaut j'affiche le formulaire d'inscription
         return [
 
@@ -126,22 +132,34 @@ class SecurityController extends AbstractController{
 
     public function logout () {
     
+        // La fonction session_unset() supprime toutes les variables de session
+        // Cela permet de "déconnecter" l'utilisateur en supprimant ses données de session (comme l'ID de l'utilisateur)
         session_unset();
-    
+
+        // redirige l'utilisateur vers la page de connexion
         $this->redirectTo("home", "index");
         
     }
 
     public function profile($id) {
 
+        // Créaer une nouvelle instance de UserManager 
         $userManager = new UserManager();
 
-        $user = $userManager -> findOneById($id);
+        // Recherche d'un utilisateur par son identifiant ($id) dans la base de données
+        // La méthode findOneById retourne un utilisateur spécifique selon son ID
+        $user = $userManager->findOneById($id);
 
-        $friends = $userManager -> findFriendsByUser($id);
+        // Recherche des amis de l'utilisateur en utilisant la méthode findFriendsByUser du UserManager
+        // Cette méthode retourne une liste des amis de l'utilisateur (s'il y en a)
+        $friends = $userManager->findFriendsByUser($id);
+
+        // Créer une nouvelle instance de PublicationManager 
         $publicationManager = new PublicationManager();
 
-        $publications = $publicationManager -> findPublicationsByUser($id);
+        // Recherche des publications de l'utilisateur avec la méthode findPublicationsByUser
+        // Cette méthode retourne une liste de publications postées par l'utilisateur
+        $publications = $publicationManager->findPublicationsByUser($id);
 
         return [
 
@@ -150,9 +168,9 @@ class SecurityController extends AbstractController{
 
             "data" => [
 
-            'user' => $user,
-            'friends' => $friends,
-            'publications' => $publications
+                "user" => $user,
+                "friends" => $friends,
+                "publications" => $publications
 
             ]
         
@@ -165,20 +183,20 @@ class SecurityController extends AbstractController{
         $user_id = SESSION::getUser()->getId();
         $user_id_1 = isset($_GET['id']) ? $_GET['id'] : null;
         $dateFollow = date('Y-m-d H:i:s');
-        
+
+        // Créaer une nouvelle instance de UserManager 
         $followManager = new FollowManager();
-        // Vérification si l'utilisateur tente de se suivre lui-même
+       
         if ($user_id == $user_id_1) {
             echo "Vous ne pouvez pas vous suivre vous-même.";
             return;
         }
 
-        // Vérifier si l'utilisateur suit déjà l'autre utilisateur
         $isFollowing = $followManager->following($user_id, $user_id_1);
 
         if ($isFollowing) {
             
-            echo "Vous suivez déjà cet utilisateur.";
+            //"Vous suivez déjà cet utilisateur.";
             
             $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$user_id_1");
             
@@ -189,8 +207,6 @@ class SecurityController extends AbstractController{
             $data=['dateFollow'=>$dateFollow, 'user_id'=>$user_id, 'user_id_1'=>$user_id_1];
 
             $followManager -> add($data);
-
-            echo "Vous suivez maintenant cet utilisateur.";
 
             $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$user_id_1");
 
@@ -272,6 +288,69 @@ class SecurityController extends AbstractController{
             ]
         ];
 
+    }
+
+    public function editProfile() {
+
+        // L'ID de l'utilisateur connecté
+        $userId = SESSION::getUser()->getId(); 
+
+        // Créaer une nouvelle instance de UserManager 
+        $userManager = new UserManager();
+
+        // Récupère les données de l'utilisateur
+        $userEdit = $userManager->findOneById($id); 
+
+        return [
+
+            "view" => VIEW_DIR."security/profil.php",
+            "meta_description" => "Modifications profil"
+            
+        ];
+    }
+
+    public function updateProfile() {
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = SESSION::getUser()->getId();  // L'ID de l'utilisateur connecté
+            $nickName = filter_input(INPUT_POST, "nickName", FILTER_SANITIZE_FULL_SPECIAL_CHARS); 
+            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL); 
+            $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS); 
+            $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_FULL_SPECIAL_CHARS); 
+
+            // Validation des champs
+            if (empty($nickName) || empty($email)) {
+
+                echo "Le nom d'utilisateur et l'email sont obligatoires.";
+
+                $this->redirectTo("security", "editProfile");
+
+            }
+
+            if($pass1 === $pass2 && strlen($pass1) >= 5){
+
+            // Créaer une nouvelle instance de UserManager 
+            $userManager = new UserManager();
+
+            // Met à jour le profil de l'utilisateur
+            $updateValid = $userManager->updateUser($id, $nickName, $email, $password->password_hash($pass1, PASSWORD_DEFAULT));
+
+            }
+
+            if ($updateValid) {
+
+                echo = "Profil mis à jour avec succès.";
+                // Redirige l'utilisateur vers son profil
+                $this->redirectTo("security", "profile");
+
+            } else {
+
+                echo = "Une erreur est survenue lors de la mise à jour.";
+
+                $this->redirectTo("security", "editProfile");
+
+            }
+        }
     }
 }
  

@@ -1,6 +1,5 @@
 <?php
     $publications = $result["data"]["publications"];
-    $friends = $result["data"]["friends"];
     
     include VIEW_DIR."template/nav.php";
 ?>

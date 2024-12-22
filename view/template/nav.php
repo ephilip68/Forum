@@ -1,7 +1,7 @@
 
     <header class="header">
         <div class="headerContent d-flex">
-            <div class="logo">
+            <div class="logoPage">
                 <img src="public/img/logo-erwin.png" alt="" width="150px" heigh="50px">
             </div>
             <div class="center">

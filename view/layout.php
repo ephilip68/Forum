@@ -6,29 +6,27 @@
         <meta name="description" content="<?= $meta_description ?>">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script src="https://cdn.tiny.cloud/1/zg3mwraazn1b2ezih16je1tc6z7gwp5yd4pod06ae5uai8pa/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="<?= PUBLIC_DIR ?>/css/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/css/uikit.min.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="<?= PUBLIC_DIR ?>/css/style.css">
         <title>SportLink</title>
     </head>
+
    
     <body>
         <!-- <div id="wrapper"> 
             <div id="mainpage"> -->
-                <!-- c'est ici que les messages (erreur ou succès) s'affichent-->
-                <!-- <h3 class="message" style="color: red"><?= App\Session::getFlash("error") ?></h3>
-                <h3 class="message" style="color: green"><?= App\Session::getFlash("success") ?></h3>
-                <header>
+
+                <!-- <header>
                     
                     <nav>
                         <div id="">
                             <a href="/">Accueil</a> -->
-                            <?php
+                            <?php 
                             // if(App\Session::isAdmin()){
                                 ?>
                                 <!-- <a href="index.php?ctrl=home&action=users">Voir la liste des gens</a> -->
@@ -43,7 +41,11 @@
                 </header> -->
                 
                 <main id="forum">
-                    <?= $page ?>
+                    <!-- c'est ici que les messages (erreur ou succès) s'affichent-->
+                    <!-- <h3 class="message" style="color: red"><?= App\Session::getFlash("error") ?></h3>
+                    <h3 class="message" style="color: green"><?= App\Session::getFlash("success") ?></h3> -->
+                    <?= $page 
+                    ?>
                 </main>
             <!-- </div> -->
             <!-- <footer>
@@ -83,8 +85,9 @@
                 });
             })
         </script>
+        <script src="<?= PUBLIC_DIR ?>/js/script.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v1.9.4/dist/alpine.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>
-        <script src="<?= PUBLIC_DIR ?>/js/script.js" defer></script>
     </body>
 </html>

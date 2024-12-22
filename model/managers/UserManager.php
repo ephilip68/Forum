@@ -14,29 +14,50 @@ class UserManager extends Manager{
         parent::connect();
     }
 
+    // récupére un utilisateur en fonction de son email
     public function findOneByEmail($email){
+        
         $sql = "SELECT * 
-                FROM " . $this->tableName . " u 
-                WHERE u.email = :email";
- 
+        FROM " . $this->tableName . " u 
+        WHERE u.email = :email";
+    
+        // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
         return $this->getOneOrNullResult(
-            DAO::select($sql, ['email' => $email], false),
-            $this->className
+            DAO::select($sql, ['email' => $email], false), 
+            $this->className  
         );
     }
-
+    
+    //trouve les amis de l'utilisateur en fonction de son ID
     public function findFriendsByUser($id){
 
         $sql = "SELECT u.id_user, u.nickName 
-                FROM " . $this->tableName . " u 
-                INNER JOIN follow f ON u.id_user = f.user_id_1
-                WHERE f.user_id = :id";
+        FROM " . $this->tableName . " u 
+        INNER JOIN follow f ON u.id_user = f.user_id_1
+        WHERE f.user_id = :id";
 
+        // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return  $this->getMultipleResults(
             DAO::select($sql, ['id' => $id]), 
             $this->className
         );
 
+    }
+
+
+    // Met à jour les informations de l'utilisateur
+    public function updateUser($id, $nickName, $email, $password) {
+
+        $sql = "UPDATE ". $this->tableName . " u  
+        SET u.id = :id, u.nickName = :nickName, u.email = :email, u.password = :password 
+        WHERE id = :id";
+
+        // la requête renvoie plusieurs enregistrements --> getMultipleResults
+        return  $this->getMultipleResults(
+            DAO::select($sql, ['id' => $id , 'nickName' => $nickName, 'email'=> $email , 'password' => $password]), 
+            $this->className
+        );
+       
     }
 
 }
