@@ -6,7 +6,7 @@ use App\ControllerInterface;
 use App\Session;
 use Model\Managers\UserManager;
 use Model\Managers\PublicationManager;
-
+use Model\Managers\FollowManager;
 
 class PublicationController extends AbstractController implements ControllerInterface {
 
@@ -128,6 +128,32 @@ class PublicationController extends AbstractController implements ControllerInte
             "meta_description" => "supprimer publication"
         ];
     }
+
+    public function listAmis($id){
+
+        $userManager = new UserManager();
+
+        $friends = $userManager -> findFriendsByUser($id);
+       
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/listAmis.php",
+            "meta_description" => "List d'amis",
+            "data" => [
+
+            'friends' => $friends        
+        
+            ]
+
+        ];
+    }
+
+
+
+    
+
+    
+
 }
 
     

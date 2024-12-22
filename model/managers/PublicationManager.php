@@ -16,7 +16,7 @@ class PublicationManager extends Manager{
 
     public function findPublicationsByUser($id){
 
-        $sql = "SELECT p.id_publication, p.content, p.publicationDate, p.photo, p.video, p.user_id 
+        $sql = "SELECT p.id_publication, p.content, p.publicationDate, p.photo, p.video, p.user_id, u.nickName
                 FROM " . $this->tableName . " p 
                 INNER JOIN user u ON p.user_id = u.id_user
                 WHERE u.id_user = :id";

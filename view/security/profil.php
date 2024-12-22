@@ -2,9 +2,13 @@
     $user = $result["data"]["user"];
     $friends = $result["data"]["friends"];
     $publications = $result["data"]["publications"];
+    $countFollowig = $result["data"]['countFollowing'];
+    
+
 ?>
 <?php
 include VIEW_DIR."template/nav.php";
+
 ?>
 
 <div>
@@ -19,9 +23,19 @@ include VIEW_DIR."template/nav.php";
     ?>
     
     <button><a href="#"></a>Modifier profil</button>
-
     <?php 
     }?>
+
+    <?php 
+
+        if (App\Session::getUser() == $_GET['id']) {
+    ?>
+        <a href="index.php?ctrl=security&action=deleteFollowing&id=<?=$user->getId()?>">ne plus Suivre</a>
+
+    <?php }else{ ?>
+
+        <a href="index.php?ctrl=security&action=addFollow&id=<?=$user->getId()?>">Suivre</a>
+    <?php } ?>
 
     <h3>Liste d'Amis</h3>
     <?php

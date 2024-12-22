@@ -5,9 +5,12 @@ use App\Session;
 use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\UserManager;
+use Model\Managers\FollowManager;
 use Model\Managers\PublicationManager;
 
 class SecurityController extends AbstractController{
+
+   
 
     // contiendra les méthodes liées à l'authentification : register, login et logout
 
@@ -125,7 +128,7 @@ class SecurityController extends AbstractController{
     
         session_unset();
     
-        $this->redirectTo($ctrl = "home", $action = "index");
+        $this->redirectTo("home", "index");
         
     }
 
@@ -155,7 +158,120 @@ class SecurityController extends AbstractController{
         
         ];   
 
-    }
+    } 
     
+    public function addFollow() {
+        
+        $user_id = SESSION::getUser()->getId();
+        $user_id_1 = isset($_GET['id']) ? $_GET['id'] : null;
+        $dateFollow = date('Y-m-d H:i:s');
+        
+        $followManager = new FollowManager();
+        // Vérification si l'utilisateur tente de se suivre lui-même
+        if ($user_id == $user_id_1) {
+            echo "Vous ne pouvez pas vous suivre vous-même.";
+            return;
+        }
+
+        // Vérifier si l'utilisateur suit déjà l'autre utilisateur
+        $isFollowing = $followManager->following($user_id, $user_id_1);
+
+        if ($isFollowing) {
+            
+            echo "Vous suivez déjà cet utilisateur.";
+            
+            $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$user_id_1");
+            
+        }
+    
+        if ($user_id != $user_id_1) {
+
+            $data=['dateFollow'=>$dateFollow, 'user_id'=>$user_id, 'user_id_1'=>$user_id_1];
+
+            $followManager -> add($data);
+
+            echo "Vous suivez maintenant cet utilisateur.";
+
+            $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$user_id_1");
+
+        }else {
+            
+            echo "Une erreur est survenue lors de l'ajout du suivi.";
+            
+        }
+
+        return [
+
+            "view" => VIEW_DIR."security/profil.php",
+            "meta_description" => "Ajouter Follower",
+
+            "data" => [
+
+                "isFollowing" => $isFollowing,
+                "user_id_1" => $user_id_1
+            ]
+        
+        ];   
+        
+    }
+
+    public function deleteFollowing() {
+
+        $user_id = SESSION::getUser()->getId(); 
+        $user_id_1 = isset($_GET['id']) ? $_GET['id'] : null;  
+    
+        
+        $followManager = new FollowManager();
+
+        $followManager->deleteFollow($user_id, $user_id_1);
+
+        echo "Vous ne suivez plus cet utilisateur.";
+
+        $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$user_id_1");
+
+        return [
+
+            "view" => VIEW_DIR."security/profil.php",
+            "meta_description" => "Profil Utilisateur"
+
+        ];
+
+    }
+
+    public function countFollowing($user_id){
+
+        $followManager = new FollowManager();
+
+        $countFollowing = $followManager->countFollowing($user_id);
+
+        var_dump($countFollowing);die;
+
+        return [
+            "view" => VIEW_DIR . "security/profil.php",
+            "meta_description" => "Compte le nombre de personnes suivies",
+            "data" => [
+                "countFollowing" => $countFollowing
+            ]
+        ];
+
+    }
+
+    public function countFollowers($user_id_1){
+
+        $followManager = new FollowManager();
+
+        $countFollowers = $followManager->countFollowers($user_id_1);
+
+        return [
+
+            "view" => VIEW_DIR."security/profil.php",
+            "meta_description" => "Compte le nombre de followers",
+            "data" => [
+                
+                "countFollowers" => $countFollowers
+            ]
+        ];
+
+    }
 }
  

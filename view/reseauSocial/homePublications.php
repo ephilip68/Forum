@@ -1,5 +1,6 @@
 <?php
     $publications = $result["data"]["publications"];
+    $friends = $result["data"]["friends"];
     
     include VIEW_DIR."template/nav.php";
 ?>
@@ -19,7 +20,7 @@
                 <?php
                 }
                 ?> 
-                    <a href="#"><li class="listContent"><i class="fa-solid fa-user-group"></i><span>Amis</span></li></a>
+                    <a href="index.php?ctrl=publication&action=listAmis"><li class="listContent"><i class="fa-solid fa-user-group"></i><span>Amis</span></li></a>
                     <a href="#"><li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Enregistrements</span></li></a>
                     <a href="#"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Evènements</span></li></a>
                     <a href="#"><li class="listContent"><i class="fa-solid fa-magnifying-glass"></i><span>Rechercher</span></li></a>
