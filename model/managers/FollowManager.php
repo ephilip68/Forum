@@ -43,7 +43,7 @@ class FollowManager extends Manager{
         );
     }
 
-    //compte le nombre de follow
+    //compte le nombre de follow d'un unique utilisateur
     public function countFollowing($user_id) {
     
         
@@ -57,20 +57,20 @@ class FollowManager extends Manager{
             $this->className  
         );
     }
+
     
-    //compte le nombre de followers
+    //compte le nombre de followers d'un unique utilisateur
     public function countFollowers($user_id_1) {
-    
+        
         $sql = "SELECT COUNT(*)  
         FROM " . $this->tableName . " f
         WHERE f.user_id_1 = :user_id_1";
-    
-       // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
+        
+        // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
         return $this->getSingleScalarResult(
             DAO::select($sql, ['user_id_1' => $user_id_1], false), 
             $this->className 
-        );
+            );
     }
-
-   
+            
 }

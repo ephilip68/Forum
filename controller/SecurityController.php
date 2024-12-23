@@ -110,14 +110,17 @@ class SecurityController extends AbstractController{
                     else {
                         // Mot de passe incorrect, vous pouvez afficher un message d'erreur à l'utilisateur
                         echo "Mot de passe incorrect.";
+                        $this->redirectTo("home", "index");
                     }
                 } else {
                     // L'email n'existe pas dans la base de données, afficher un message d'erreur
                     echo "Utilisateur inconnu.";
+                    $this->redirectTo("home", "index");
                 }
             } else {
                 // Si l'email ou le mot de passe n'est pas rempli, afficher un message d'erreur
                 echo "Veuillez remplir tous les champs.";
+                $this->redirectTo("home", "index");
             }
         }
 
@@ -144,7 +147,9 @@ class SecurityController extends AbstractController{
     public function profile($id) {
 
         $currentUserId = SESSION::getUser()->getId();
-        // Créaer une nouvelle instance de UserManager 
+        $user_id = $_GET['id'];
+
+        // Créer une nouvelle instance de UserManager 
         $userManager = new UserManager();
 
         // Recherche d'un utilisateur par son identifiant ($id) dans la base de données
@@ -162,10 +167,18 @@ class SecurityController extends AbstractController{
         // Cette méthode retourne une liste de publications postées par l'utilisateur
         $publications = $publicationManager->findPublicationsByUser($id);
 
+        //Créer une nouvelle instance de FollowManager 
         $followManager = new FollowManager();
 
         // Vérifier si l'utilisateur connecté suit déjà cet utilisateur
         $isFollowing = $followManager->following($currentUserId, $id);
+
+        // Récupére le nombre de personnes suivies par l'utilisateur
+        $following = $followManager->countFollowing($user_id);
+
+        // Récupére le nombre de personnes qui suivent l'utilisateur
+        $followers = $followManager->countFollowers($user_id);
+
 
         return [
 
@@ -177,7 +190,10 @@ class SecurityController extends AbstractController{
                 "user" => $user,
                 "friends" => $friends,
                 "publications" => $publications,
-                "isFollowing" => $isFollowing
+                "isFollowing" => $isFollowing,
+                "following" => $following,
+                "followers" => $followers
+                
 
             ]
         
@@ -185,101 +201,7 @@ class SecurityController extends AbstractController{
 
     } 
     
-    public function addFollow($friend_id){
-
-        // Récupérer l'utilisateur connecté
-        $user_id = SESSION::getUser()->getId();
-        $dateFollow = date('Y-m-d H:i:s');
-    
-        // Vérifier que l'utilisateur ne s'ajoute pas lui-même
-        if ($user_id == $friend_id) {
-            echo "Vous ne pouvez pas vous suivre vous-même.";
-            return;
-        }
-    
-        // Instancier le FollowManager
-        $followManager = new FollowManager();
-    
-        // Vérifier si l'utilisateur suit déjà cet ami
-        $following = $followManager->following($user_id, $friend_id);
-    
-        if ($following) {
-            // Rediriger si déjà suivi
-            echo "Vous suivez déjà cet utilisateur.";
-            $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$friend_id");
-            return;
-        }
-    
-        // Ajouter l'ami dans la base de données
-        $data = [
-            'dateFollow' => $dateFollow,
-            'user_id' => $user_id,
-            'user_id_1' => $friend_id
-        ];
-    
-        $followManager->add($data);
-
-        $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$friend_id");
-    
-    }
-
-    public function deleteFollowing($friend_id) {
-
-        $user_id = SESSION::getUser()->getId();   
-    
-        $followManager = new FollowManager();
-
-        $followManager->deleteFollow($user_id, $friend_id);
-
-        echo "Vous ne suivez plus cet utilisateur.";
-
-        $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$friend_id");
-
-        return [
-
-            "view" => VIEW_DIR."security/profil.php",
-            "meta_description" => "Profil Utilisateur : "
-
-        ];
-
-    }
-
-    public function countFollowing($user_id){
-
-        $followManager = new FollowManager();
-
-        $countFollowing = $followManager->countFollowing($user_id);
-
-        var_dump($countFollowing);die;
-
-        return [
-            "view" => VIEW_DIR . "security/profil.php",
-            "meta_description" => "Compte le nombre de personnes suivies : ", 
-            "data" => [
-                "countFollowing" => $countFollowing
-            ]
-        ];
-
-    }
-
-    public function countFollowers($user_id_1){
-
-        $followManager = new FollowManager();
-
-        $countFollowers = $followManager->countFollowers($user_id_1);
-
-        return [
-
-            "view" => VIEW_DIR."security/profil.php",
-            "meta_description" => "Compte le nombre de followers : ",
-            "data" => [
-                
-                "countFollowers" => $countFollowers
-            ]
-        ];
-
-    }
-
+   
     public function editProfile($id) {
 
         // L'ID de l'utilisateur connecté
