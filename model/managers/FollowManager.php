@@ -15,31 +15,30 @@ class FollowManager extends Manager{
     }
 
     // récupère les id afin de pouvoir vérifier si les utilisateur se suivent déja
-    public function following($user_id, $user_id_1) {
-        
-        $sql = "SELECT *
-        FROM " . $this->tableName . " f
-        WHERE f.user_id  = :user_id
-        AND  f.user_id_1 = :user_id_1";
-
-        // la requête renvoie plusieurs enregistrements --> getMultipleResults
-        return  $this->getMultipleResults(
-            DAO::select($sql, ['user_id' => $user_id, 'user_id_1' => $user_id_1]), 
-            $this->className
-        );
+    public function following($user_id, $friend_id) {
+        $sql = "SELECT COUNT(*) 
+                FROM " . $this->tableName . " f
+                WHERE f.user_id = :user_id
+                AND f.user_id_1 = :friend_id";
+    
+        // Exécute la requête avec DAO::select et récupère un seul résultat
+        $result = DAO::select($sql, ['user_id' => $user_id, 'friend_id' => $friend_id], false);
+    
+        // Retourne vrai si le comptage est supérieur à 0, faux sinon
+        return $result ? $result['COUNT(*)'] > 0 : false;
     }
 
     // supprime colonne de la table Follow en fonction de l'ID de l'utilisateur et de l'ID de la personne qu'il suit
-    public function deleteFollow($user_id, $user_id_1) {
+    public function deleteFollow($user_id, $friend_id) {
 
         $sql = "DELETE 
         FROM " . $this->tableName . " f
         WHERE f.user_id = :user_id 
-        AND f.user_id_1 = :user_id_1";
+        AND f.user_id_1 = :friend_id";
     
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return $this->getMultipleResults(
-            DAO::delete($sql, ['user_id' => $user_id, 'user_id_1' => $user_id_1]),  
+            DAO::delete($sql, ['user_id' => $user_id, 'friend_id' => $friend_id]),  
             $this->className 
         );
     }
@@ -48,26 +47,26 @@ class FollowManager extends Manager{
     public function countFollowing($user_id) {
     
         
-        $sql = "SELECT COUNT(*) AS Nombres_Following 
+        $sql = "SELECT COUNT(*) 
         FROM " . $this->tableName . " f
         WHERE f.user_id = :user_id";
     
         // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
-        return $this->getOneOrNullResult(
+        return $this->getSingleScalarResult(
             DAO::select($sql, ['user_id' => $user_id], false),  
             $this->className  
         );
     }
     
     //compte le nombre de followers
-    public function countFollower($user_id_1) {
+    public function countFollowers($user_id_1) {
     
-        $sql = "SELECT COUNT(*) AS Nombres_Followers 
+        $sql = "SELECT COUNT(*)  
         FROM " . $this->tableName . " f
         WHERE f.user_id_1 = :user_id_1";
     
        // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
-        return $this->getOneOrNullResult(
+        return $this->getSingleScalarResult(
             DAO::select($sql, ['user_id_1' => $user_id_1], false), 
             $this->className 
         );

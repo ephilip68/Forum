@@ -143,6 +143,7 @@ class SecurityController extends AbstractController{
 
     public function profile($id) {
 
+        $currentUserId = SESSION::getUser()->getId();
         // Créaer une nouvelle instance de UserManager 
         $userManager = new UserManager();
 
@@ -161,6 +162,11 @@ class SecurityController extends AbstractController{
         // Cette méthode retourne une liste de publications postées par l'utilisateur
         $publications = $publicationManager->findPublicationsByUser($id);
 
+        $followManager = new FollowManager();
+
+        // Vérifier si l'utilisateur connecté suit déjà cet utilisateur
+        $isFollowing = $followManager->following($currentUserId, $id);
+
         return [
 
             "view" => VIEW_DIR."security/profil.php",
@@ -170,7 +176,8 @@ class SecurityController extends AbstractController{
 
                 "user" => $user,
                 "friends" => $friends,
-                "publications" => $publications
+                "publications" => $publications,
+                "isFollowing" => $isFollowing
 
             ]
         
@@ -178,77 +185,60 @@ class SecurityController extends AbstractController{
 
     } 
     
-    public function addFollow() {
-        
-        $user_id = SESSION::getUser()->getId();
-        $user_id_1 = isset($_GET['id']) ? $_GET['id'] : null;
-        $dateFollow = date('Y-m-d H:i:s');
+    public function addFollow($friend_id){
 
-        // Créaer une nouvelle instance de UserManager 
-        $followManager = new FollowManager();
-       
-        if ($user_id == $user_id_1) {
+        // Récupérer l'utilisateur connecté
+        $user_id = SESSION::getUser()->getId();
+        $dateFollow = date('Y-m-d H:i:s');
+    
+        // Vérifier que l'utilisateur ne s'ajoute pas lui-même
+        if ($user_id == $friend_id) {
             echo "Vous ne pouvez pas vous suivre vous-même.";
             return;
         }
-
-        $isFollowing = $followManager->following($user_id, $user_id_1);
-
-        if ($isFollowing) {
-            
-            //"Vous suivez déjà cet utilisateur.";
-            
-            $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$user_id_1");
-            
+    
+        // Instancier le FollowManager
+        $followManager = new FollowManager();
+    
+        // Vérifier si l'utilisateur suit déjà cet ami
+        $following = $followManager->following($user_id, $friend_id);
+    
+        if ($following) {
+            // Rediriger si déjà suivi
+            echo "Vous suivez déjà cet utilisateur.";
+            $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$friend_id");
+            return;
         }
     
-        if ($user_id != $user_id_1) {
+        // Ajouter l'ami dans la base de données
+        $data = [
+            'dateFollow' => $dateFollow,
+            'user_id' => $user_id,
+            'user_id_1' => $friend_id
+        ];
+    
+        $followManager->add($data);
 
-            $data=['dateFollow'=>$dateFollow, 'user_id'=>$user_id, 'user_id_1'=>$user_id_1];
-
-            $followManager -> add($data);
-
-            $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$user_id_1");
-
-        }else {
-            
-            echo "Une erreur est survenue lors de l'ajout du suivi.";
-            
-        }
-
-        return [
-
-            "view" => VIEW_DIR."security/profil.php",
-            "meta_description" => "Ajouter Follower",
-
-            "data" => [
-
-                "isFollowing" => $isFollowing,
-                "user_id_1" => $user_id_1
-            ]
-        
-        ];   
-        
+        $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$friend_id");
+    
     }
 
-    public function deleteFollowing() {
+    public function deleteFollowing($friend_id) {
 
-        $user_id = SESSION::getUser()->getId(); 
-        $user_id_1 = isset($_GET['id']) ? $_GET['id'] : null;  
+        $user_id = SESSION::getUser()->getId();   
     
-        
         $followManager = new FollowManager();
 
-        $followManager->deleteFollow($user_id, $user_id_1);
+        $followManager->deleteFollow($user_id, $friend_id);
 
         echo "Vous ne suivez plus cet utilisateur.";
 
-        $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$user_id_1");
+        $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$friend_id");
 
         return [
 
             "view" => VIEW_DIR."security/profil.php",
-            "meta_description" => "Profil Utilisateur"
+            "meta_description" => "Profil Utilisateur : "
 
         ];
 
@@ -264,7 +254,7 @@ class SecurityController extends AbstractController{
 
         return [
             "view" => VIEW_DIR . "security/profil.php",
-            "meta_description" => "Compte le nombre de personnes suivies",
+            "meta_description" => "Compte le nombre de personnes suivies : ", 
             "data" => [
                 "countFollowing" => $countFollowing
             ]
@@ -281,7 +271,7 @@ class SecurityController extends AbstractController{
         return [
 
             "view" => VIEW_DIR."security/profil.php",
-            "meta_description" => "Compte le nombre de followers",
+            "meta_description" => "Compte le nombre de followers : ",
             "data" => [
                 
                 "countFollowers" => $countFollowers
@@ -290,7 +280,7 @@ class SecurityController extends AbstractController{
 
     }
 
-    public function editProfile() {
+    public function editProfile($id) {
 
         // L'ID de l'utilisateur connecté
         $userId = SESSION::getUser()->getId(); 
@@ -309,7 +299,7 @@ class SecurityController extends AbstractController{
         ];
     }
 
-    public function updateProfile() {
+    public function updateProfile($id) {
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id = SESSION::getUser()->getId();  // L'ID de l'utilisateur connecté
@@ -339,13 +329,13 @@ class SecurityController extends AbstractController{
 
             if ($updateValid) {
 
-                echo = "Profil mis à jour avec succès.";
+                echo "Profil mis à jour avec succès.";
                 // Redirige l'utilisateur vers son profil
                 $this->redirectTo("security", "profile");
 
             } else {
 
-                echo = "Une erreur est survenue lors de la mise à jour.";
+                echo "Une erreur est survenue lors de la mise à jour.";
 
                 $this->redirectTo("security", "editProfile");
 

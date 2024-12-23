@@ -2,8 +2,9 @@
     $user = $result["data"]["user"];
     $friends = $result["data"]["friends"];
     $publications = $result["data"]["publications"];
-    // $countFollowig = $result["data"]['countFollowing'];
-    
+    $isFollowing = $result["data"]["isFollowing"];
+
+   
 
 ?>
 <?php
@@ -231,7 +232,7 @@ include VIEW_DIR."template/nav.php";
         </div>
         <div class="main">
             <div class="search-bar">
-                <input type="text" placeholder="Search" />
+                <input class="search" type="text" placeholder="Search" />
             </div>
             <div class="main-container">
                 <div class="profile">
@@ -245,15 +246,50 @@ include VIEW_DIR."template/nav.php";
                         <?php 
                             if(App\Session::getUser() == $user){
                         ?>
-                            <a class="profile-menu-link actives" href="#">Modifier profil</a>
-                        <?php } ?>
-                        <?php 
-                        if (App\Session::getUser() == $_GET['id']) {
-                        ?>
-                            <a href="index.php?ctrl=security&action=deleteFollowing&id=<?=$user->getId()?>">ne plus Suivre</a>
-                        <?php }else{ ?>
+                            <a class="profile-menu-link actives" href="#modal-example4" uk-toggle>Modifier profil</a>
+                        <?php }elseif(App\Session::getUser()->getId() == $isFollowing) { ?>
+
+                            <a class="profile-menu-link actives" href="index.php?ctrl=security&action=deleteFollowing&id=<?=$user->getId()?>">ne plus Suivre</a>
+
+                        <?php }elseif(App\Session::getUser()->getId() != $isFollowing){ ?>
+
                             <a class="profile-menu-link actives" href="index.php?ctrl=security&action=addFollow&id=<?=$user->getId()?>">Suivre</a>
-                        <?php } ?>
+
+                        <?php }else{ ?> 
+                            
+                        <?php } ?>  
+                    </div>
+                    <div id="modal-example4" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Modifier Profil</h3>
+                                    <hr>
+                                    <a class="btn-close uk-modal-close" ><i class="fa-solid fa-xmark"></i></a>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="index.php?ctrl=security&action=updateProfile$id=" method="post">
+                                        <div class="modal-comment">
+                                            <div class="modal-Form">
+                                                <div><?= App\Session::getUser()-> getNickName() ?></div>
+                                                <input type="text" placeholder="Pseudo" name="nickName" value="" >
+
+                                                <div><?= App\Session::getUser()-> getEmail() ?></div>
+                                                <input type="email" placeholder="Email" name="email" value="" >
+                                                
+                                                <div>Mot de passe</div>
+                                                <input type="password" placeholder="Nouveau mot de passe" name="pass1" value="" >
+
+                                                <div></div>
+                                                <input type="password" placeholder="Confirmer nouveau mot de passe" name="pass2" value="" >
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <input type="submit" name="submit" value="Modifier">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="timeline">
@@ -261,7 +297,7 @@ include VIEW_DIR."template/nav.php";
                         <div class="intro box">
                             <div class="intro-title">
                                 Informations
-                                <button class="intro-menu"></button>
+                                <button class="intro-menu"><a href="index.php?ctrl=security&action=countFollowing">follow</a></button>
                             </div>
                             <div class="info">
                                 <div class="info-item">
