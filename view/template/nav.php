@@ -8,7 +8,7 @@
                 <div class="scroller">
                     <ul class="menu list-unstyled">
                         <a href="index.php?ctrl=publication&action=index"><li class="menuList"><i class="fa-solid fa-house"></i>Accueil</li></a>
-                        <a href="#"><li class="menuList"><i class="fa-solid fa-message"></i>Messagerie</li></a>
+                        <a href="index.php?ctrl=message&action=index"><li class="menuList"><i class="fa-solid fa-message"></i>Messagerie</li></a>
                         <a href="#"><li class="menuList"><i class="fa-solid fa-bell"></i>Notifications</li></a>
                         <a href="index.php?ctrl=forum"><li class="menuList"><i class="fa-solid fa-pen-to-square"></i>Communauté</li></a>
                     </ul>

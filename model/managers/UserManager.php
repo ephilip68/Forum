@@ -44,6 +44,19 @@ class UserManager extends Manager{
 
     }
 
+    public function updateProfilPhoto($userId, $file){
+
+        $sql = "UPDATE ". $this->tableName . " u 
+        SET u.avatar = :file WHERE u.id_user = :userId";
+
+        // la requête renvoie plusieurs enregistrements --> getMultipleResults
+        return  $this->getMultipleResults(
+            DAO::select($sql, ['file' => $file, 'userId' => $userId]), 
+            $this->className
+        );
+
+    }
+
 
     // Met à jour les informations de l'utilisateur
     public function updateUser($id, $nickName, $email, $password) {
@@ -59,6 +72,21 @@ class UserManager extends Manager{
         );
        
     }
+
+        //trouve les amis de l'utilisateur en fonction de son ID
+        public function getProfileAvatar($id){
+
+            $sql = "SELECT u.avatar
+            FROM " . $this->tableName . " u 
+            WHERE u.id_user = :id";
+    
+             // Exécute la requête avec DAO::select et récupère un seul résultat
+             $result = DAO::select($sql, ['id' => $id], false);
+            
+             // Retourne vrai si le comptage est supérieur à 0, faux sinon
+             return $result;
+    
+        }
 
     
 

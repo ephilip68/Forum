@@ -42,7 +42,7 @@
             
             <div id="modal-example" uk-modal>
                 <div class="uk-modal-dialog uk-modal-body">
-                    <a class="btn-close uk-modal-close" ><i class="fa-solid fa-xmark"></i></a>
+                    <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
                     <div class="modalContent">
                         <div class="formBox">
                             <div class="title">
@@ -52,19 +52,24 @@
 
                                 <label for="pseudo"></label>
                                 <i class="fa-solid fa-user user"> </i>
-                                <input class="input" type="text" name="nickName" id="pseudo" placeholder="Pseudo">
+                                <input class="input" type="text" name="nickName" id="pseudo" placeholder="Pseudo" required>
 
                                 <label for="email"></label>
                                 <i class="fa-solid fa-envelope envelope"></i>
-                                <input class="input" type="email" name="email" id="email" placeholder="Email">
+                                <input class="input" type="email" name="email" id="email" placeholder="Email" required>
 
                                 <label for="pass1"></label>
                                 <i class="fa-solid fa-unlock"></i>
-                                <input class="input" type="password" name="pass1" id="pass1" placeholder="Mot de passe" >
+                                <input class="input" type="password" name="pass1" id="pass1" placeholder="Mot de passe" required>
 
                                 <label for="pass2"></label>
                                 <i class="fa-solid fa-lock"></i>
-                                <input class="input" type="password" name="pass2" id="pass2" placeholder="Confirmer mot de passe">
+                                <input class="input" type="password" name="pass2" id="pass2" placeholder="Confirmer mot de passe" required>
+
+                                <label class="checkbox">
+                                    <input type="checkbox" name="accept_cgu" required> J'accepte les <a href="view/security/cgu.php" target="_blank">Conditions Générales d'Utilisation</a>.
+                                </label>
+
                                 
                                <input class="submit" type="submit" name="submit" value="Créer votre compte">
 
@@ -80,7 +85,7 @@
             
             <div id="modal-example2" uk-modal>
                 <div class="uk-modal-dialog uk-modal-body">
-                    <a class="btn-close uk-modal-close" ><i class="fa-solid fa-xmark"></i></a>
+                    <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
                     <div class="modalContent">
                         <div class="formBox2">
                             <div class="title">
@@ -103,10 +108,10 @@
                             <form class="formulaire2" action="index.php?ctrl=security&action=login" method="POST">
 
                                 <label for="email"></label>
-                                <input class="input2" type="email" name="email" id="email" placeholder="Adresse email">
+                                <input class="input2" type="email" name="email" id="email" placeholder="Adresse email" required>
 
                                 <label for="pass1"></label>
-                                <input class="input2" type="password" name="password" id="pass1" placeholder="Mot de passe" >
+                                <input class="input2" type="password" name="password" id="pass1" placeholder="Mot de passe" required>
                                 
                                 <input class="submit" type="submit" name="submit" value="Se connecter">
                                 

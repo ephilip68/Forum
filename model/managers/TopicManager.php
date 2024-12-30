@@ -27,4 +27,26 @@ class TopicManager extends Manager{
             $this->className
         );
     }
+
+    public function LastTopicDateByCategory($category_id) {
+        // La requête SQL pour récupérer la date du dernier topic publié dans cette catégorie
+        $sql = "SELECT t.title, t.user_id, t.creationDate
+                FROM ".$this->tableName." t
+                WHERE t.category_id = :category_id 
+                AND t.closed = 0
+                ORDER BY t.creationDate DESC
+                LIMIT 1";
+    
+                // Exécute la requête avec DAO::select et récupère un seul résultat
+                $result = DAO::select($sql, ['category_id' => $category_id], false);
+            
+                // Retourne vrai si le comptage est supérieur à 0, faux sinon
+                return $result;
+    }
+    
+   
+
+    
 }
+
+

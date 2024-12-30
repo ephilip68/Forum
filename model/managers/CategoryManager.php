@@ -14,5 +14,19 @@ class CategoryManager extends Manager{
         parent::connect();
     }
 
+    public function countTopicByCategory($category_id) {
+        // La requête SQL pour compter les topics d'une catégorie donnée
+        $sql = "SELECT COUNT(*)
+                FROM ".$this->tableName." c
+                INNER JOIN topic t ON c.id_category = t.category_id AND closed = 0
+                WHERE t.category_id = :category_id ";
     
+        
+        // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
+        return $this->getSingleScalarResult(
+            DAO::select($sql, ['category_id' => $category_id], false),  
+            $this->className  
+        );
     }
+
+}    

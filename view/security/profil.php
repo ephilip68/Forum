@@ -239,43 +239,84 @@ include VIEW_DIR."template/nav.php";
             <div class="main-container">
                 <div class="profile">
                     <div class="profile-avatar">
-                        <img src="https://images.genius.com/2326b69829d58232a2521f09333da1b3.1000x1000x1.jpg" alt="" class="profile-img">
-                        <!-- <img src="public/upload/<?=$user->getAvatar()?>" alt="" srcset=""> -->
+                        <?php if (!empty($user->getAvatar())){ ?>
+
+                            <img src="public/upload/<?=$user->getAvatar()?>" alt="photo de profil" class="profile-img">
+
+                        <?php }else{ ?>
+
+                            <img src="public/img/default-avatar.webp" alt="photo de profil par défaut" class="profile-img">
+
+                        <?php } ?>      
+                        <a href="#modal-example4" uk-toggle uk-icon="icon: camera"></a>
                         <div class="profile-name"><?=ucfirst($user->getNickName())?></div>
+                        <div class="containerPublication">
+                            <!-- Modal -->
+                            <div id="modal-example4" uk-modal>
+                                <div class="uk-modal-dialog uk-modal-body">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Ajouter une photo de profil</h3>
+                                            <hr>
+                                            <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="index.php?ctrl=security&action=addPhoto" method="post" enctype="multipart/form-data">
+                                                <div class="modal-comment">
+                                                    <div class="modal-Form">
+                                                        <div uk-form-custom >
+                                                            <input type="file" name="photo" id="fileUpload" onchange="previewPicture(this)">
+                                                            <div class="js-upload uk-placeholder uk-text-center">
+                                                                <span uk-icon="icon: cloud-upload"></span>
+                                                                <span class="uk-text-middle">Ajouter votre photo</span>
+                                                                <span class="link">ou faites glisser-déposer</span>
+                                                                <img src="#" alt="" id="image" style="margin-top: 20px;">
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+                                                <br/>
+                                                <input type="submit" name="submit" value="Publier">
+                                                <p><strong>Note:</strong> Seuls les formats .jpg, .jpeg, .jpeg, .gif, .png, .webp sont autorisés jusqu'à une taille maximale de 5 Mo.</p>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <img src="https://images.unsplash.com/photo-1508247967583-7d982ea01526?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80" alt="" class="profile-cover">
+                    
                     <div class="profile-menu">
                         <div class="followers">
-                            <?php 
-                                if ($_GET['id']){
-                            ?>
+                            <?php if ($_GET['id']){ ?>
+
                                 <a><?= $following. " ". "abonnement"?><?= $following > 1 ? "s" : "" ?></a>
                                 <a><?= $followers. " ". "abonné"?><?= $followers > 1 ? "s" : "" ?></a>
+
                             <?php } ?>
                         </div>
-                        <?php 
-                            if(App\Session::getUser() == $user){
-                        ?>
-                            <a class="profile-menu-link actives" href="#modal-example4" uk-toggle>Modifier profil</a>
-                        <?php }elseif(App\Session::getUser()->getId() == $isFollowing) { ?>
+                        <?php if(App\Session::getUser() == $user){ ?>
+
+                            <a class="profile-menu-link actives" href="#modal-example5" uk-toggle>Modifier profil</a>
+
+                        <?php }elseif($isFollowing) { ?>
 
                             <a class="profile-menu-link actives" href="index.php?ctrl=follow&action=deleteFollowing&id=<?=$user->getId()?>">ne plus Suivre</a>
 
-                        <?php }elseif(App\Session::getUser()->getId() != $isFollowing){ ?>
+                        <?php }else{ ?>
 
                             <a class="profile-menu-link actives" href="index.php?ctrl=follow&action=addFollow&id=<?=$user->getId()?>">Suivre</a>
 
-                        <?php }else{ ?> 
-                            
-                        <?php } ?>  
+                        <?php } ?> 
                     </div>
-                    <div id="modal-example4" uk-modal>
+                    <div id="modal-example5" uk-modal>
                         <div class="uk-modal-dialog uk-modal-body">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h3 class="modal-title">Modifier Profil</h3>
                                     <hr>
-                                    <a class="btn-close uk-modal-close" ><i class="fa-solid fa-xmark"></i></a>
+                                    <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
                                 </div>
                                 <div class="modal-body">
                                     <form action="index.php?ctrl=security&action=updateProfile$id=" method="post">
@@ -441,11 +482,11 @@ include VIEW_DIR."template/nav.php";
             <div class="side-wrapper contacts">
                 <div class="side-title">CONTACTS</div>
                     <div class="user">
-                        <?php
-                            foreach($friends as $friend){ 
-                        ?>
+                        <?php foreach($friends as $friend){ ?>
+
                             <img src="<?=$friend->getAvatar()?>" alt="" srcset="">
-                            <a href="index.php?ctrl=security&action=profile&id=<?=$friend->getId()?>"><?=ucfirst($friend->getNickName())?></a>   
+                            <a href="index.php?ctrl=security&action=profile&id=<?=$friend->getId()?>"><?=ucfirst($friend->getNickName())?></a>
+
                         <?php } ?>
                         <!-- <div class="user-status"></div> -->
                     </div>   

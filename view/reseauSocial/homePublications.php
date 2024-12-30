@@ -44,7 +44,7 @@
             <div class="publicationContent">
                 <div class="publicationList">
                     <figure>
-                        <img src="public/img/R.jpg" alt="image utilisateur">
+                        <img src="public/img/R.jpg" alt="image utilisateur" class="img_profil">
                     </figure>
                     <button class="writeSomething" type="button" uk-toggle="target: #modal-example3"><a href="#"></a>Publier quelque chose !</button>
                 </div>
@@ -71,7 +71,7 @@
                                 <div class="modal-header">
                                     <h3 class="modal-title">Créer une publication</h3>
                                     <hr>
-                                    <a class="btn-close uk-modal-close" ><i class="fa-solid fa-xmark"></i></a>
+                                    <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
                                 </div>
                                 <div class="modal-body">
                                     <form action="index.php?ctrl=publication&action=addPublication" method="post" enctype="multipart/form-data">
@@ -122,18 +122,6 @@
         </div>
     </div>
 
-   
-
-    <!-- default template for cloning -->
-
-
-
-<!-- <div class="form">
-    <form action="index.php?ctrl=publication&action=addPublication" method="post">
-        <input  name="content" type="text" value="Publier quelque chose !">
-        <input type="submit" name="submit" value="Publier">
-    </form>
-</div> -->
 
 
 

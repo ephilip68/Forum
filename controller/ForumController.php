@@ -12,22 +12,64 @@ use Model\Managers\PostManager;
 class ForumController extends AbstractController implements ControllerInterface{
 
     public function index() {
-        
-        // créer une nouvelle instance de CategoryManager
+
+        // Créer une nouvelle instance de CategoryManager
         $categoryManager = new CategoryManager();
 
-        // récupérer la liste de toutes les catégories grâce à la méthode findAll de Manager.php (triés par nom)
-        $categories = $categoryManager->findAll();
+        // créer une nouvelle instance de TopicManager
+        $topicManager = new TopicManager();
 
-        // le controller communique avec la vue "listCategories" (view) pour lui envoyer la liste des catégories (data)
+         // créer une nouvelle instance de UserManager
+        $userManager = new UserManager;
+
+        // Récupérer la liste de toutes les catégories grâce à la méthode findAll()
+        // Si findAll() retourne un générateur, il faut le convertir en tableau
+        $categories = iterator_to_array($categoryManager->findAll());
+
+        // Crée un tableau pour stocker les catégories avec le nombre de topics
+        $countTopic = [];
+
+        // Pour chaque catégorie, récupérer le nombre de topics associés
+        foreach ($categories as $category) {
+            // Récupère le nombre de topics pour chaque catégorie (en passant l'id de la catégorie)
+            $topicCount = $categoryManager->countTopicByCategory($category->getId());
+
+            // Récupère la date du dernier topic pour cette catégorie
+            $lastTopic = $topicManager->LastTopicDateByCategory($category->getId());
+
+            // Récupérer l'image de profil du dernier utilisateur
+            $lastUserAvatar = '';
+
+            if ($lastTopic) {
+
+                $lastUserAvatar = $userManager->getProfileAvatar($lastTopic['user_id']);
+
+            }
+
+            // Ajoute les détails du topic dans le tableau
+            $countTopic[] = [
+                
+                'id_category' => $category->getId(),
+                'name' => $category->getName(),
+                'COUNT(*)' => $topicCount,
+                'last_title' => $lastTopic ? $lastTopic['title'] : 'Aucun sujet',
+                'last_date' => $lastTopic ? $lastTopic['creationDate'] : 'Aucune activité',
+                'last_user' => $lastTopic ? $lastTopic['user_id'] : '',
+                'last_avatar' => $lastUserAvatar ? $lastUserAvatar ['avatar'] : ''
+
+            ];
+            // var_dump($lastUserAvatar['avatar']);die;
+        }
+        
+        // Envoie les données à la vue
         return [
-
             "view" => VIEW_DIR."forum/listCategories.php",
             "meta_description" => "Liste des catégories du forum",
             "data" => [
 
-                "categories" => $categories
-
+                "categories" => $categories,  
+                "countTopic" => $countTopic,
+                   
             ]
         ];
     }
@@ -45,8 +87,8 @@ class ForumController extends AbstractController implements ControllerInterface{
     
         // Appelle la méthode `findTopicsByCategory` du TopicManager pour récupérer tous les topics qui sont associés à cette catégorie spécifique.
         $topics = $topicManager->findTopicsByCategory($id);
-    
         
+    
         return [
             "view" => VIEW_DIR . "forum/listTopics.php", 
             "meta_description" => "Liste des topics par catégorie : " . $category, 
@@ -98,19 +140,87 @@ class ForumController extends AbstractController implements ControllerInterface{
             // Vérifie que le nom de la catégorie (après nettoyage) n'est pas vide
             if ($name) {
 
-                // créer une nouvelle instance de CategoryManager
+                // Vérification si un fichier photo a été téléchargé et si aucune erreur n'a été rencontrée
+                if(isset($_FILES["photo"]) && $_FILES["photo"]["error"] == 0){
+
+                    // Liste des extensions et types MIME autorisés pour l'image
+                    $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png", "webp" => "image/webp");
+                    
+                    // Récupère le nom du fichier, son type MIME et sa taille
+                    $filename = $_FILES["photo"]["name"];
+                    $filetype = $_FILES["photo"]["type"];
+                    $filesize = $_FILES["photo"]["size"];
+
+                    // Récupère l'extension du fichier
+                    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+                    // Vérifie si l'extension du fichier est dans la liste des extensions autorisées
+                    if(!array_key_exists($ext, $allowed)) {
+                        die("Erreur : Veuillez sélectionner un format de fichier valide."); // Si l'extension n'est pas valide, on arrête l'exécution
+                    }
+
+                    // Vérifie la taille du fichier, ici on limite à 5Mo
+                    $maxsize = 5 * 1024 * 1024;
+                    if($filesize > $maxsize) {
+                        die("Erreur : La taille du fichier est supérieure à la limite autorisée."); // Si la taille est trop grande, on arrête
+                    }
+
+                    // Vérifie que le type MIME du fichier est valide
+                    if(in_array($filetype, $allowed)){
+
+                        // Vérifie si un fichier avec le même nom existe déjà sur le serveur
+                        if(file_exists("upload/" . $_FILES["photo"]["name"])){
+
+                            // Si le fichier existe déjà, on affiche un message d'erreur
+                            echo $_FILES["photo"]["name"] . " existe déjà."; 
+
+                        } else{
+                            // Si tout est correct, on déplace le fichier téléchargé vers le dossier "public/upload"
+                            move_uploaded_file($_FILES["photo"]["tmp_name"], "public/upload/" . $_FILES["photo"]["name"]);
+
+                            // Si le téléchargement a réussi
+                            echo "Votre fichier a été téléchargé avec succès."; 
+                        }
+
+                    } else{
+
+                        // Si le type MIME n'est pas autorisé
+                        echo "Erreur : Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer."; 
+                    }
+
+                } else{
+
+                    // Si le téléchargement du fichier a échoué, on affiche l'erreur associée
+                    echo "Erreur: " . $_FILES["photo"]["error"];
+                }
+
+                // Créer une nouvelle instance de PublicationManager 
                 $categoryManager = new CategoryManager();
 
-                // Prépare les données à insérer dans la base de données 'name' correspond à la valeur nettoyée du champ 'title'
-                $data = ['name' => $name];
+                // Récupère le nom de la photo téléchargée
+                $photo = $_FILES["photo"]["name"];
 
-                // Appelle la méthode 'add' du CategoryManager pour ajouter une nouvelle catégorie dans la base de données
+                // Crée un tableau associatif contenant les données à insérer dans la base de données
+                $data = ['name'=>$name, 'photo'=>$photo];
+
+                // Appelle la méthode 'add' de PublicationManager pour ajouter la nouvelle publication dans la base de données
                 $categoryManager->add($data);
+
+                // Redirige vers la page principale des publications après l'ajout
+                $this->redirectTo("forum", "index");
+
                 
                 return [
 
                     "view" => VIEW_DIR."forum/listCategories.php",
                     "meta_description" => "Page ajouter categotie",
+                    "data" => [
+
+                        "name" => $name,
+                        "photo" => $photo
+                        
+        
+                    ]
                     
                 ];
             }
@@ -142,17 +252,20 @@ class ForumController extends AbstractController implements ControllerInterface{
         // Cela signifie que l'utilisateur a rempli le formulaire pour ajouter un topic à la catégorie
         if (isset($_POST["submit"])) {
         
-        // La fonction filter_input() permet de valider et nettoyer les données transmises via le formulaire
-        // Le filtre FILTER_SANITIZE_FULL_SPECIAL_CHARS supprime ou encode les caractères spéciaux et balises HTML
-        // Cela empêche l'injection de code HTML ou JavaScript (XSS)
-        $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  // Récupère le titre du topic et le nettoie
-        $message = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  // Récupère le texte du message initial et le nettoie
-        // $creationDate = filter_input(INPUT_POST, "creationDate", FILTER_SANITIZE_NUMBER_INT);
-        // $closed = filter_input(INPUT_POST, "closed", FILTER_SANITIZE_NUMBER_INT);
-        
-        // Récupère l'ID de la catégorie à partir de l'URL via $_GET['id']
-        // Cela permet de savoir à quelle catégorie on ajoute ce topic
-        $categoryId = $_GET['id'];
+            // La fonction filter_input() permet de valider et nettoyer les données transmises via le formulaire
+            // Le filtre FILTER_SANITIZE_FULL_SPECIAL_CHARS supprime ou encode les caractères spéciaux et balises HTML
+            // Cela empêche l'injection de code HTML ou JavaScript (XSS)
+            $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  // Récupère le titre du topic et le nettoie
+            $message = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  // Récupère le texte du message initial et le nettoie
+            // $creationDate = filter_input(INPUT_POST, "creationDate", FILTER_SANITIZE_NUMBER_INT);
+            // $closed = filter_input(INPUT_POST, "closed", FILTER_SANITIZE_NUMBER_INT);
+            
+            // Récupère l'ID de la catégorie à partir de l'URL via $_GET['id']
+            // Cela permet de savoir à quelle catégorie on ajoute ce topic
+            $category = $_GET['id'];
+
+            // Récupérer l'utilisateur connecté
+            $user_id = SESSION::getUser()->getId();
 
             // Vérifie si le titre et le message du topic ne sont pas vides après nettoyage
             if ($title && $message) {
@@ -162,7 +275,7 @@ class ForumController extends AbstractController implements ControllerInterface{
 
                 // Prépare les données pour l'ajout du topic dans la base de données
                 // On crée un tableau associatif avec le titre du topic et l'ID de la catégorie à laquelle il appartient
-                $dataTopic = ['title' => $title, 'category_id' => $categoryId];
+                $dataTopic = ['title' => $title, 'user_id' => $user_id, 'category_id' => $category];
 
                 // Appelle la méthode 'add' du TopicManager pour ajouter un nouveau topic dans la base de données
                 // La méthode 'add' retourne probablement l'ID du topic ajouté
@@ -173,15 +286,22 @@ class ForumController extends AbstractController implements ControllerInterface{
 
                 // Prépare les données pour l'ajout du message initial du topic (le premier post)
                 // On crée un tableau associatif avec le texte du message et l'ID du topic auquel il appartient
-                $dataPost = ['text' => $message, 'topic_id' => $topics];  // On utilise l'ID du topic retourné par l'ajout du topic
+                $dataPost = ['text' => $message, 'user_id' => $user_id, 'topic_id' => $topics];  // On utilise l'ID du topic retourné par l'ajout du topic
 
                 // Appelle la méthode 'add' du PostManager pour ajouter un premier post dans la base de données pour ce topic
                 $posts = $postManager->add($dataPost);
+
+                $this->redirectTo("forum", "index.php?ctrl=forum&action=listTopicsByCategory&id=$category");
+    
                
                 return [
 
-                    "view" => VIEW_DIR."reseauSocial/listCategories.php",
-                    "meta_description" => "Ajouter topic"
+                    "view" => VIEW_DIR."forum/listTopics.php",
+                    "meta_description" => "Ajouter topic",
+                    "data" => [
+                        "category" => $category, 
+                        "topics" => $topics 
+                    ]
                 ];
             }
         }    
@@ -219,8 +339,8 @@ class ForumController extends AbstractController implements ControllerInterface{
 
                 return [
 
-                    "view" => VIEW_DIR."forum/listPostsByTopic&id.php",
-                    "meta_description" => "Liste des posts du forum",
+                    "view" => VIEW_DIR."forum/listPosts.php",
+                    "meta_description" => "Liste des posts du forum"
  
                 ];
 

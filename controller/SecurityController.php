@@ -22,14 +22,22 @@ class SecurityController extends AbstractController{
         // Filtrer la saisie des champs du formulaire pour prévenir les attaques XSS et valider les données
         // Ici on utilise FILTER_SANITIZE_FULL_SPECIAL_CHARS pour assainir les caractères spéciaux et HTML
         $pseudo = filter_input(INPUT_POST, "nickName", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  
-        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL);  
+        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);  
         $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  
         $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  
 
             // Vérifie que tous les champs sont remplis
             if($pseudo && $email && $pass1 && $pass2){
+
+                // Vérifie si la case des CGU a été cochée
+                if (!isset($_POST['accept_cgu'])) {
+
+                    echo "Vous devez accepter les Conditions Générales d'Utilisation.";
+                    return;
+                    
+                }
                 
-                // Crée une instance de UserManager pour gérer les utilisateurs
+                // Créer une nouvelle instance de UserManager 
                 $userManager = new UserManager();
 
                 // Demande au UserManager de chercher un utilisateur avec l'email fourni
@@ -44,19 +52,28 @@ class SecurityController extends AbstractController{
                 } else {
 
                     // Si les mots de passe sont identiques et que le mot de passe est suffisamment long
-                    if($pass1 === $pass2 && strlen($pass1) >= 5){
+                    if($pass1 === $pass2 && strlen($pass1) >= 8){
 
-                        // Prépare les données de l'utilisateur à insérer dans la base de données
-                        // Le mot de passe est hashé avec password_hash pour sécuriser le stockage
-                        $data = ['nickName'=>$pseudo, 'password'=>password_hash($pass1, PASSWORD_DEFAULT), 'email'=>$email];
+                        $regex = '/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/';
 
-                        // Ajoute l'utilisateur dans la base de données via UserManager
-                        $user = $userManager->add($data);
+                        if (preg_match($regex, $pass1)){
 
+                            // Prépare les données de l'utilisateur à insérer dans la base de données
+                            // Le mot de passe est hashé avec password_hash pour sécuriser le stockage
+                            $data = ['nickName'=>$pseudo, 'password'=>password_hash($pass1, PASSWORD_DEFAULT), 'email'=>$email];
 
+                            // Ajoute l'utilisateur dans la base de données via UserManager
+                            $user = $userManager->add($data);
+
+                        }else {
+
+                            // Si le mot de passe ne respecte pas la regex
+                            echo "Le mot de passe doit contenir au moins une majuscule, un chiffre et un caractère spécial.";
+
+                        }
                     } else {
 
-                    echo "Les mots de passe ne sont pas identiques ou sont trop courts.";
+                    echo "Les mots de passe ne sont pas identiques ou sont trop courts au moins 8 caractères(une majuscule, un chiffre, un caractère spécial).";
                     }    
                 } 
             } else{
@@ -81,8 +98,31 @@ class SecurityController extends AbstractController{
         if(isset($_POST["submit"])){
 
             // Filtrer la saisie des champs du formulaire
-            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL); // Assainir l'email
-            $password = $_POST['password'];  // Récupère le mot de passe entré par l'utilisateur
+            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL); 
+            $password = $_POST['password']; 
+
+            // Vérification avec regex pour l'email
+            $emailRegex = '/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/';
+
+            if (!preg_match($emailRegex, $email)) {
+
+                echo "L'email fourni est invalide.";
+
+                $this->redirectTo("home", "index");
+                return;
+
+            }
+
+            // Vérifie si le mot de passe respecte les conditions (une majuscule, un chiffre, un caractère spécial et un minimun de 8 caractères)
+            $passwordRegex = '/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/';
+
+            if (!preg_match($passwordRegex, $password)) {
+
+                echo "Le mot de passe doit contenir au moins une majuscule, un chiffre et un caractère spécial, et avoir au moins 8 caractères.";
+                
+                $this->redirectTo("home", "index");
+                return;
+            }
     
             // Vérifie que l'email et le mot de passe sont valides
             if($email && $password){
@@ -200,6 +240,94 @@ class SecurityController extends AbstractController{
         ];   
 
     } 
+
+    public function addPhoto() {
+
+        // Vérifie si le formulaire a été soumis 
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+            // Vérification si un fichier photo a été téléchargé et si aucune erreur n'a été rencontrée
+            if(isset($_FILES["photo"]) && $_FILES["photo"]["error"] == 0){
+
+                // Liste des extensions et types MIME autorisés pour l'image
+                $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png", "webp" => "image/webp");
+                
+                // Récupère le nom du fichier, son type MIME et sa taille
+                $filename = $_FILES["photo"]["name"];
+                $filetype = $_FILES["photo"]["type"];
+                $filesize = $_FILES["photo"]["size"];
+
+                // Récupère l'extension du fichier
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+                // Vérifie si l'extension du fichier est dans la liste des extensions autorisées
+                if(!array_key_exists($ext, $allowed)) {
+                    die("Erreur : Veuillez sélectionner un format de fichier valide."); // Si l'extension n'est pas valide, on arrête l'exécution
+                }
+
+                // Vérifie la taille du fichier, ici on limite à 5Mo
+                $maxsize = 5 * 1024 * 1024;
+                if($filesize > $maxsize) {
+                    die("Erreur : La taille du fichier est supérieure à la limite autorisée."); // Si la taille est trop grande, on arrête
+                }
+
+                // Vérifie que le type MIME du fichier est valide
+                if(in_array($filetype, $allowed)){
+
+                    // Vérifie si un fichier avec le même nom existe déjà sur le serveur
+                    if(file_exists("upload/" . $_FILES["photo"]["name"])){
+
+                        // Si le fichier existe déjà, on affiche un message d'erreur
+                        echo $_FILES["photo"]["name"] . " existe déjà."; 
+
+                    } else{
+                        // Si tout est correct, on déplace le fichier téléchargé vers le dossier "public/upload"
+                        move_uploaded_file($_FILES["photo"]["tmp_name"], "public/upload/" . $_FILES["photo"]["name"]);
+
+                        // Si le téléchargement a réussi
+                        echo "Votre fichier a été téléchargé avec succès."; 
+                    }
+
+                } else{
+
+                    // Si le type MIME n'est pas autorisé
+                    echo "Erreur : Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer."; 
+                }
+
+                // Créer une nouvelle instance de PublicationManager 
+                $userManager = new UserManager();
+
+                $userId = SESSION::getUser()->getId();
+
+                // Récupère le nom de la photo téléchargée
+                $photo = $_FILES["photo"]["name"];
+
+                // Appelle la méthode 'updateProfilPhoto' de UserManager pour modifier la photo dans la base de données
+                $userManager->updateProfilPhoto($userId, $photo);
+
+                // Redirige vers la page profil de l'utilisateur connecté après l'ajout
+                $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$userId");
+
+            } else{
+
+                // Si le téléchargement du fichier a échoué, on affiche l'erreur associée
+                echo "Erreur: " . $_FILES["photo"]["error"];
+            }
+            
+            return [
+
+                "view" => VIEW_DIR."reseauSocial/homePublications.php",
+                "meta_description" => "ajouter publication",
+                "data" => [
+
+                    "photo" => $photo
+                    
+    
+                ]
+            ];
+            
+        }    
+    }
     
    
     public function editProfile($id) {
