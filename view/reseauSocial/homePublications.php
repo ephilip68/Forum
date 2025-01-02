@@ -16,7 +16,7 @@
                 <?php } ?> 
                 <a href="index.php?ctrl=publication&action=listAmis"><li class="listContent"><i class="fa-solid fa-user-group"></i><span>Amis</span></li></a>
                 <a href="index.php?ctrl=publication&action=getFavoritesPublications"><li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Enregistrements</span></li></a>
-                <a href="#"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Evènements</span></li></a>
+                <a href="index.php?ctrl=event&action=index"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Evènements</span></li></a>
                 <a href="#"><li class="listContent"><i class="fa-solid fa-magnifying-glass"></i><span>Rechercher</span></li></a>
                 <a href="#"><li class="listContent"><i class="fa-solid fa-envelope"></i><span>Newsletters</span></li></a>
                 <li class="divider"></li>
@@ -110,14 +110,18 @@
                                         <div class="album-date-home"><?=$publication->getPublicationDate()?></div>
                                     </div>
                                     <div class="home-option">
-                                        <button type="button" class="options-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                                        <a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?> "><i class="fa-solid fa-xmark home-close"></i></a>
+                                        <?php if(App\Session::getUser()->getId() == $publication->getUser()->getId()) { ?>
+                                            <button type="button" class="options-btn"><span uk-icon="icon: more"></span></button>
+                                            <a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?> "><i class="fa-solid fa-xmark home-close"></i></a>
+                                        <?php }else{ ?>
+                                            <button type="button" class="options-btn"><span uk-icon="icon: more"></span></button>
+                                        <?php } ?>
                                     </div>
                                     <div class="options-menu" id="optionsMenu">
                                         <div class="arrow"></div>
                                         <ul>
-                                            <li><a href="#">Signaler la publication</a></li>
-                                            <li><a href="index.php?ctrl=publication&action=addFavorites&id=<?= $publication->getId() ?>"><i class="fa-solid fa-bookmark"></i>Enregistrer la publication</a></li>
+                                            <li><a href="index.php?ctrl=publication&action=addFavorites&id=<?= $publication->getId() ?>"><span uk-icon="icon: bookmark"></span>Enregistrer la publication</a></li>
+                                            <li><a href="#"><span uk-icon="icon: warning"></span>Signaler la publication</a></li>
                                         </ul>
                                     </div>
                                 </div>

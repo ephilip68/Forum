@@ -4,61 +4,67 @@
     include VIEW_DIR."template/nav.php";
 ?>
 
-<h3>Liste d'Enregistrements</h3>
-
-
-<?php foreach($favorites as $favoris) { ?>
-
-    <div class="album-home box-box">
-        <div class="status-main-content">
-            <div class="status-main-home">
-                <img src="public/upload/<?=$favoris->getPublication()->getUser()->getAvatar()?>" class="status-img"/>
-                <div class="album-detail-home">
-                    <div class="album-title-home"><a href="index.php?ctrl=security&action=profile&id=<?=$favoris->getPublication()->getUser()->getId()?>"><?=ucfirst($favoris->getPublication()->getUser()->getNickName())?></a></div>
-                    <div class="album-date-home"><?=$favoris->getPublication()->getPublicationDate()?></div>
-                </div>
-                <div class="home-option">
-                    <button type="button" class="options-btn"><i class="fa-solid fa-ellipsis"></i></button>
-                    <a href="index.php?ctrl=publication&action=deletePublication&id=<?= $favoris->getPublication()->getId() ?> "><i class="fa-solid fa-xmark home-close"></i></a>
-                </div>
-                <div class="options-menu" id="optionsMenu">
-                    <div class="arrow"></div>
-                    <ul>
-                        <li><a href="#">Signaler la publication</a></li>
-                        <li><a href="index.php?ctrl=publication&action=deleteFavorites&id=<?= $favoris->getPublication()->getId() ?>"><i class="fa-solid fa-bookmark"></i>Supprimer des enregistrements</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="album-content-home">
-                <p><?=ucfirst($favoris->getPublication()->getContent())?></p>
-            </div>
-            <div class="album-photos-home">
-                <img src="public/upload/<?=$favoris->getPublication()->getPhoto()?>" alt="" class="album-photo-home"/>
-            </div>
-            <div class="album-actions-home">
-                <div class="action-reaction">
-                    <a href=""><i class="fa-solid fa-heart" style="color:red"></i></a>
-                    <div class="action-number">
-                        <span>Commentaire</span>
-                        <span>Partage</span>
+<div class="container-home" >
+    <div class="left-side-content">
+        <div class="left-side-event">
+            <div class="side-wrapper">
+                <ul class="listNavEvent list-unstyled">
+                    <div class="navEvent">
+                        <a href="index.php?ctrl=security&action=profile&id=<?=App\Session::getUser()->getId()?>"><li class="listContent"><i><img src="public/upload/<?=App\Session::getUser()->getAvatar()?>" class="status-img-nav"/></i><span><?= ucfirst(App\Session::getUser()->getNickName())?></span></li></a>
                     </div>
-                </div>
-                <div class="divider-home"></div>
-                <div class="action-reactions">
-                    <a href="#"><i class="fa-regular fa-heart"></i>J'aime</a>
-                    <a href="#"><i class="fa-regular fa-comment"></i>Commenter</a>
-                    <a href="#"><i class="fa-solid fa-share"></i>Republier</a>
-                </div>    
-            </div>    
+                    <div class="footerHome">
+                        <a class="" href="#">A Propos</a> - 
+                        <a class="" href="#">Règlement du forum</a> -  
+                        <a class="" href="#">Mentions légales</a>  
+                        -<small>&copy; <?= date_create("now")->format("Y") ?></small>
+                    </div>
+                </ul>   
+            </div>
         </div>
     </div>
+    <div class="main-container-home">
+        <div class="timeline-favorites">
+            <div class="favoritesTitle"><h3>Liste des enregistrements</h3></div>
+            <?php foreach($favorites as $favoris) { ?>
+                <div class="timeline-center-favorites">
+                    <div class="favoritesStatus">
+                        <div class="favoritesPhoto">
+                            <img src="public/upload/<?=$favoris->getPublication()->getPhoto()?> "/>
+                        </div>
+                        <div class="favoritesList">
+                            <div class="favotitesInfo"> 
+                                <h4><?=ucfirst($favoris->getPublication()->getContent())?></h4>
+                                <div class="favoritesDescriptions">
+                                    <img src="public/upload/<?=$favoris->getUser()->getAvatar()?>" class="status-img-nav"/>
+                                    <p>Enregistré à partir de la <a href=""><strong>Publication de <?=ucfirst($favoris->getPublication()->getUser()->getNickName())?></strong></a></p>
+                                </div>
+                            </div>
+                            <div class="favoritesButton">
+                                <button class="btnSharefavorites"><i class="fa-solid fa-share"></i></button>
+                                <button type="button" class="options-btn-favorites"><span uk-icon="icon: more"></span></button>
+                            </div>
+                            <div class="options-menu-favorites" id="optionsMenu">
+                                <div class="arrow"></div>
+                                <ul>
+                                    <li><a href="index.php?ctrl=publication&action=deleteFavorites&id=<?= $favoris->getPublication()->getId() ?>"><span uk-icon="icon: close"></span>Supprimer cet enregistrement</a></li>
+                                    <li><a href="#"><span uk-icon="icon: warning"></span>Signaler cette publication</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+</div>
 
-<?php } ?>
+
+    
 
 <script>
     // Récupérer tous les boutons d'options et les menus associés
-    const optionsBtns = document.querySelectorAll('.options-btn');
-    const optionsMenus = document.querySelectorAll('.options-menu'); 
+    const optionsBtns = document.querySelectorAll('.options-btn-favorites');
+    const optionsMenus = document.querySelectorAll('.options-menu-favorites'); 
 
     // Ajouter un événement à chaque bouton
     optionsBtns.forEach((btn, index) => {
