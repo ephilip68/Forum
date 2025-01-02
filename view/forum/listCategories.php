@@ -95,11 +95,11 @@ include VIEW_DIR."template/nav.php";
 
                             <?php if (!empty($topic['last_avatar'])){ ?>
 
-                                <img src="public/upload/<?= $topic['last_avatar'] ?>" alt="photo de profil" class="img_profil">     
+                                <img src="public/upload/<?= $topic['last_avatar'] ?>" alt="photo de profil" class="status-img">     
 
                                 <?php }else{ ?>
 
-                                    <img src="public/img/default-avatar.webp" alt="photo de profil par défaut" class="img_profil">
+                                    <img src="public/img/default-avatar.webp" alt="photo de profil par défaut" class="status-img">
 
                                 <?php } ?>      
                             <?php } ?>
