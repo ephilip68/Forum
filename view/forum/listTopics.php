@@ -1,11 +1,10 @@
 <?php
 
     $category = $result["data"]['category']; 
-    $topics = $result["data"]['topics']; 
+    $topics = $result["data"]['topics'];  
     include VIEW_DIR."template/nav.php";
   
 ?>
-
 <section class="pageCategorie">
     <div class="categoryContent">
         <div class="categoryTitle">
@@ -72,11 +71,12 @@
                     <?php if(empty($topics)){ ?> 
                         <p>Cette catégorie n'a pas de sujet pour le moment.</p>
                     <?php }else{ ?>    
-                    <?php foreach($topics as $topic){ ?>
-
+                        <?php foreach($topics as $topic){ ?>
+                        
                         <tr id='product-hover'>
-
-                            <td><a href="index.php?ctrl=forum&action=listPostsByTopic&id=<?= $topic->getId() ?>"><?php echo ucfirst($topic->getTitle())?></a></td>
+                            
+                            
+                            <td><a href="index.php?ctrl=post&action=listPostsByTopic&id=<?= $topic->getId() ?>"><?php echo ucfirst($topic->getTitle())?></a></td>
                             <td><?php echo ucfirst($topic->getUser()->getNickName()) ?></td>
                             <td></td>
                             <td></td>

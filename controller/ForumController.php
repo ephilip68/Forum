@@ -5,9 +5,11 @@ use App\Session;
 use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\UserManager;
+use Model\Managers\LikeMessageManager;
 use Model\Managers\CategoryManager;
 use Model\Managers\TopicManager;
 use Model\Managers\PostManager;
+use Model\Managers\CommentPostManager;
 
 class ForumController extends AbstractController implements ControllerInterface{
 
@@ -81,51 +83,30 @@ class ForumController extends AbstractController implements ControllerInterface{
     
         // créer une nouvelle instance de CategoryManager
         $categoryManager = new CategoryManager();
+
+        // créer une nouvelle instance de PostManager
+        $postManager = new PostManager();
     
         // Appelle la méthode `findOneById` du CategoryManager pour obtenir les informations sur la catégorie à partir de l'ID passé en argument ($id). Cela va récupérer une catégorie spécifique de la base de données.
         $category = $categoryManager->findOneById($id);
     
         // Appelle la méthode `findTopicsByCategory` du TopicManager pour récupérer tous les topics qui sont associés à cette catégorie spécifique.
         $topics = $topicManager->findTopicsByCategory($id);
+
+        // Récupère tous les posts associés à ce topic en utilisant l'ID du topic
+        $posts = $postManager->findPostsByTopic($id);
         
-    
         return [
             "view" => VIEW_DIR . "forum/listTopics.php", 
             "meta_description" => "Liste des topics par catégorie : " . $category, 
             "data" => [
                 "category" => $category, 
-                "topics" => $topics 
+                "topics" => $topics
+                
             ]
         ];
     }
 
-    public function listPostsByTopic($id) {
-        
-        // créer une nouvelle instance de PostManager
-        $postManager = new PostManager();
-        
-        // créer une nouvelle instance de TopicManager
-        $topicManager = new TopicManager();
-
-        // Récupère les informations du topic en utilisant son ID
-        $topic = $topicManager->findOneById($id);
-
-        // Récupère tous les posts associés à ce topic en utilisant l'ID du topic
-        $posts = $postManager->findPostsByTopic($id);
-
-        // le controller communique avec la vue "listPosts" (view) pour lui envoyer la liste des Posts (data)
-        return [
-
-            "view" => VIEW_DIR."forum/listPosts.php",
-            "meta_description" => "Liste des posts du forum",
-            "data" => [
-
-                "topic" => $topic,
-                "posts" => $posts
-
-            ]   
-        ];
-    }
 
     public function addCategory(){
 
@@ -310,8 +291,8 @@ class ForumController extends AbstractController implements ControllerInterface{
     public function addPostToTopic($id){
 
         // Vérifie si le formulaire a été soumis via la méthode POST
-    // Cela signifie que l'utilisateur a rempli le formulaire pour ajouter un post au topic
-    if (isset($_POST["submit"])) {
+        // Cela signifie que l'utilisateur a rempli le formulaire pour ajouter un post au topic
+        if (isset($_POST["submit"])) {
         
         // La fonction filter_input() permet de valider et nettoyer les données transmises via le formulaire
         // Le filtre FILTER_SANITIZE_FULL_SPECIAL_CHARS supprime ou encode les caractères spéciaux et les balises HTML pour prévenir les injections de code (XSS)
@@ -324,6 +305,9 @@ class ForumController extends AbstractController implements ControllerInterface{
         // Cela permet d'ajouter le post au topic spécifique
         $topicId = $_GET['id'];
 
+         // Récupérer l'utilisateur connecté
+         $userId = SESSION::getUser()->getId();
+
         // Vérifie si le texte du post n'est pas vide après nettoyage
         if ($text) {
 
@@ -332,10 +316,12 @@ class ForumController extends AbstractController implements ControllerInterface{
 
             // Prépare les données à insérer dans la base de données
             // On crée un tableau avec le texte du post et l'ID du topic auquel ce post est associé
-            $data = ['text' => $text, 'topic_id' => $topicId];
+            $data = ['text' => $text, 'user_id'=>$userId, 'topic_id' => $topicId];
 
             // Appelle la méthode 'add' du PostManager pour ajouter le nouveau post dans la base de données
             $postManager->add($data);
+
+            $this->redirectTo("forum", "listPostsByTopic&id=$topicId");
 
                 return [
 
@@ -346,5 +332,45 @@ class ForumController extends AbstractController implements ControllerInterface{
 
             }
         }    
+    }
+
+
+
+    public function likePost($id) {
+
+        $postId = $_GET['id'];
+
+        $userId = SESSION::getUser()->getId();
+
+        // créer une nouvelle instance de LikeMessage
+        $likeMessageManager = new LikeMessageManager();
+    
+        // Vérifier si l'utilisateur suit déjà cet ami
+        $userLike = $likeMessageManager->userLike($userId, $postId);
+    
+        if ($userLike) {
+            // Rediriger si déjà suivi
+            echo "Vous aimez déjà ce post.";
+            $this->redirectTo("forum", "listPostsByTopic&id=$postId");
+            return;
+        }
+        
+    
+        // Ajouter like dans la base de données
+        $data = [
+            'post_id' => $postId,
+            'user_id' => $userId
+        ];
+    
+        $likeMessageManager->add($data);
+
+        $this->redirectTo("forum", "listPostsByTopic&id=$postId");
+    
+        return [
+
+            "view" => VIEW_DIR."forum/listPosts.php",
+            "meta_description" => "Liste des posts du forum"
+
+        ];
     }
 }

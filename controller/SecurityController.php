@@ -25,9 +25,10 @@ class SecurityController extends AbstractController{
         $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);  
         $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  
         $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  
+        $avatar = !empty($_POST['avatar']) ? $_POST['avatar'] : 'default-avatar.webp'; // Avatar par défaut si non spécifié
 
             // Vérifie que tous les champs sont remplis
-            if($pseudo && $email && $pass1 && $pass2){
+            if($pseudo && $email && $pass1 && $pass2 && $avatar){
 
                 // Vérifie si la case des CGU a été cochée
                 if (!isset($_POST['accept_cgu'])) {
@@ -60,7 +61,7 @@ class SecurityController extends AbstractController{
 
                             // Prépare les données de l'utilisateur à insérer dans la base de données
                             // Le mot de passe est hashé avec password_hash pour sécuriser le stockage
-                            $data = ['nickName'=>$pseudo, 'password'=>password_hash($pass1, PASSWORD_DEFAULT), 'email'=>$email];
+                            $data = ['nickName'=>$pseudo, 'password'=>password_hash($pass1, PASSWORD_DEFAULT), 'email'=>$email, 'avatar' => $avatar];
 
                             // Ajoute l'utilisateur dans la base de données via UserManager
                             $user = $userManager->add($data);

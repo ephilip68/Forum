@@ -14,7 +14,7 @@ final class Publication extends Entity{
     private $publicationDate;
     private $photo;
     private $video;
-    private $user_id;
+    private $user;
 
     // chaque entité aura le même constructeur grâce à la méthode hydrate (issue de App\Entity)
     public function __construct($data){
@@ -136,9 +136,9 @@ final class Publication extends Entity{
     /**
      * Get the value of user_id
      */ 
-    public function getUser_id(){
+    public function getUser(){
 
-        return $this->user_id;
+        return $this->user;
 
     }
 
@@ -147,9 +147,9 @@ final class Publication extends Entity{
      *
      * @return  self
      */ 
-    public function setUser_id($user_id){
+    public function setUser($user){
 
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
         

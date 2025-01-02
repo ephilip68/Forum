@@ -2,6 +2,9 @@
 
 $topic = $result["data"]["topic"];
 $posts = $result["data"]["posts"];
+$comments = $result["data"]["comments"];
+$countLike = $result["data"]["countLike"];
+$userLike = $result["data"]["userLike"];
 
 include VIEW_DIR."template/nav.php";
 
@@ -21,11 +24,11 @@ include VIEW_DIR."template/nav.php";
                             <p><?php echo ucfirst($topic->getTitle())?></p>
                         </div>
                         <div class="cardProfil">
-                        <?php foreach($posts as $post){ ?>
                         
-                            <?php if (!empty($post->getUser()->getAvatar())){ ?>
+                        
+                            <?php if (!empty($topic->getUser()->getAvatar())){ ?>
 
-                                <img src="public/upload/<?= $post->getUser()->getAvatar() ?>" alt="photo de profil" class="img_profil">     
+                                <img src="public/upload/<?= $topic->getUser()->getAvatar() ?>" alt="photo de profil" class="img_profil">     
     
                             <?php }else{ ?>
     
@@ -33,15 +36,25 @@ include VIEW_DIR."template/nav.php";
     
                             <?php } ?>      
                             
-                            <p><?= ucfirst($post->getUser()->getNickName()) ?></p>
+                            <p><?= ucfirst($topic->getUser()->getNickName()) ?></p>
                         </div>
                         <div class="cardText">
-                            <p><?= ucfirst($post->getText()) ?></p>
+                            <?php foreach($posts as $post){ ?>
+                                <p><?= ucfirst($post->getText()) ?></p>
+                            
                         </div>
                         <div class="cardReaction">
                             <div class="cardReactionLike">
-                                <span></span>
-                                <a href=""><i class="fa-solid fa-heart"></i></a>
+                                
+                                    <span><?= $countLike ?></span>
+                               
+                                <?php if (!$userLike){ ?>
+                                    <form action="index.php?ctrl=forum&action=likePost&id=<?= $post->getId() ?>" method="POST">
+                                        <button type="submit" name="submit"><i class="fa-solid fa-heart"></i></button>
+                                    </form>
+                                <?php }else{ ?>
+                                    <p>Vous avez déjà aimé ce topic.</p>
+                                <?php } ?>
                             </div>
                             <div class="cardReactionShare">
                                 <a href=""><i class="fa-solid fa-up-right-from-square"></i></a>
@@ -59,7 +72,7 @@ include VIEW_DIR."template/nav.php";
                             <div id="modal-example8" uk-modal>
                                 <div class="uk-modal-dialog uk-modal-body modal-post">
                                     <div class="modal-content">
-                                        <a class="btn-close uk-modal-close close-post" ><i class="fa-solid fa-up-right-and-down-left-from-center"></i></a>
+                                        <a class="btn-close uk-modal-close close-post"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></a>
                                         <div class="modal-reply">
                                             <div class="modalReplyTitle">
                                                 <i class="fa-solid fa-reply"></i>
@@ -67,7 +80,7 @@ include VIEW_DIR."template/nav.php";
                                             </div>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="index.php?ctrl=forum&action=addPostToTopic&id=<?= $topic->getId()?>" method="post">
+                                            <form action="index.php?ctrl=post&action=addCommentPost&id=<?= $post->getId() ?>" method="post">
                                                 <div class="modal-comment">
                                                     <textarea class="editor" name="text" cols="30" rows="10" placeholder="Vous en pensez-quoi?"></textarea>
                                                 </div>
@@ -104,21 +117,23 @@ include VIEW_DIR."template/nav.php";
                         <div class="cardAvatar">
                             <p>1</p>
                         </div>
-                        <?php } ?>
+                        
                     </div>
                 </div>
             </div>
             <div class="message_container">
+                <?php foreach($comments as $comment){ ?>
+                    
                 <div class="messageAnswer">
                     <div class="messageProfil">
-                        <img src="" alt="">
+                        <img src="" alt="photo de profil" class="img_profil" alt="">
                         <div class="messageProfilInfo">
                             <span></span>
                             <span></span>
                         </div>
                     </div>
                     <div class="messageText">
-                        <p></p>
+                        <p><?= $comment->getText()?></p>
                     </div>
                     <div class="messageReaction">
                         <div class="answer">
@@ -143,7 +158,8 @@ include VIEW_DIR."template/nav.php";
                     </div>
                 </div>
             </div>
-        </div>
+            <?php } ?>
+        </div><?php } ?>
     </div>
 </section>
 

@@ -7,6 +7,7 @@ use App\Session;
 use Model\Managers\UserManager;
 use Model\Managers\PublicationManager;
 use Model\Managers\FollowManager;
+use Model\Managers\FavoritesManager;
 
 class PublicationController extends AbstractController implements ControllerInterface {
 
@@ -17,6 +18,7 @@ class PublicationController extends AbstractController implements ControllerInte
 
         // récupérer la liste de toutes les publications grâce à la méthode findAll de Manager.php (triés par nom)
         $publications = $publicationManager->findAll();
+
 
         // le controller communique avec la vue "listPublication" (view) pour lui envoyer la liste des publications (data)
         return [
@@ -32,6 +34,8 @@ class PublicationController extends AbstractController implements ControllerInte
     }
 
     public function listPublicationsByUser(){
+
+
 
     }
 
@@ -172,6 +176,92 @@ class PublicationController extends AbstractController implements ControllerInte
             "data" => [
 
             "friends" => $friends        
+        
+            ]
+
+        ];
+    }
+
+    public function addFavorites() {
+
+        // Récupérer l'ID de l'utilisateur et de la publication
+        $userId = Session::getUser()->getId();
+        $publicationId = $_GET['id']; // ID de la publication envoyée par la requête
+
+        // Créer une nouvelle instance de UserManager 
+        $favoritesManager = new FavoritesManager();
+
+        // Vérifie si l'utilisateur à déja enregistré la publication
+        $isFavorites = $favoritesManager->isFavorites($userId, $publicationId);
+
+        // Si oui, il sera redirigé et reçevra un message d'erreur
+        if($isFavorites){
+
+            echo "Publication déja enregistrée !";
+
+            $this->redirectTo("publication", "index");
+            return;
+
+        }
+
+        // Si non, la publication sera ajouté à la BDD
+        $data = ['publication_id' => $publicationId, 'user_id' => $userId];
+
+        $favoritesManager->add($data);
+
+        echo "Publication enregistrée !";
+
+        // Après l'ajout de la publication dans les enregistrements, on redirige l'utilisateur vers la page principale des publications
+        $this->redirectTo("publication", "index");
+
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/homePublication.php",
+            "meta_description" => "Enregistrer publication"
+           
+        ];
+
+    }
+
+    public function deleteFavorites($publicationId) {
+    
+        // Récupérer l'ID de l'utilisateur et de la publication
+        $userId = Session::getUser()->getId();
+
+        // Créer une nouvelle instance de UserManager 
+        $favoritesManager = new FavoritesManager();
+
+        $favoritesManager->deleteFavorites($userId, $publicationId);
+
+        // Après la suppression de la publication, on redirige l'utilisateur vers la page principale des enregistrements
+        $this->redirectTo("publication", "index.php?ctrl=publication&action=getFavoritesPublications");
+
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/homePublications.php",
+            "meta_description" => "Supprimer enregistrements"
+
+        ];
+    
+    }
+
+    public function getFavoritesPublications() {
+
+        // Récupérer l'ID de l'utilisateur et de la publication
+        $userId = Session::getUser()->getId();
+
+        // Créer une nouvelle instance de UserManager 
+        $favoritesManager = new FavoritesManager();
+
+        $favorites = $favoritesManager->getFavorites($userId);
+
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/listEnregistrements.php",
+            "meta_description" => "Liste des favoris",
+            "data" => [
+
+            "favorites" => $favorites        
         
             ]
 
