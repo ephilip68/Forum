@@ -18,7 +18,7 @@
                 <a href="index.php?ctrl=publication&action=getFavoritesPublications"><li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Enregistrements</span></li></a>
                 <a href="index.php?ctrl=event&action=index"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Evènements</span></li></a>
                 <a href="#"><li class="listContent"><i class="fa-solid fa-magnifying-glass"></i><span>Rechercher</span></li></a>
-                <a href="#"><li class="listContent"><i class="fa-solid fa-envelope"></i><span>Newsletters</span></li></a>
+                <a href="index.php?ctrl=newsletters&action=index"><li class="listContent"><i class="fa-solid fa-envelope"></i><span>Newsletters</span></li></a>
                 <li class="divider"></li>
                 <a href="#"><li class="listContent"><i class="fa-solid fa-gear"></i><span>Paramètres</span></li></a>
                 <!-- si l'utilisateur est connecté  -->
@@ -64,8 +64,7 @@
                             </div>
                         </div>
                     </div>
-                    
-
+                
                     <!-- Modal -->
                     <div id="modal-example3" uk-modal>
                         <div class="uk-modal-dialog uk-modal-body">

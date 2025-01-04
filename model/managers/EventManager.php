@@ -14,6 +14,21 @@ class EventManager extends Manager{
         parent::connect();
     }
 
+    public function findEventByUser($id){
+
+        $sql = "SELECT e.id_event, e.creationDate, e.photo, e.title, e.text, e.eventDate, e.eventHours, e.city, e.country, e.user_id, u.nickName
+        FROM " . $this->tableName . " e 
+        INNER JOIN user u ON e.user_id = u.id_user
+        WHERE u.id_user = :id";
+
+        // la requête renvoie plusieurs enregistrements --> getMultipleResults
+        return  $this->getMultipleResults(
+            DAO::select($sql, ['id' => $id]), 
+            $this->className
+        );
+
+    }
+
     // // Récupérer tous les événements à venir
     // public function comingEvents($id){
 

@@ -31,7 +31,7 @@ class UserManager extends Manager{
     //trouve les amis de l'utilisateur en fonction de son ID
     public function findFriendsByUser($id){
 
-        $sql = "SELECT u.id_user, u.nickName 
+        $sql = "SELECT u.id_user, u.nickName, u.avatar
         FROM " . $this->tableName . " u 
         INNER JOIN follow f ON u.id_user = f.user_id_1
         WHERE f.user_id = :id";

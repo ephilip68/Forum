@@ -7,6 +7,7 @@ use App\ControllerInterface;
 use Model\Managers\UserManager;
 use Model\Managers\FollowManager;
 use Model\Managers\PublicationManager;
+use Model\Managers\EventManager;
 
 class SecurityController extends AbstractController{
 
@@ -208,17 +209,23 @@ class SecurityController extends AbstractController{
         // Cette méthode retourne une liste de publications postées par l'utilisateur
         $publications = $publicationManager->findPublicationsByUser($id);
 
-        //Créer une nouvelle instance de FollowManager 
+        // Créer une nouvelle instance de FollowManager 
         $followManager = new FollowManager();
 
         // Vérifier si l'utilisateur connecté suit déjà cet utilisateur
         $isFollowing = $followManager->following($currentUserId, $id);
-
+        
         // Récupére le nombre de personnes suivies par l'utilisateur
         $following = $followManager->countFollowing($user_id);
-
+        
         // Récupére le nombre de personnes qui suivent l'utilisateur
         $followers = $followManager->countFollowers($user_id);
+
+        //C réer une nouvelle instance de EventManager 
+        $eventManager = new EventManager();
+
+        // Cette méthode retourne une liste des évènement postées par l'utilisateur
+        $events = $eventManager->findEventByUser($id);
 
 
         return [
@@ -233,7 +240,8 @@ class SecurityController extends AbstractController{
                 "publications" => $publications,
                 "isFollowing" => $isFollowing,
                 "following" => $following,
-                "followers" => $followers
+                "followers" => $followers,
+                "events" => $events
                 
 
             ]
