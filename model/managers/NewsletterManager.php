@@ -4,10 +4,10 @@ namespace Model\Managers;
 use App\Manager;
 use App\DAO;
 
-class NewslettersManager extends Manager{
+class NewsletterManager extends Manager{
 
     // on indique la classe POO et la table correspondante en BDD pour le manager concerné
-    protected $className = "Model\Entities\Newsletters";
+    protected $className = "Model\Entities\Newsletter";
     protected $tableName = "newsletters";
 
     public function __construct(){
@@ -28,5 +28,15 @@ class NewslettersManager extends Manager{
         return $result ? $result['COUNT(*)'] > 0 : false;
     }
 
+    public function getAllSubscribers() {
+        $sql = "SELECT n.email 
+        FROM ".$this->tableName." n ";
+
+        // la requête renvoie plusieurs enregistrements --> getMultipleResults
+        return  $this->getMultipleResults(
+        DAO::select($sql),
+        $this->className
+        );
+    }
    
 }

@@ -73,20 +73,34 @@ class UserManager extends Manager{
        
     }
 
-        //trouve les amis de l'utilisateur en fonction de son ID
-        public function getProfileAvatar($id){
+    //trouve les amis de l'utilisateur en fonction de son ID
+    public function getProfileAvatar($id){
 
-            $sql = "SELECT u.avatar
-            FROM " . $this->tableName . " u 
-            WHERE u.id_user = :id";
-    
-             // Exécute la requête avec DAO::select et récupère un seul résultat
-             $result = DAO::select($sql, ['id' => $id], false);
-            
-             // Retourne vrai si le comptage est supérieur à 0, faux sinon
-             return $result;
-    
-        }
+        $sql = "SELECT u.avatar
+        FROM " . $this->tableName . " u 
+        WHERE u.id_user = :id";
+
+            // Exécute la requête avec DAO::select et récupère un seul résultat
+            $result = DAO::select($sql, ['id' => $id], false);
+        
+            // Retourne vrai si le comptage est supérieur à 0, faux sinon
+            return $result;
+
+    }
+
+    // Recherche d'un utilisateur (par exemple par nom)
+    public function searchUsers($nickName) {
+
+        $sql = "SELECT *
+        FROM " . $this->table_name ." u 
+        WHERE u.nickName = :nickName";
+
+        // Exécute la requête avec DAO::select et récupère un seul résultat
+        $result = DAO::select($sql, ['nickName' => $nickName], false);
+        
+        // Retourne vrai si le comptage est supérieur à 0, faux sinon
+        return $result;
+    }
 
     
 

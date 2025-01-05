@@ -47,11 +47,11 @@ include VIEW_DIR."template/nav.php";
                     <?php }else{ ?>
                         <img src="public/upload/default-avatar.webp" alt="photo de profil par défaut" class="profile-img">
                     <?php } ?>      
-                    <a href="#modal-example4" uk-toggle ><i class="fa-solid fa-camera"></i></a>
+                    <a href="#modal-avatar" uk-toggle ><i class="fa-solid fa-camera"></i></a>
                     <div class="profile-name"><?=ucfirst($user->getNickName())?></div>
                     <div class="containerPublication">
                         <!-- Modal -->
-                        <div id="modal-example4" uk-modal>
+                        <div id="modal-avatar" uk-modal>
                             <div class="uk-modal-dialog uk-modal-body">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -64,12 +64,12 @@ include VIEW_DIR."template/nav.php";
                                             <div class="modal-comment">
                                                 <div class="modal-Form">
                                                     <div uk-form-custom >
-                                                        <input type="file" name="photo" id="fileUpload" onchange="previewPicture(this)">
+                                                        <input type="file" name="photo" id="fileUpload" data-target="image-2">
                                                         <div class="js-upload uk-placeholder uk-text-center">
                                                             <span uk-icon="icon: cloud-upload"></span>
                                                             <span class="uk-text-middle">Ajouter votre photo</span>
                                                             <span class="link">ou faites glisser-déposer</span>
-                                                            <img src="#" alt="" id="image" style="margin-top: 20px;">
+                                                            <img src="#" alt="" class="image-2" style="margin-top: 20px;">
                                                         </div>
                                                     </div> 
                                                 </div>
@@ -97,7 +97,7 @@ include VIEW_DIR."template/nav.php";
                     </div>
                     <?php if(App\Session::getUser() == $user){ ?>
 
-                        <a class="profile-menu-btn" href="#modal-example5" uk-toggle><span uk-icon="pencil"></span>Modifier profil</a>
+                        <a class="profile-menu-btn" href="#modal-edit" uk-toggle><span uk-icon="pencil"></span>Modifier profil</a>
 
                     <?php }elseif($isFollowing) { ?>
 
@@ -109,7 +109,7 @@ include VIEW_DIR."template/nav.php";
 
                     <?php } ?> 
                 </div>
-                <div id="modal-example5" uk-modal>
+                <div id="modal-edit" uk-modal>
                     <div class="uk-modal-dialog uk-modal-body">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -152,7 +152,7 @@ include VIEW_DIR."template/nav.php";
                             <div class="info-item">
                                 <span uk-icon="icon: social"></span>
                                 Inscrit le 
-                                <a href="#"><?=$user->getDateInscription()?></a>
+                                <a href="#"><?=$user->getFormattedDateInscription()?></a>
                             </div>
                             <div class="info-item">
                                 <span uk-icon="icon: mail"></span>
@@ -181,7 +181,7 @@ include VIEW_DIR."template/nav.php";
                                     </div>
                                     <div class="eventList">
                                         <div class="eventInfo">
-                                            <p class="eventDate"><?= $event->getEventDate() ?> à <?= $event->getEventHours() ?></p>
+                                            <p class="eventDate"><?= $event->getFormattedDate() ?> à <?= $event->getEventHours() ?></p>
                                             <p class="eventTitle"><?= ucfirst($event->getTitle()) ?> | <?= ucfirst($event->getText()) ?></p>
                                             <p class="eventSide"><?= ucfirst($event->getCity()) ?>, <?= ucfirst($event->getCountry()) ?></p>
                                         </div>  
@@ -227,7 +227,7 @@ include VIEW_DIR."template/nav.php";
                             <!-- <div class="status-main"> -->
                                 <div class="publicationList">
                                     <img src="public/upload/<?=App\Session::getUser()->getAvatar()?>" class="status-img"/>
-                                    <button class="writeSomething" type="button" uk-toggle="target: #modal-example3"><a href="#"></a>Publier quelque chose !</button>
+                                    <button class="writeSomething" type="button" uk-toggle="target: #modal-publication-profil"><a href="#"></a>Publier quelque chose !</button>
                                 </div>
                             <!-- </div> -->
                             <div class="divider2"></div>
@@ -251,7 +251,7 @@ include VIEW_DIR."template/nav.php";
                     <?php } ?>
                 
                     <!-- Modal -->
-                    <div id="modal-example3" uk-modal>
+                    <div id="modal-publication-profil" uk-modal>
                         <div class="uk-modal-dialog uk-modal-body">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -265,12 +265,12 @@ include VIEW_DIR."template/nav.php";
                                             <div class="modal-Form">
                                                 <input id="content" name="content" placeholder="Publier quelque chose !">
                                                 <div uk-form-custom >
-                                                    <input type="file" name="photo" id="fileUpload" onchange="previewPicture(this)">
+                                                    <input type="file" name="photo" id="fileUpload" data-target="image-3">
                                                     <div class="js-upload uk-placeholder uk-text-center">
                                                         <span uk-icon="icon: cloud-upload"></span>
                                                         <span class="uk-text-middle">Ajouter des photos/vidéos</span>
                                                         <span class="link">ou faites glisser-déposer</span>
-                                                        <img src="#" alt="" id="image" style="margin-top: 20px;">
+                                                        <img src="#" alt="" class="image-3" style="margin-top: 20px;">
                                                     </div>
                                                 </div> 
                                             </div>
@@ -292,7 +292,7 @@ include VIEW_DIR."template/nav.php";
                                     <img src="public/upload/<?=$publication->getUser()->getAvatar()?>" class="status-img"/>
                                     <div class="album-detail-home">
                                         <div class="album-title-home"><a href="index.php?ctrl=security&action=profile&id=<?=$publication->getUser()->getId()?>"><?=ucfirst($publication->getUser()->getNickName())?></a></div>
-                                        <div class="album-date-home"><?=$publication->getPublicationDate()?></div>
+                                        <div class="album-date-home"><?=$publication->getFormattedPublicationDate()?></div>
                                     </div>
                                     <div class="home-option">
                                         <?php if(App\Session::getUser()->getId() == $publication->getUser()->getId()) { ?>
@@ -389,6 +389,35 @@ include VIEW_DIR."template/nav.php";
             }
         });
     });
+
+    // Récupérer tous les boutons d'options et les menus associés
+    const optionsButtons = document.querySelectorAll('.options-btn');
+    const optionsShows = document.querySelectorAll('.options-menu'); 
+
+    // Ajouter un événement à chaque bouton
+    optionsButtons.forEach((btn, index) => {
+        const menu = optionsShows[index]; 
+        
+        // Ajouter l'événement au clic sur le bouton
+        btn.addEventListener('click', function(event) {
+            // Empêcher la propagation du clic pour éviter de fermer le menu immédiatement
+            event.stopPropagation();
+            
+            // Alterner la visibilité du menu
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    });
+
+    // Fermer le menu si on clique ailleurs sur la page
+    document.addEventListener('click', function(event) {
+        optionsShows.forEach(menu => {
+            if (!menu.contains(event.target) && !optionsButtons.some(btn => btn.contains(event.target))) {
+                menu.style.display = 'none';
+            }
+        });
+    });
+
+    
 </script>  
 
 

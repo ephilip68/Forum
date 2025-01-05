@@ -14,10 +14,12 @@ class MessageManager extends Manager{
         parent::connect();
     }
 
+    
+
     // Récupérer les messages d'un utilisateur (entrant et sortant)
     public function getMessages($user_id) {
         
-        $sql = "SELECT m.*, u.nickName FROM messages m
+        $sql = "SELECT m.*, u.nickName FROM message m
                 INNER JOIN user u ON m.user_id = u.id_user
                 WHERE m.user_id_1 = :user_id OR m.user_id = :user_id
                 ORDER BY m.dateMessage DESC";

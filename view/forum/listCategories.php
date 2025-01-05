@@ -40,12 +40,12 @@ include VIEW_DIR."template/nav.php";
                                 <div class="modal-Form">
                                     <input id="content" type="text" name="title" placeholder="Nom de la catégorie">
                                     <div uk-form-custom >
-                                        <input type="file" name="photo" id="fileUpload" onchange="previewPicture(this)">
+                                        <input type="file" name="photo" id="fileUpload" data-target="image-4">
                                         <div class="js-upload uk-placeholder uk-text-center">
                                             <span uk-icon="icon: cloud-upload"></span>
                                             <span class="uk-text-middle">Ajouter photo</span>
                                             <span class="link">ou faites glisser-déposer</span>
-                                            <img src="#" alt="" id="image" style="margin-top: 20px;">
+                                            <img src="#" alt="" class="image-4" style="margin-top: 20px;">
                                         </div>
                                     </div> 
                                 </div>
@@ -82,7 +82,6 @@ include VIEW_DIR."template/nav.php";
                     </div>
                     <div class="info_category">
                         <span class="title_info">DERNIERE ACTIVITE</span>
-                        
                         <span class="last_info_activity"><?= $topic['last_date'] ?></span>
                     </div>
                 </div>

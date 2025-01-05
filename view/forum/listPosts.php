@@ -28,7 +28,7 @@ include VIEW_DIR."template/nav.php";
                         
                             <?php if (!empty($topic->getUser()->getAvatar())){ ?>
 
-                                <img src="public/upload/<?= $topic->getUser()->getAvatar() ?>" alt="photo de profil" class="img_profil">     
+                                <img src="public/upload/<?= $topic->getUser()->getAvatar() ?>" alt="photo de profil" class="status-img">     
     
                             <?php }else{ ?>
     
@@ -46,8 +46,9 @@ include VIEW_DIR."template/nav.php";
                         <div class="cardReaction">
                             <div class="cardReactionLike">
                                 
-                                    <span><?= $countLike ?></span>
-                               
+                                    <span><?= $countLike[$post->getId()] ?></span>
+
+
                                 <?php if (!$userLike){ ?>
                                     <form action="index.php?ctrl=forum&action=likePost&id=<?= $post->getId() ?>" method="POST">
                                         <button type="submit" name="submit"><i class="fa-solid fa-heart"></i></button>
@@ -122,7 +123,7 @@ include VIEW_DIR."template/nav.php";
                 </div>
             </div>
             <div class="message_container">
-                <?php foreach($comments as $comment){ ?>
+                <?php foreach($comments[$post->getId()] as $comment){ ?>
                     
                 <div class="messageAnswer">
                     <div class="messageProfil">
@@ -133,7 +134,9 @@ include VIEW_DIR."template/nav.php";
                         </div>
                     </div>
                     <div class="messageText">
+                    
                         <p><?= $comment->getText()?></p>
+                        
                     </div>
                     <div class="messageReaction">
                         <div class="answer">

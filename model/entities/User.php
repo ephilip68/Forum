@@ -2,6 +2,8 @@
 namespace Model\Entities;
 
 use App\Entity;
+use dateTime;
+use IntlDateFormatter;
 
 /*
     En programmation orientée objet, une classe finale (final class) est une classe que vous ne pouvez pas étendre, c'est-à-dire qu'aucune autre classe ne peut hériter de cette classe. En d'autres termes, une classe finale ne peut pas être utilisée comme classe parente.
@@ -158,4 +160,22 @@ final class User extends Entity{
         return $this;
         
     }
+    
+
+    /**
+     * Format publication date based on time difference or full date
+     *
+     * @return string
+    */
+    public function getFormattedDateInscription() {
+        $now = new DateTime();
+        $dateInscription = new DateTime($this->dateInscription);
+        $diff = $now->diff($dateInscription);
+
+        // Utilisation d'IntlDateFormatter pour formater la date en français
+        $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
+        $formatter->setPattern('d MMMM yyyy'); // Format : Lundi 5 janvier 2025
+        return $formatter->format($dateInscription);
+    }
+
 }

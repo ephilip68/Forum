@@ -18,7 +18,7 @@
                 <a href="index.php?ctrl=publication&action=getFavoritesPublications"><li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Enregistrements</span></li></a>
                 <a href="index.php?ctrl=event&action=index"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Evènements</span></li></a>
                 <a href="#"><li class="listContent"><i class="fa-solid fa-magnifying-glass"></i><span>Rechercher</span></li></a>
-                <a href="index.php?ctrl=newsletters&action=index"><li class="listContent"><i class="fa-solid fa-envelope"></i><span>Newsletters</span></li></a>
+                <a href="index.php?ctrl=newsletter&action=index"><li class="listContent"><i class="fa-solid fa-envelope"></i><span>Newsletters</span></li></a>
                 <li class="divider"></li>
                 <a href="#"><li class="listContent"><i class="fa-solid fa-gear"></i><span>Paramètres</span></li></a>
                 <!-- si l'utilisateur est connecté  -->
@@ -45,7 +45,7 @@
                         <!-- <div class="status-main"> -->
                             <div class="publicationList">
                                 <img src="public/upload/<?=App\Session::getUser()->getAvatar()?>" class="status-img"/>
-                                <button class="writeSomething" type="button" uk-toggle="target: #modal-example3"><a href="#"></a>Publier quelque chose !</button>
+                                <button class="writeSomething" type="button" uk-toggle="target: #modal-publication"><a href="#"></a>Publier quelque chose !</button>
                             </div>
                         <!-- </div> -->
                         <div class="divider2"></div>
@@ -66,7 +66,7 @@
                     </div>
                 
                     <!-- Modal -->
-                    <div id="modal-example3" uk-modal>
+                    <div id="modal-publication" uk-modal>
                         <div class="uk-modal-dialog uk-modal-body">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -80,12 +80,12 @@
                                             <div class="modal-Form">
                                                 <input id="content" name="content" placeholder="Publier quelque chose !">
                                                 <div uk-form-custom >
-                                                    <input type="file" name="photo" id="fileUpload" onchange="previewPicture(this)">
+                                                    <input type="file" name="photo" id="fileUpload" data-target="image-1">
                                                     <div class="js-upload uk-placeholder uk-text-center">
                                                         <span uk-icon="icon: cloud-upload"></span>
                                                         <span class="uk-text-middle">Ajouter des photos/vidéos</span>
                                                         <span class="link">ou faites glisser-déposer</span>
-                                                        <img src="#" alt="" id="image" style="margin-top: 20px;">
+                                                        <img src="#" alt="" class="image-1" style="margin-top: 20px;">
                                                     </div>
                                                 </div> 
                                             </div>
@@ -106,7 +106,7 @@
                                     <img src="public/upload/<?=$publication->getUser()->getAvatar()?>" class="status-img"/>
                                     <div class="album-detail-home">
                                         <div class="album-title-home"><a href="index.php?ctrl=security&action=profile&id=<?=$publication->getUser()->getId()?>"><?=ucfirst($publication->getUser()->getNickName())?></a></div>
-                                        <div class="album-date-home"><?=$publication->getPublicationDate()?></div>
+                                        <div class="album-date-home"><?=$publication->getFormattedPublicationDate()?></div>
                                     </div>
                                     <div class="home-option">
                                         <?php if(App\Session::getUser()->getId() == $publication->getUser()->getId()) { ?>
@@ -189,6 +189,7 @@
         });
     });
 </script>
+
 
 
 

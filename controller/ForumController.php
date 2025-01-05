@@ -55,7 +55,7 @@ class ForumController extends AbstractController implements ControllerInterface{
                 'name' => $category->getName(),
                 'COUNT(*)' => $topicCount,
                 'last_title' => $lastTopic ? $lastTopic['title'] : 'Aucun sujet',
-                'last_date' => $lastTopic ? $lastTopic['creationDate'] : 'Aucune activité',
+                'last_date' => $lastTopic ? $lastTopic['creationDate'] : '',
                 'last_user' => $lastTopic ? $lastTopic['user_id'] : '',
                 'last_avatar' => $lastUserAvatar ? $lastUserAvatar ['avatar'] : ''
 
@@ -281,12 +281,14 @@ class ForumController extends AbstractController implements ControllerInterface{
                     "meta_description" => "Ajouter topic",
                     "data" => [
                         "category" => $category, 
-                        "topics" => $topics 
+                        "topics" => $topics,
+                        
                     ]
                 ];
             }
         }    
     }
+
 
     public function addPostToTopic($id){
 

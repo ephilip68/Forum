@@ -2,6 +2,8 @@
 namespace Model\Entities;
 
 use App\Entity;
+use DateTime;
+use IntlDateFormatter;
 
 /*
     En programmation orientée objet, une classe finale (final class) est une classe que vous ne pouvez pas étendre, c'est-à-dire qu'aucune autre classe ne peut hériter de cette classe. En d'autres termes, une classe finale ne peut pas être utilisée comme classe parente.
@@ -31,9 +33,10 @@ final class Event extends Entity{
     /**
      * Get the value of id
      */ 
-    public function getId()
-    {
+    public function getId(){
+
         return $this->id;
+
     }
 
     /**
@@ -41,19 +44,21 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setId($id)
-    {
+    public function setId($id){
+
         $this->id = $id;
 
         return $this;
+
     }
 
     /**
      * Get the value of creationDate
      */ 
-    public function getCreationDate()
-    {
+    public function getCreationDate(){
+
         return $this->creationDate;
+
     }
 
     /**
@@ -61,19 +66,21 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setCreationDate($creationDate)
-    {
+    public function setCreationDate($creationDate){
+
         $this->creationDate = $creationDate;
 
         return $this;
+
     }
 
     /**
      * Get the value of photo
      */ 
-    public function getPhoto()
-    {
+    public function getPhoto(){
+
         return $this->photo;
+
     }
 
     /**
@@ -81,19 +88,21 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setPhoto($photo)
-    {
+    public function setPhoto($photo){
+
         $this->photo = $photo;
 
         return $this;
+
     }
 
     /**
      * Get the value of title
      */ 
-    public function getTitle()
-    {
+    public function getTitle(){
+
         return $this->title;
+
     }
 
     /**
@@ -101,19 +110,21 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setTitle($title)
-    {
+    public function setTitle($title){
+
         $this->title = $title;
 
         return $this;
+
     }
 
     /**
      * Get the value of text
      */ 
-    public function getText()
-    {
+    public function getText(){
+
         return $this->text;
+
     }
 
     /**
@@ -121,19 +132,21 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setText($text)
-    {
+    public function setText($text){
+
         $this->text = $text;
 
         return $this;
+
     }
 
     /**
      * Get the value of eventDate
      */ 
-    public function getEventDate()
-    {
+    public function getEventDate(){
+
         return $this->eventDate;
+
     }
 
     /**
@@ -141,19 +154,21 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setEventDate($eventDate)
-    {
+    public function setEventDate($eventDate){
+
         $this->eventDate = $eventDate;
 
         return $this;
+
     }
     
     /**
      * Get the value of eventHours
      */ 
-    public function getEventHours()
-    {
+    public function getEventHours(){
+
         return $this->eventHours;
+
     }
 
     /**
@@ -161,19 +176,27 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setEventHours($eventHours)
-    {
-        $this->eventHours = $eventHours;
+    public function setEventHours($eventHours){
+
+        // Si $eventHours est une chaîne, la convertir en objet DateTime
+        if (is_string($eventHours)) {
+            $eventHours = new \DateTime($eventHours); // Créer un objet DateTime à partir de la chaîne
+        }
+
+        // Formater la date pour afficher uniquement l'heure et les minutes
+        $this->eventHours = $eventHours->format('H:i');
 
         return $this;
+
     }
     
     /**
      * Get the value of city
      */ 
-    public function getCity()
-    {
+    public function getCity(){
+
         return $this->city;
+
     }
 
     /**
@@ -181,19 +204,21 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setCity($city)
-    {
+    public function setCity($city){
+
         $this->city = $city;
 
         return $this;
+
     }
 
     /**
      * Get the value of country
      */ 
-    public function getCountry()
-    {
+    public function getCountry(){
+
         return $this->country;
+
     }
 
     /**
@@ -201,19 +226,21 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setCountry($country)
-    {
+    public function setCountry($country){
+
         $this->country = $country;
 
         return $this;
+
     }
     
     /**
      * Get the value of user
      */ 
-    public function getUser()
-    {
+    public function getUser(){
+
         return $this->user;
+
     }
     
     /**
@@ -221,11 +248,32 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setUser($user)
-    {
+    public function setUser($user){
+
         $this->user = $user;
     
         return $this;
+
+    }
+
+    public function getFormattedDate() {
+
+        // Récupérer le fuseau horaire de la France (Europe/Paris)
+        $timezone = new \DateTimeZone('Europe/Paris');  
+        
+        // Récupérer la date actuelle avec le bon fuseau horaire
+        $now = new \DateTime('now', $timezone);  
+    
+        // Récupérer la date de publication avec le bon fuseau horaire
+        $eventDate = new \DateTime($this->eventDate, $timezone);  
+        
+        // Calculer la différence de temps
+        $diff = $now->diff($eventDate);
+
+        $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
+        $formatter->setPattern('d MMMM yyyy'); 
+        return $formatter->format($eventDate);
+       
     }
 }
 

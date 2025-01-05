@@ -11,38 +11,59 @@ class MessageController extends AbstractController implements ControllerInterfac
 
     public function index() {
         
-        // créer une nouvelle instance de CategoryManager
-        // $messageManager = new MessageManager();
+        $user_id = SESSION::getUser()->getId();  // ID de l'utilisateur connecté
+    
+        $messageManager = new MessageManager;
 
-        // récupérer la liste de tous les messages grâce à la méthode findAll de Manager.php (triés par nom)
-        // $messages = $messageManager->findAll();
-
-        // le controller communique avec la vue "listCategories" (view) pour lui envoyer la liste des catégories (data)
-
-
-
+        $messages = $messageManager->getMessages($user_id);
+    
         return [
 
             "view" => VIEW_DIR."reseauSocial/messagerie.php",
-            "meta_description" => "Liste des messages"
-          
+            "meta_description" => "Liste des messages",
+            "data" => [
+
+                "messages" => $messages
+
+            ]
+            
         ];
+
+    }
+
+    public function searchUsers() {
+
+        if (isset($_POST['submit'])) {
+
+            $userManager = new UserManager();
+
+            $searchs = $userManager->findAll();  // Rechercher les utilisateurs
+
+            return [
+
+                "view" => VIEW_DIR."reseauSocial/messagerie.php",
+                "meta_description" => "Liste des messages"
+            
+                
+            ];
+        }
+           
     }
 
     public function sendMessage() {
 
         if (isset($_POST['submit'])) {
             // Récupérer les informations de l'utilisateur actuel (l'expéditeur)
-            $user_id = SESSION::getUser()->getId();
-            $user_id_1 = $_POST['user_id_1'];  // ID du destinataire
-            $message = $_POST['messages'];  // Contenu du message
+            $user = SESSION::getUser()->getId();
+            $userId = $_GET['id'];  // ID du destinataire
+            $message = filter_input(INPUT_POST, "message", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     
             // Assurez-vous que le destinataire est valide et que le message n'est pas vide
-            if (!empty($message) && $user_id_1 != $user_id) {
+            if (!empty($message) && $userId != $user) {
                 $messageManager = new MessageManager;
                   
                 // Crée un tableau associatif contenant les données à insérer dans la base de données
-                $data = ['messages'=>$message, 'user_id'=>$user_1, 'user_id_1'=>$user_id_1];
+                $data = ['messages'=>$message, 'user_id'=>$user, 'user_id_1'=>$userId];
 
                 // Appelle la méthode 'add' de Manager pour ajouter la nouvelle publication dans la base de données
                 $messageManager->add($data);

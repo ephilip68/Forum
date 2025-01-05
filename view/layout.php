@@ -86,9 +86,65 @@
                 });
             })
 
-            
+            //================ Prévisualiser une image ================//
+
+            var previewPicture = function (e) {
+                const input = e.target;  // L'élément input qui a déclenché l'événement
+
+                // Obtenir la liste des fichiers téléchargés
+                const files = input.files;
+
+                // Vérifier s'il y a des fichiers téléchargés
+                if (files && files.length > 0) {
+                    const picture = files[0];  // Ici, on suppose qu'un seul fichier est téléchargé à la fois.
+
+                    // Créer un objet FileReader pour lire le fichier
+                    var reader = new FileReader();
+
+                    // Quand la lecture du fichier est terminée
+                    reader.onload = function (event) {
+                        // On met à jour l'élément image correspondant
+                        // On suppose que l'élément image a la même classe que l'élément input
+                        var imgElements = document.querySelectorAll(`img.${input.dataset.target}`);
+                        
+                        imgElements.forEach(function(imgElement) {
+                            imgElement.src = event.target.result; // Mettre à jour le src de chaque image
+                        });
+                    };
+
+                    // Lire l'image comme une URL de type base64
+                    reader.readAsDataURL(picture);
+                }
+            }
+
+            // Ajouter un écouteur d'événements à chaque champ de fichier
+            var fileInputs = document.querySelectorAll('input[type="file"]');
+            fileInputs.forEach(function(input) {
+                input.addEventListener('change', previewPicture);
+            });
+
+            //================ Menu burger ================//
+
+            function menuMobile() {
+                const btn = document.querySelector('.burger');
+                const header = document.querySelector('.header');
+                const links = document.querySelectorAll('.navbar a');
+
+                btn.addEventListener('click', () => {
+                    header.classList.toggle('show-nav');
+                });
+
+                links.forEach(link => {
+                    link.addEventListener('click', () => {
+                    header.classList.remove('show-nav');
+                    });
+                });
+            }
+
+            menuMobile();
+
+ 
         </script>
-        <script src="<?= PUBLIC_DIR ?>/js/script.js" defer></script>
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v1.9.4/dist/alpine.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.13/dist/js/uikit-icons.min.js"></script>

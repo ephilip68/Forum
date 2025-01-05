@@ -35,12 +35,12 @@
                 <div class="modal-body">
                     <form action="index.php?ctrl=event&action=addEvent" method="post" enctype="multipart/form-data">
                         <div uk-form-custom >
-                            <input type="file" name="photo" id="fileUpload" onchange="previewPicture(this)">
+                            <input type="file" name="photo" id="fileUpload" data-target="image-5">
                             <div class="js-upload uk-placeholder uk-text-center">
                                 <span uk-icon="icon: cloud-upload"></span>
                                 <span class="uk-text-middle">Ajouter des photos/vidéos</span>
                                 <span class="link">ou faites glisser-déposer</span>
-                                <img src="#" alt="" id="image" style="margin-top: 20px;">
+                                <img src="#" alt="" class="image-5" style="margin-top: 20px;">
                             </div>
                         </div> 
                         <div class="modal-comment">
@@ -87,7 +87,7 @@
                             </div>
                             <div class="eventList">
                                 <div class="eventInfo">
-                                    <p class="eventDate"><?= $event->getEventDate() ?> à <?= $event->getEventHours() ?></p>
+                                    <p class="eventDate"><?= $event->getFormattedDate() ?> à <?= $event->getEventHours() ?></p>
                                     <p class="eventTitle"><?= ucfirst($event->getTitle()) ?> | <?= ucfirst($event->getText()) ?></p>
                                     <p class="eventSide"><?= ucfirst($event->getCity()) ?>, <?= ucfirst($event->getCountry()) ?></p>
                                 </div>  

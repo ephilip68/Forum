@@ -57,10 +57,6 @@
         </div>
     </div>
 </div>
-
-
-    
-
 <script>
     // Récupérer tous les boutons d'options et les menus associés
     const optionsBtns = document.querySelectorAll('.options-btn-favorites');

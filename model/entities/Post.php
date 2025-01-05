@@ -2,6 +2,7 @@
 namespace Model\Entities;
 
 use App\Entity;
+use DateTime;
 
 final class Post extends Entity{
 
