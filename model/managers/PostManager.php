@@ -22,10 +22,11 @@ class PostManager extends Manager{
         WHERE topic_id = :id";
        
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
-        return  $this->getMultipleResults(
-            DAO::select($sql, ['id' => $id]), 
-            $this->className
-        );
+       // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
+       return $this->getOneOrNullResult(
+        DAO::select($sql, ['id' => $id], false), 
+        $this->className  
+    );
         
     }
 }

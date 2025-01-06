@@ -1,6 +1,8 @@
 <?php
 namespace Controller;
 
+
+use IntlDateFormatter;
 use App\Session;
 use App\AbstractController;
 use App\ControllerInterface;
@@ -33,11 +35,22 @@ class ForumController extends AbstractController implements ControllerInterface{
 
         // Pour chaque catégorie, récupérer le nombre de topics associés
         foreach ($categories as $category) {
-            // Récupère le nombre de topics pour chaque catégorie (en passant l'id de la catégorie)
+
+            // Récupère le nombre de topics pour chaque catégorie
             $topicCount = $categoryManager->countTopicByCategory($category->getId());
 
             // Récupère la date du dernier topic pour cette catégorie
-            $lastTopic = $topicManager->LastTopicDateByCategory($category->getId());
+            $lastTopic = $topicManager->lastTopicDateByCategory($category->getId());
+
+            $lastTopicDate = '';
+
+            if ($lastTopic) {
+                
+                $forumController = new ForumController();
+
+                $lastTopicDate = $forumController->getFormattedDate($lastTopic['creationDate']);
+
+            }
 
             // Récupérer l'image de profil du dernier utilisateur
             $lastUserAvatar = '';
@@ -55,7 +68,7 @@ class ForumController extends AbstractController implements ControllerInterface{
                 'name' => $category->getName(),
                 'COUNT(*)' => $topicCount,
                 'last_title' => $lastTopic ? $lastTopic['title'] : 'Aucun sujet',
-                'last_date' => $lastTopic ? $lastTopic['creationDate'] : '',
+                'last_date' => $lastTopicDate ? $lastTopicDate : 'Aucune activité',
                 'last_user' => $lastTopic ? $lastTopic['user_id'] : '',
                 'last_avatar' => $lastUserAvatar ? $lastUserAvatar ['avatar'] : ''
 
@@ -84,27 +97,85 @@ class ForumController extends AbstractController implements ControllerInterface{
         // créer une nouvelle instance de CategoryManager
         $categoryManager = new CategoryManager();
 
-        // créer une nouvelle instance de PostManager
-        $postManager = new PostManager();
-    
         // Appelle la méthode `findOneById` du CategoryManager pour obtenir les informations sur la catégorie à partir de l'ID passé en argument ($id). Cela va récupérer une catégorie spécifique de la base de données.
         $category = $categoryManager->findOneById($id);
     
         // Appelle la méthode `findTopicsByCategory` du TopicManager pour récupérer tous les topics qui sont associés à cette catégorie spécifique.
         $topics = $topicManager->findTopicsByCategory($id);
 
-        // Récupère tous les posts associés à ce topic en utilisant l'ID du topic
-        $posts = $postManager->findPostsByTopic($id);
+        // Incrémentez les vues du topic chaque fois que l'on consulte un topic
+        $topicManager->topicViews($id);
+
+        // Récupérez le topic et le nombre de vues
+        $topicViews = $topicManager->getTopicViews($id);  // Supposez que cette méthode existe pour récupérer un topic
+        $views = $topicManager->topicViews($topicViews);  // Récupère le nombre de vues
+
         
         return [
             "view" => VIEW_DIR . "forum/listTopics.php", 
             "meta_description" => "Liste des topics par catégorie : " . $category, 
             "data" => [
                 "category" => $category, 
-                "topics" => $topics
+                "topics" => $topics,
+                "views" => $views
+                
                 
             ]
         ];
+    }
+
+    public function getFormattedDate($creationDate) {
+
+        // Récupérer le fuseau horaire de la France (Europe/Paris)
+        $timezone = new \DateTimeZone('Europe/Paris');  
+        
+        // Récupérer la date actuelle avec le bon fuseau horaire
+        $now = new \DateTime('now', $timezone);  
+    
+        // Récupérer la date de publication avec le bon fuseau horaire
+        $creationDates = new \DateTime($creationDate, $timezone);
+        
+        // Calculer la différence de temps
+        $diff = $now->diff($creationDates);
+
+        // Si la publication vient d'être mise en ligne (moins de 1 minute)
+        if ($diff->s < 60 && $diff->i === 0 && $diff->h === 0 && $diff->d === 0 && $diff->m === 0 && $diff->y === 0) {
+            return "À l'instant"; 
+        }
+
+        // Si la publication est dans moins de 1 minute mais plus d'instant
+        if ($diff->i === 1 && $diff->h === 0 && $diff->d === 0 && $diff->m === 0 && $diff->y === 0) {
+            return "Il y a 1 minute"; 
+        }
+
+        // Moins de 1 heure : Affiche "Il y a X minute(s)"
+        if ($diff->h === 0 && $diff->d === 0 && $diff->y === 0 && $diff->m === 0) {
+            return "Il y a " . $diff->i . " minute" . ($diff->i > 1 ? "s" : "");
+        }
+
+        // Moins de 24 heures : Affiche "Il y a X heure(s)"
+        if ($diff->d === 0 && $diff->y === 0 && $diff->m === 0) {
+            return "Il y a " . $diff->h . " heure" . ($diff->h > 1 ? "s" : "");
+        }
+
+        // Hier : Affiche "Hier à Xh"
+        if ($diff->d === 1) {
+            return "Hier à " . $creationDates->format('H\hi'); // Format : Hier à 10h30
+        }
+
+        // De 1 à 7 jours : (ex. : "Lundi 5 janvier à 11h").
+        if ($diff->d > 1 && $diff->d <= 7) {
+            $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE);
+            $formatter->setPattern("d MMMM, HH'h'mm"); 
+            return $formatter->format($creationDates);
+        }
+
+        // Plus de 7 jours : (ex. : "5 janvier 2024").
+        if ($diff->d > 7) {
+            $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
+            $formatter->setPattern('d MMMM yyyy'); 
+            return $formatter->format($creationDates);
+        }
     }
 
 

@@ -29,19 +29,5 @@ class EventManager extends Manager{
 
     }
 
-    // // Récupérer tous les événements à venir
-    // public function comingEvents($id){
-
-    //     $sql = "SELECT * 
-    //     FROM ".$this->tableName." e 
-    //     WHERE e.id_event = :id 
-    //     ORDER BY eventDate ASC";
-
-    //     // la requête renvoie plusieurs enregistrements --> getMultipleResults
-    //     return  $this->getMultipleResults(
-    //         DAO::select($sql, ['id' => $id]), 
-    //         $this->className
-    //     );
-    // }
 
 }

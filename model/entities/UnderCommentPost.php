@@ -3,47 +3,23 @@ namespace Model\Entities;
 
 use App\Entity;
 use DateTime;
+use IntlDateFormatter;
 
 /*
     En programmation orientée objet, une classe finale (final class) est une classe que vous ne pouvez pas étendre, c'est-à-dire qu'aucune autre classe ne peut hériter de cette classe. En d'autres termes, une classe finale ne peut pas être utilisée comme classe parente.
 */
 
-final class CommentPost extends Entity{
+final class UnderCommentPost extends Entity{
 
-    private $id;
     private $text;
     private $commentDate;
-    private $post;
     private $user;
+    private $comment;
 
-
-    // chaque entité aura le même constructeur grâce à la méthode hydrate (issue de App\Entity)
-    public function __construct($data){  
-        
-        $this->hydrate($data); 
-        
-    }
-    
-    /**
-     * Get the value of id
-     */ 
-    public function getId()
-    {
-        return $this->id;
+    public function __construct($data){         
+        $this->hydrate($data);        
     }
 
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-    
     /**
      * Get the value of text
      */ 
@@ -85,27 +61,7 @@ final class CommentPost extends Entity{
     }
 
     /**
-     * Get the value of post_id
-     */ 
-    public function getPost()
-    {
-        return $this->post;
-    }
-
-    /**
-     * Set the value of post_id
-     *
-     * @return  self
-     */ 
-    public function setPost($post)
-    {
-        $this->post = $post;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of user_id
+     * Get the value of user
      */ 
     public function getUser()
     {
@@ -113,7 +69,7 @@ final class CommentPost extends Entity{
     }
 
     /**
-     * Set the value of user_id
+     * Set the value of user
      *
      * @return  self
      */ 
@@ -124,4 +80,23 @@ final class CommentPost extends Entity{
         return $this;
     }
 
+    /**
+     * Get the value of comment
+     */ 
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Set the value of comment
+     *
+     * @return  self
+     */ 
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
 }

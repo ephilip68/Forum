@@ -73,12 +73,11 @@ include VIEW_DIR."template/nav.php";
                 <div class="categoryActivity">
                     <div class="info_category">
                         <span class="title_info">TOPICS</span>
-                        <?php 
-                            foreach ($countTopic as $topic){
+                        <?php foreach ($countTopic as $topic){
 
-                                if ($category->getId() == $topic['id_category']){
-                        ?>
-                            <span class="last_info"><?= $topic['COUNT(*)'] ?></span> 
+                        if ($category->getId() == $topic['id_category']){?>
+
+                        <span class="last_info"><?= $topic['COUNT(*)'] ?></span> 
                     </div>
                     <div class="info_category">
                         <span class="title_info">DERNIERE ACTIVITE</span>
@@ -92,17 +91,10 @@ include VIEW_DIR."template/nav.php";
                     <div class="info_last_topic">
                         <?php if ($topic['last_user']){ ?>
 
-                            <?php if (!empty($topic['last_avatar'])){ ?>
-
-                                <img src="public/upload/<?= $topic['last_avatar'] ?>" alt="photo de profil" class="status-img">     
-
-                                <?php }else{ ?>
-
-                                    <img src="public/img/default-avatar.webp" alt="photo de profil par défaut" class="status-img">
-
-                                <?php } ?>      
-                            <?php } ?>
-                        <span class="last_info"><?= $topic['last_title'] ?></span>
+                            <img src="public/upload/<?= $topic['last_avatar'] ?>" alt="photo de profil" class="status-img">     
+    
+                        <?php } ?>
+                        <a href="index.php?ctrl=post&action=listPostsByTopic&id="><span class="last_info"><?= ucfirst($topic['last_title']) ?></span></a>
                         <?php } ?>
                     <?php } ?>
                     </div>

@@ -47,7 +47,8 @@ class UserManager extends Manager{
     public function updateProfilPhoto($userId, $file){
 
         $sql = "UPDATE ". $this->tableName . " u 
-        SET u.avatar = :file WHERE u.id_user = :userId";
+        SET u.avatar = :file 
+        WHERE u.id_user = :userId";
 
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return  $this->getMultipleResults(

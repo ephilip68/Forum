@@ -2,6 +2,8 @@
 
     $category = $result["data"]['category']; 
     $topics = $result["data"]['topics'];  
+    $views = $result["data"]['views'];  
+    
     include VIEW_DIR."template/nav.php";
   
 ?>
@@ -57,14 +59,14 @@
                 </div>
             </div>
         </div>
-        <div class='cantainer-topic'>
+        <div class='container-topic'>
             <table class='uk-table uk-table-hover' id='recap'>
                 <thead id='category'>
-                    <tr id=title>
-                        <th class='category-title'>TOPIC</th>
-                        <th class='category-title'>UTILISATEURS</th>
-                        <th class='category-title'>REPUBLICATIONS</th>
-                        <th class='category-title'>VUES</th>
+                    <tr id=title-category>
+                        <th id='title-topic'>TOPIC</th>
+                        <th id='title-user'>UTILISATEUR</th>
+                        <th id='title-reply'>REPUBLICATIONS</th>
+                        <th id='title-view'>VUES</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,12 +76,10 @@
                         <?php foreach($topics as $topic){ ?>
                         
                         <tr id='product-hover'>
-                            
-                            
-                            <td><a href="index.php?ctrl=post&action=listPostsByTopic&id=<?= $topic->getId() ?>"><?php echo ucfirst($topic->getTitle())?></a></td>
-                            <td><?php echo ucfirst($topic->getUser()->getNickName()) ?></td>
-                            <td></td>
-                            <td></td>
+                            <td id="topic"><a href="index.php?ctrl=post&action=listPostsByTopic&id=<?= $topic->getId() ?>"><?php echo ucfirst($topic->getTitle())?></a></td>
+                            <td class="user-topic"><a href="index.php?ctrl=security&action=profile&id=<?= $topic->getUser()->getId() ?>"><img src="public/upload/<?= $topic->getUser()->getAvatar() ?>" class="status-img-nav"/><p><?= ucfirst($topic->getUser()->getNickName()) ?></a></p></td>
+                            <td class="info-topic"></td>
+                            <td class="info-topic"><?= $topic->getViews() ?></td>
                         </tr>  
                     <?php } ?>
                 <?php } ?>

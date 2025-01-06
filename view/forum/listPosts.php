@@ -1,7 +1,7 @@
 <?php
 
 $topic = $result["data"]["topic"];
-$posts = $result["data"]["posts"];
+$post = $result["data"]["post"];
 $comments = $result["data"]["comments"];
 $countLike = $result["data"]["countLike"];
 $userLike = $result["data"]["userLike"];
@@ -39,14 +39,14 @@ include VIEW_DIR."template/nav.php";
                             <p><?= ucfirst($topic->getUser()->getNickName()) ?></p>
                         </div>
                         <div class="cardText">
-                            <?php foreach($posts as $post){ ?>
-                                <p><?= ucfirst($post->getText()) ?></p>
+                            
+                                <p><?= $post->getText() ?></p>
                             
                         </div>
                         <div class="cardReaction">
                             <div class="cardReactionLike">
                                 
-                                    <span><?= $countLike[$post->getId()] ?></span>
+                                    <span><?= $countLike?></span>
 
 
                                 <?php if (!$userLike){ ?>
@@ -81,7 +81,7 @@ include VIEW_DIR."template/nav.php";
                                             </div>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="index.php?ctrl=post&action=addCommentPost&id=<?= $post->getId() ?>" method="post">
+                                            <form action="index.php?ctrl=post&action=addCommentPost&id=<?= $post->getId() ?>" method="POST">
                                                 <div class="modal-comment">
                                                     <textarea class="editor" name="text" cols="30" rows="10" placeholder="Vous en pensez-quoi?"></textarea>
                                                 </div>
@@ -123,7 +123,7 @@ include VIEW_DIR."template/nav.php";
                 </div>
             </div>
             <div class="message_container">
-                <?php foreach($comments[$post->getId()] as $comment){ ?>
+                <?php foreach($comments as $comment){ ?>
                     
                 <div class="messageAnswer">
                     <div class="messageProfil">
@@ -135,8 +135,8 @@ include VIEW_DIR."template/nav.php";
                     </div>
                     <div class="messageText">
                     
-                        <p><?= $comment->getText()?></p>
-                        
+                        <p><?=  ucfirst($comment['text']) ?></p>
+                       
                     </div>
                     <div class="messageReaction">
                         <div class="answer">
@@ -155,14 +155,41 @@ include VIEW_DIR."template/nav.php";
                                 <i class="fa-regular fa-bookmark"></i>
                             </div>
                             <div class="cardReactionReply">
-                                <span>Répondre</span>
+                                <a href="#modal-under-comment"uk-toggle><span>Répondre</span></a>
                             </div>   
+                        </div>
+                    </div>
+                    <!-- Modal -->
+                    <div id="modal-under-comment" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body modal-post">
+                            <div class="modal-content">
+                                <a class="btn-close uk-modal-close close-post"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></a>
+                                <div class="modal-reply">
+                                    <div class="modalReplyTitle">
+                                        <i class="fa-solid fa-reply"></i>
+                                        <h3 class="modalTitle"><?= ucfirst($comment['text'])?></h3>
+                                    </div>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="index.php?ctrl=post&action=addUnderComment&id=<?= $comment['id_comment'] ?>" method="POST">
+                                        <div class="modal-comment">
+                                            <textarea class="editor" name="text" cols="30" rows="10" placeholder="Vous en pensez-quoi?"></textarea>
+                                        </div>
+                                        <div class="modal-submit">
+                                            <div class="modal-button">
+                                                <button class="uk-modal-close btn-cancel">Annuler</button>
+                                                <button class="btn-submit" type="submit" name="submit">Envoyer</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <?php } ?>
-        </div><?php } ?>
+        </div>
     </div>
 </section>
 

@@ -16,6 +16,7 @@ final class Topic extends Entity{
     private $user;
     private $category;
     private $creationDate;
+    private $views;
     private $closed;
 
     public function __construct($data){         
@@ -115,6 +116,26 @@ final class Topic extends Entity{
         
         return $this;
     }
+
+     /**
+     * Get the value of view
+     */ 
+    public function getViews()
+    {
+        return $this->views;
+    }
+
+    /**
+     * Set the value of view
+     *
+     * @return  self
+     */ 
+    public function setViews($views)
+    {
+        $this->views = $views;
+
+        return $this;
+    }
     
     /**
      * Get the value of closed
@@ -193,4 +214,5 @@ final class Topic extends Entity{
             return $formatter->format($creationDate);
         }
     }
+
 }
