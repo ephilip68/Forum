@@ -19,9 +19,11 @@ class UnderCommentPostManager extends Manager{
     public function findUnderCommentByCommentPost($id) {
     
         // Requête pour récupérer les sous-commentaires
-        $sql = "SELECT * 
+        $sql = "SELECT u.text, u.commentDate, u.user_id, u.comment_id, s.nickName, s.avatar
         FROM ".$this->tableName." u
-        WHERE u.comment_id = :id";
+        INNER JOIN commentpost c ON u.comment_id = c.id_comment
+        INNER JOIN user s ON u.user_id = s.id_user
+        WHERE c.post_id = :id";
 
         // Exécute la requête avec DAO::select et récupère un seul résultat
         $result = DAO::select($sql, ['id' => $id], true);

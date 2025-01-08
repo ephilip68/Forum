@@ -17,9 +17,10 @@ class CommentPostManager extends Manager{
     // récupérer tous les commentaires d'une catégorie spécifique (par son id)
     public function findCommentsByPost($id){
 
-        $sql = "SELECT * 
-        FROM ".$this->tableName." p
-        WHERE p.post_id = :id";
+        $sql = "SELECT c.id_comment, c.text, c.commentDate, c.post_id, c.user_id, u.avatar, u.nickName
+        FROM ".$this->tableName." c
+        INNER JOIN user u ON c.user_id = u.id_user
+        WHERE c.post_id = :id";
        
         // Exécute la requête avec DAO::select et récupère un seul résultat
         $result = DAO::select($sql, ['id' => $id], true);

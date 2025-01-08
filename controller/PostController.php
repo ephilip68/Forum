@@ -32,6 +32,8 @@ class PostController extends AbstractController implements ControllerInterface{
         // Créer une nouvelle instance de LikeMessage
         $likeMessageManager = new LikeMessageManager();
 
+        $underCommentPostManager = new UnderCommentPostManager();
+
         // Récupère les informations du topic en utilisant son ID
         $topic = $topicManager->findOneById($id);
 
@@ -40,6 +42,8 @@ class PostController extends AbstractController implements ControllerInterface{
         
         // Récupère les informations du topic en utilisant son ID
         $comments = $commentPostManager->findCommentsByPost($post->getId());
+
+        $underComments = $underCommentPostManager->findUnderCommentByCommentPost($post->getId());
         
         // Récupérer le nombre de likes
         $countLike = $likeMessageManager->countLikes($post->getId());
@@ -67,7 +71,8 @@ class PostController extends AbstractController implements ControllerInterface{
                 "post" => $post,
                 "comments" => $comments,
                 "countLike" => $countLike,
-                "userLike" => $userLike
+                "userLike" => $userLike,
+                "underComments" => $underComments
 
             ]   
         ];
@@ -164,5 +169,4 @@ class PostController extends AbstractController implements ControllerInterface{
             }
         }    
     }
-
 }

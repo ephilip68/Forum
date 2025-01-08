@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="burgerList">
-                <button class="burger"><span class="bar"></span></button>
+                <button class="uk-button burger " uk-tooltip="title: Compte; pos: bottom"><span class="bar"></span></button>
             </div>
             <nav class="navbar">
                 <ul class="menuBurger list-unstyled">

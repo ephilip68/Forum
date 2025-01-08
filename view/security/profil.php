@@ -95,19 +95,21 @@ include VIEW_DIR."template/nav.php";
 
                         <?php } ?>
                     </div>
-                    <?php if(App\Session::getUser() == $user){ ?>
+                    <div class="profile-menu-content">
+                        <?php if(App\Session::getUser() == $user){ ?>
 
-                        <a class="profile-menu-btn" href="#modal-edit" uk-toggle><span uk-icon="pencil"></span>Modifier profil</a>
+                            <a class="profile-menu-btn" href="#modal-edit" uk-toggle>Modifier profil</a>
 
-                    <?php }elseif($isFollowing) { ?>
+                        <?php }elseif($isFollowing) { ?>
 
-                        <a class="profile-menu-suivi" href="index.php?ctrl=follow&action=deleteFollowing&id=<?=$user->getId()?>">Suivi(e)</a>
+                            <a class="profile-menu-suivi" href="index.php?ctrl=follow&action=deleteFollowing&id=<?=$user->getId()?>">Suivi(e)</a>
 
-                    <?php }else{ ?>
+                        <?php }else{ ?>
 
-                        <a class="profile-menu-suivre" href="index.php?ctrl=follow&action=addFollow&id=<?=$user->getId()?>">Suivre</a>
+                            <a class="profile-menu-suivre" href="index.php?ctrl=follow&action=addFollow&id=<?=$user->getId()?>">Suivre</a>
 
-                    <?php } ?> 
+                        <?php } ?>
+                    </div> 
                 </div>
                 <div id="modal-edit" uk-modal>
                     <div class="uk-modal-dialog uk-modal-body">
@@ -290,9 +292,9 @@ include VIEW_DIR."template/nav.php";
                             <div class="status-main-content">
                                 <div class="status-main-home">
                                     <img src="public/upload/<?=$publication->getUser()->getAvatar()?>" class="status-img"/>
-                                    <div class="album-detail-home">
-                                        <div class="album-title-home"><a href="index.php?ctrl=security&action=profile&id=<?=$publication->getUser()->getId()?>"><?=ucfirst($publication->getUser()->getNickName())?></a></div>
-                                        <div class="album-date-home"><?=$publication->getFormattedPublicationDate()?></div>
+                                    <div class="album-details">
+                                        <div class="album-titles"><a href="index.php?ctrl=security&action=profile&id=<?=$publication->getUser()->getId()?>"><?=ucfirst($publication->getUser()->getNickName())?></a></div>
+                                        <div class="album-dates"><?=$publication->getFormattedPublicationDate()?></div>
                                     </div>
                                     <div class="home-option">
                                         <?php if(App\Session::getUser()->getId() == $publication->getUser()->getId()) { ?>
