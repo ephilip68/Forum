@@ -1209,19 +1209,42 @@ nav {
 
 /*********** Card ***********/
 
-#card {width: 20%;position: absolute;position: fixed;top: 12%;right: 0;display: flex;flex-direction: column;align-items: center;gap: 30px;}
+#card {width: 20%;position: absolute;position: fixed;top: 11%;right: 0;display: flex;flex-direction: column;align-items: center;gap: 30px;}
 
 /*********** Sujets Récent ***********/
 
-.card1 {width:85%;height: 250px;background-color: white;border-radius: 15px;box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);padding: .5em 2em;}
+.card1 {width:85%;min-height: 250px;background-color: white;border-radius: 15px;box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);padding: .5em 2em;}
 
-h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-align: justify;color: #151C27;}
+h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-align: justify;color: #151C27;height: 50px;width: 100%;}
+
+.profilTopics{display: flex;width: 100%;gap: 10px;color: #151C27;min-height: 70px;margin-bottom: 15px;}
+
+.lastTopicHome{display: flex;flex-direction: column;width: 100%;gap: 3px;}
+
+.lastTopicHome a{font-weight: 600;}
+
+.lastTopicHome a:hover{color: #151C27;}
+
+.lastTopicHome span{font-size: .9em;}
+
+.lastTopicHome span a{color: #0A4DC1;font-size: 1em;margin-left: 5px;}
+
+.lastTopicHome span a:hover{color: #0A4DC1;text-decoration: none;}
+
+.lastTopicHome p{margin: 0;font-size: .8em;}
 
 /*********** Amis en Ligne ***********/
 
 .card2 {width: 85%;min-height: 350px;background: linear-gradient(0deg, rgba(1, 26, 70, 1) 0%, rgba(10, 77, 193, 1) 100%);border-radius: 15px;box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);padding: .5em 2em;}
 
-.card2 h2 {color: white;}
+.card2 h2 {color: white;margin-bottom: 10px;}
+
+/***************************************************************** LISTE AMIS *********************************************************************/
+.friends{margin: 1em 1em 0 .5em;}
+
+.profilFriendsMenu{display: flex;width: 100%;align-items: center;gap: 10px;color: #151C27;font-size: 1.2em;height: 45px;margin-bottom: 20px;justify-content: space-between;}
+
+.friendsOptions i{font-size: 1em;}
 
 /***************************************************************** EVENTS *********************************************************************/
 
@@ -1236,6 +1259,8 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 .listNavEvent {height: 88vh;display: flex;flex-direction: column;justify-content: space-between;}
 
 .navEvent{width: 108.7%; display: flex;flex-direction: column;gap: 20px;}
+
+.navEvent h2{padding-left: .3em;height: 30px;}
 
 .timeline-event { position: relative;z-index: 2;padding: 40px;}
 
@@ -1947,8 +1972,6 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 .cardInfoResult{font-weight: 450;font-size: .9em;}
 
 .cardAvatar{height: 50px;}
-
-#modal-example8{height: 84%;width: 69.65%;justify-content: center;align-items: center;top: 11.3%;left: 14.95%;border-radius: 20px;background-color: #74d4fd45;overflow: hidden;}
 
 .under{height: 84% !important;width: 69.65% !important;justify-content: center !important;align-items: center !important;top: 11.3% !important;left: 14.95% !important;border-radius: 20px !important;background-color: #74d4fd45 !important;overflow: hidden !important;}
 

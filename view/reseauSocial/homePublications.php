@@ -1,6 +1,8 @@
 <?php
     $publications = $result["data"]["publications"];
-    
+    $friends = $result["data"]["friends"];
+    $lastTwoTopics = $result["data"]["lastTwoTopics"];
+
     include VIEW_DIR."template/nav.php";
 ?>
 
@@ -17,7 +19,7 @@
                 <a href="index.php?ctrl=publication&action=listAmis"><li class="listContent"><i class="fa-solid fa-user-group"></i><span>Amis</span></li></a>
                 <a href="index.php?ctrl=publication&action=getFavoritesPublications"><li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Enregistrements</span></li></a>
                 <a href="index.php?ctrl=event&action=index"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Evènements</span></li></a>
-                <a href="#"><li class="listContent"><i class="fa-solid fa-magnifying-glass"></i><span>Rechercher</span></li></a>
+                <a href="#modal-search" uk-toggle><li class="listContent"><i class="fa-solid fa-magnifying-glass"></i><span>Rechercher</span></li></a>
                 <a href="index.php?ctrl=newsletter&action=index"><li class="listContent"><i class="fa-solid fa-envelope"></i><span>Newsletters</span></li></a>
                 <li class="divider"></li>
                 <a href="#"><li class="listContent"><i class="fa-solid fa-gear"></i><span>Paramètres</span></li></a>
@@ -34,6 +36,30 @@
                     -<small>&copy; <?= date_create("now")->format("Y") ?></small>
                 </div>
             </ul>   
+        </div>
+    </div>
+
+    <!-- Modal Search -->
+    <div id="modal-search" uk-modal>
+        <div class="uk-modal-dialog uk-modal-body">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Rechercher</h3>
+                    <hr>
+                    <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
+                </div>
+                <div class="modal-body">
+                    <form action="index.php?ctrl=publication&action=search" method="post">
+                        <div class="modal-comment">
+                            <div class="modal-Form">
+                                <input id="search-social" type="text" name="search" placeholder="Rechercher des publications, amis ou événements..."> 
+                            </div>
+                        </div>
+                        <br/>
+                        <input class="status-share" type="submit" name="submit" value="Publier">
+                    </form> 
+                </div>
+            </div>
         </div>
     </div>
 
@@ -155,9 +181,37 @@
     <div class="grid-item " id="card">
         <div class="card1">
             <h2>Sujets Récent</h2>
+            <?php if(!empty($lastTwoTopics)) { ?>
+                <?php foreach($lastTwoTopics as $topic) {  ?>
+                    <div class="profilTopics">
+                        <img src="public/upload/<?=$topic->getUser()->getAvatar()?>" class="status-img-nav"/>
+                        <div class="lastTopicHome">
+                            <a href="index.php?ctrl=post&action=listPostsByTopic&id=<?= $topic->getId() ?>"><?= ucfirst($topic->getTitle()) ?></a>
+                            <span>Par<a href="index.php?ctrl=security&action=profile&id=<?= $topic->getUser()->getId() ?>"><?= ucfirst($topic->getUser()->getNickName()) ?></a></span>
+                            <p><?= $topic->getFormattedDate() ?></p>
+                        </div>
+                    </div> 
+                <?php } ?>
+            <?php }else{ ?>
+                <div class="intro-title-friend" >
+                    Aucun Topic !
+                </div>
+            <?php } ?>
         </div>
         <div class="card2">
-        <h2>Amis en ligne</h2> 
+            <h2>Amis en ligne</h2>
+            <?php if(!empty($friends)) { ?>
+                <?php foreach($friends as $friend) { ?>
+                    <div class="profilFriends">
+                        <img src="public/upload/<?=$friend->getAvatar()?>" class="status-img"/>
+                        <a href="index.php?ctrl=security&action=profile&id=<?= $friend->getId() ?>" style='color:white'><?= ucfirst($friend->getNickName()) ?></a>
+                    </div> 
+                <?php } ?>
+            <?php }else{ ?>
+                <div class="intro-title-friend" >
+                    <p style="color:white">Aucun Amis !</p>
+                </div>
+            <?php } ?>
         </div>
     </div>   
 </div>

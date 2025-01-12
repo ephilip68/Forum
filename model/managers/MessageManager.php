@@ -14,31 +14,66 @@ class MessageManager extends Manager{
         parent::connect();
     }
 
-    
+    public function getMessagesBetweenUsers($user_id, $recipientId) {
 
-    // Récupérer les messages d'un utilisateur (entrant et sortant)
-    public function getMessages($user_id) {
+        $sql = "SELECT m.*, u.nickName, u.avatar
+        FROM " . $this->tableName . " m
+        INNER JOIN user u ON m.user_id = u.id_user  
+        WHERE m.user_id = :user_id AND m.user_id_1 = :recipientId
+        OR m.user_id = :recipientId AND m.user_id_1 = :user_id
+        ORDER BY m.dateMessage ASC";
         
-        $sql = "SELECT m.*, u.nickName FROM message m
-                INNER JOIN user u ON m.user_id = u.id_user
-                WHERE m.user_id_1 = :user_id OR m.user_id = :user_id
-                ORDER BY m.dateMessage DESC";
+       // Exécute la requête avec DAO::select et récupère un seul résultat
+       $result = DAO::select($sql, ['user_id' => $user_id, 'recipientId' => $recipientId ], true);
     
-        // la requête renvoie plusieurs enregistrements --> getMultipleResults
-        return  $this->getMultipleResults(
-            DAO::select($sql, ['user_id' => $user_id]), 
-            $this->className
-        );
-
+       // Retourne vrai si le comptage est supérieur à 0, faux sinon
+       return $result;
     }
 
+    // Méthode pour récupérer le nombre de messages non lus
+    public function unreadMessagesCount($user_id) {
+        // SQL pour récupérer le nombre de messages non lus pour l'utilisateur
+        $sql = "SELECT COUNT(*) 
+        FROM " . $this->tableName . " m
+        WHERE user_id_1 = :user_id AND m.status = 'unread'";
+
+        return $this->getSingleScalarResult(
+            DAO::select($sql, ['user_id' => $user_id], false),  
+            $this->className  
+        );
+    }
 
     // Marquer les messages comme lus
-    public function markAsRead($message_id) {
-        $stmt = $this->pdo->prepare('UPDATE messages SET is_read = 1 WHERE id = :id');
-        $stmt->bindParam(':id', $message_id);
-        return $stmt->execute();
+    public function markAsRead($user_id, $recipientId) {
+        
+        $sql = "UPDATE " . $this->tableName . " m
+        SET status = 'read'
+        WHERE user_id = :recipientId AND  user_id_1 = :user_id
+        AND status = 'unread'";
+
+         // la requête renvoie plusieurs enregistrements --> getMultipleResults
+        return  $this->getMultipleResults(
+            DAO::select($sql, ['user_id' => $user_id , 'recipientId' => $recipientId]), 
+            $this->className
+        );
     }
 
+    public function getConversations($user_id){
+
+        $sql =" SELECT u.id_user, u.nickName, u.avatar
+        FROM " . $this->tableName . " m
+        INNER JOIN user u ON u.id_user = m.user_id_1 AND m.user_id = :user_id
+        OR m.user_id = u.id_user AND m.user_id_1 = :user_id
+        WHERE m.user_id = :user_id OR m.user_id_1 = :user_id
+        GROUP BY u.id_user";
+
+        // Exécute la requête avec DAO::select et récupère un seul résultat
+       $result = DAO::select($sql, ['user_id' => $user_id], true);
     
+       // Retourne vrai si le comptage est supérieur à 0, faux sinon
+       return $result;
+
+    }
+
+
 }

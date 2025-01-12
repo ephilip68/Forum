@@ -19,9 +19,6 @@ class NewsletterController extends AbstractController implements ControllerInter
         ];
     }
 
-    
-
-    // Gérer l'abonnement à la newsletter
     public function subscribe() {
         
         if(isset($_POST["submit"])){
@@ -37,8 +34,7 @@ class NewsletterController extends AbstractController implements ControllerInter
                 echo "Cet email est déjà abonné à la newsletter.";
 
                 $this->redirectTo("newsletter", "index");
-        
-                
+           
             }
 
             // Vérifier si l'utilisateur est connecté
@@ -54,32 +50,30 @@ class NewsletterController extends AbstractController implements ControllerInter
                 $newsletterController = new NewsletterController();
 
                 // Envoi de la newsletter après l'inscription
-                $newsletterController->sendEmail($to, $subject, $message);
+                $newsletterController->sendEmail($to, $email, $subject, $message, $headers);
 
-                // Message de confirmation
-                $message = "Vous êtes maintenant inscrit à la newsletter et vous avez reçu notre dernière édition !";
+                
+                echo "Vous êtes maintenant inscrit à la newsletter et vous avez reçu notre dernière édition !";
+
             } else {
-                $message = "Une erreur est survenue, veuillez réessayer.";
+                echo "Une erreur est survenue, veuillez réessayer.";  
             }
         } else {
-            $message = "L'adresse email est requise.";
+            echo "L'adresse email est requise.";
         }
             
+        $this->redirectTo("newsletter", "index");
 
-            $this->redirectTo("newsletter", "index");
+        return [
 
+            "view" => VIEW_DIR."newsletters/listNewsletters.php",
+            "meta_description" => "Abonnement"
 
-
-            return [
-
-                "view" => VIEW_DIR."newsletters/listNewsletters.php",
-                "meta_description" => "Abonnement"
-    
-            ];
+        ];
         
     }
 
-    // Envoyer la newsletter à tous les abonnés (en récupérant l'email via une jointure)
+    
     public function sendNewsletter() {
 
         $newsletterManager = new NewsletterManager();
@@ -95,7 +89,6 @@ class NewsletterController extends AbstractController implements ControllerInter
         $headers .= "From: sportLink.newsletters@gmail.com" . "\r\n";
         $headers .= "Reply-To: sportLink.newsletters@gmail.com" . "\r\n";
         
-
         // Envoyer l'email à chaque abonné
         foreach ($subscribers as $subscriber) {
 
@@ -114,7 +107,6 @@ class NewsletterController extends AbstractController implements ControllerInter
         return;
         
         $this->redirectTo("newsletter", "index");
-        return; 
 
         return [
 
@@ -125,7 +117,7 @@ class NewsletterController extends AbstractController implements ControllerInter
     }
         
     // Fonction pour envoyer un email
-    private function sendEmail($to, $subject, $message) {
+    private function sendEmail($to, $email, $subject, $message, $headers) {
 
         if(isset($_POST["submit"])){
 
@@ -134,9 +126,13 @@ class NewsletterController extends AbstractController implements ControllerInter
             // Récupérer tous les abonnés avec leurs emails
             $subscribers = $newsletterManager->getAllSubscribers();
         
-            $to = 'erwin.philip68@gmail.com';
+            $to = 'sportLink.newsletters@gmail.com';
             $subject = 'Notre dernière newsletter';
             $message = '<h1>Bonjour, voici notre dernière newsletter !</h1><p>Contenu de la newsletter...</p>';
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
+            $headers .= "From: sportLink.newsletters@gmail.com" . "\r\n";
+            $headers .= "Reply-To: sportLink.newsletters@gmail.com" . "\r\n";
            
         
             // Envoyer l'email à chaque abonné
@@ -144,12 +140,12 @@ class NewsletterController extends AbstractController implements ControllerInter
         
         
                 // Envoi de l'email
-                $sent = mail($to, $subject, $message);
+                $sent = mail($to, $email, $subject, $message, $headers);
         
                 if ($sent) {
-                    echo "E-mail envoyé à : " . $to . "<br>";
+                    echo "E-mail envoyé à : " . $email . "<br>";
                 } else {
-                    echo "Erreur lors de l'envoi à : " . $to . "<br>";
+                    echo "Erreur lors de l'envoi à : " . $email . "<br>";
                 }
             }
         

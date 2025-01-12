@@ -29,4 +29,19 @@ class CategoryManager extends Manager{
         );
     }
 
+    // Recherche d'un utilisateur
+    public function searchCategories($name) {
+
+        $sql = "SELECT *
+        FROM " . $this->tableName . " c
+        WHERE c.name LIKE :name";
+
+        // Exécute la requête avec DAO::select et récupère un seul résultat
+        $result = DAO::select($sql, ['name' => '%' . $name . '%'], true);
+        
+        // Retourne vrai si le comptage est supérieur à 0, faux sinon
+        return $result;
+    }
+
+
 }    

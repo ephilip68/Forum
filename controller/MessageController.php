@@ -10,159 +10,94 @@ use Model\Managers\MessageManager;
 class MessageController extends AbstractController implements ControllerInterface{
 
     public function index() {
+
+        // ID de l'utilisateur connecté
+        $user_id = SESSION::getUser()->getId(); 
+
+        $messageManager = new MessageManager();
+
+        $userManager = new UserManager();
+
+        $conversations = $messageManager->getConversations($user_id);
+
+        // Vérifie les messages non lus
+        $unreadMessagesCount = $messageManager->unreadMessagesCount($user_id);
+    
+        // Recherche d'utilisateur : Appel de la méthode searchUsers
+        $searchResults = [];
+        $search = "";
+    
+        // Vérifie si une recherche d'utilisateur est soumise
+        if (isset($_POST['submit'])) {
+            $search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);  // Récupérer la recherche
         
-        $user_id = SESSION::getUser()->getId();  // ID de l'utilisateur connecté
-    
-        $messageManager = new MessageManager;
-
-        $messages = $messageManager->getMessages($user_id);
-    
-        return [
-
-            "view" => VIEW_DIR."reseauSocial/messagerie.php",
-            "meta_description" => "Liste des messages",
-            "data" => [
-
-                "messages" => $messages
-
-            ]
-            
-        ];
-
-    }
-
-    public function searchUsers() {
-
-        if (isset($_POST['submit'])) {
-
-            $userManager = new UserManager();
-
-            $searchs = $userManager->findAll();  // Rechercher les utilisateurs
-
-            return [
-
-                "view" => VIEW_DIR."reseauSocial/messagerie.php",
-                "meta_description" => "Liste des messages"
-            
-                
-            ];
+            // Instancier le UserManager et effectuer la recherche
+            $searchResults = $userManager->searchUsers($search);  // Rechercher les utilisateurs
         }
-           
+    
+        // Récupérer le destinataire si un message est envoyé
+        $recipientId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+        $messages = [];
+        
+        // Si un destinataire est sélectionné, récupérer les messages échangés
+        if ($recipientId > 0) {
+
+            // Marquer les messages comme lus 
+            $messageManager->markAsRead($user_id, $recipientId);
+
+            $messages = $messageManager->getMessagesBetweenUsers($user_id, $recipientId);
+    
+            $recipient = $userManager->findOneById($recipientId);
+        }
+        
+        
+        return [
+            "view" => VIEW_DIR . "reseauSocial/messagerie.php",  
+            "meta_description" => "Messagerie et recherche d'utilisateurs",
+            "data" => [
+                "messages" => $messages,
+                "searchResults" => $searchResults,
+                "search" => $search,
+                "recipient" => isset($recipient) ? $recipient : null,
+                "unreadMessagesCount" => $unreadMessagesCount,
+                "conversations" => $conversations 
+            ]
+        ];
     }
-
-    public function sendMessage() {
-
-        if (isset($_POST['submit'])) {
-            // Récupérer les informations de l'utilisateur actuel (l'expéditeur)
-            $user = SESSION::getUser()->getId();
-            $userId = $_GET['id'];  // ID du destinataire
-            $message = filter_input(INPUT_POST, "message", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     
-            // Assurez-vous que le destinataire est valide et que le message n'est pas vide
+    public function sendMessage($id) {
+
+        if (isset($_POST['submit_message'])) {
+
+            // Récupérer l'ID de l'utilisateur connecté
+            $user = SESSION::getUser()->getId(); 
+
+            // ID du destinataire
+            $userId = $_GET['id']; 
+
+            $message = filter_input(INPUT_POST, 'messages', FILTER_SANITIZE_FULL_SPECIAL_CHARS); 
+    
+            // Vérifier que le message et le destinataire sont valides
             if (!empty($message) && $userId != $user) {
-                $messageManager = new MessageManager;
-                  
-                // Crée un tableau associatif contenant les données à insérer dans la base de données
-                $data = ['messages'=>$message, 'user_id'=>$user, 'user_id_1'=>$userId];
 
-                // Appelle la méthode 'add' de Manager pour ajouter la nouvelle publication dans la base de données
-                $messageManager->add($data);
+                $messageManager = new MessageManager;
+
+                $data = ['messages' => $message, 'user_id' => $user, 'user_id_1' => $userId];
+                
+                $messageManager->add($data);  
     
-                echo "Message envoyé avec succès!";
-                $this->redirectTo('message', 'index');  // Rediriger vers la boîte de réception
+                $this->redirectTo("message", "index&id=$id");
+
             } else {
                 echo "Le message est vide ou le destinataire est invalide.";
             }
         }
-    }
-
-    public function reception() {
-
-        $user_id = SESSION::getUser()->getId();  // ID de l'utilisateur connecté
-    
-        $messageManager = new MessageManager;
-
-        $messages = $messageManager->getMessages($user_id);
     
         return [
-
-            "view" => VIEW_DIR."reseauSocial/messagerie.php",
-            "meta_description" => "Liste des messages",
-            "data" => [
-
-                "messages" => $messages
-
-            ]
-            
+            "view" => VIEW_DIR . "reseauSocial/messagerie.php",
+            "meta_description" => "Messagerie et recherche d'utilisateurs"
         ];
     }
 
-    public function markAsRead() {
-
-        if (isset($_GET['id'])) {
-            $message_id = $_GET['id'];
-    
-            $messageManager = new MessageManager($this->pdo);
-            $messageManager->markAsRead($message_id);
-    
-            $this->redirectTo('messages', 'inbox');  // Rediriger vers la boîte de réception
-        }
-    }
-
-    public function profile($id) {
-    
-        $currentUserId = SESSION::getUser()->getId();
-        $user_id = $_GET['id'];
-    
-        // Créer une nouvelle instance de UserManager 
-        $userManager = new UserManager();
-    
-        // Recherche d'un utilisateur par son identifiant ($id) dans la base de données
-        // La méthode findOneById retourne un utilisateur spécifique selon son ID
-        $user = $userManager->findOneById($id);
-    
-        // Recherche des amis de l'utilisateur en utilisant la méthode findFriendsByUser du UserManager
-        // Cette méthode retourne une liste des amis de l'utilisateur (s'il y en a)
-        $friends = $userManager->findFriendsByUser($id);
-    
-        // Créer une nouvelle instance de PublicationManager 
-        $publicationManager = new PublicationManager();
-    
-        // Recherche des publications de l'utilisateur avec la méthode findPublicationsByUser
-        // Cette méthode retourne une liste de publications postées par l'utilisateur
-        $publications = $publicationManager->findPublicationsByUser($id);
-    
-        //Créer une nouvelle instance de FollowManager 
-        $followManager = new FollowManager();
-    
-        // Vérifier si l'utilisateur connecté suit déjà cet utilisateur
-        $isFollowing = $followManager->following($currentUserId, $id);
-    
-        // Récupére le nombre de personnes suivies par l'utilisateur
-        $following = $followManager->countFollowing($user_id);
-    
-        // Récupére le nombre de personnes qui suivent l'utilisateur
-        $followers = $followManager->countFollowers($user_id);
-    
-    
-        return [
-    
-            "view" => VIEW_DIR."security/profil.php",
-            "meta_description" => "Profil Utilisateur",
-    
-            "data" => [
-    
-                "user" => $user,
-                "friends" => $friends,
-                "publications" => $publications,
-                "isFollowing" => $isFollowing,
-                "following" => $following,
-                "followers" => $followers
-                
-    
-            ]
-        
-        ];   
-    
-    } 
 }

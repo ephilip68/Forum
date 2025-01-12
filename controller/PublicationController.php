@@ -6,29 +6,46 @@ use App\ControllerInterface;
 use App\Session;
 use Model\Managers\UserManager;
 use Model\Managers\PublicationManager;
+use Model\Managers\CategoryManager;
 use Model\Managers\FollowManager;
 use Model\Managers\FavoritesManager;
+use Model\Managers\TopicManager;
+use Model\Managers\EventManager;
 
 class PublicationController extends AbstractController implements ControllerInterface {
 
     public function index() {
+
+        $id = SESSION::getUser()->getId();
         
         // créer une nouvelle instance de PublicationManager
         $publicationManager = new PublicationManager();
 
-        // récupérer la liste de toutes les publications grâce à la méthode findAll de Manager.php (triés par nom)
+        // Créer une nouvelle instance de UserManager 
+        $userManager = new UserManager();
+
+        // Créer une nouvelle instance de TopicManager
+        $topicManager = new TopicManager();
+
+        // récupére la liste de toutes les publications 
         $publications = $publicationManager->findAll();
 
+        $friends = $userManager->findFriendsByUser($id);
 
-        // le controller communique avec la vue "listPublication" (view) pour lui envoyer la liste des publications (data)
+        // Récupére les 2 derniers topics du forum
+        $lastTwoTopics = $topicManager->findLastTwoTopics();
+
+        
         return [
 
             "view" => VIEW_DIR."reseauSocial/homePublications.php",
             "meta_description" => "Liste des publications Réseau Social",
             "data" => [
 
-                "publications" => $publications
-
+                "publications" => $publications,
+                "friends" => $friends,
+                "lastTwoTopics" =>$lastTwoTopics
+                
             ]
         ];
     }
@@ -162,6 +179,8 @@ class PublicationController extends AbstractController implements ControllerInte
 
     public function listAmis($id){
 
+        $id = SESSION::getUser()->getId();
+
         // Créer une nouvelle instance de UserManager 
         $userManager = new UserManager();
 
@@ -172,7 +191,7 @@ class PublicationController extends AbstractController implements ControllerInte
         return [
 
             "view" => VIEW_DIR."reseauSocial/listAmis.php",
-            "meta_description" => "List d'amis",
+            "meta_description" => "Liste d'amis",
             "data" => [
 
             "friends" => $friends        
@@ -181,6 +200,68 @@ class PublicationController extends AbstractController implements ControllerInte
 
         ];
     }
+
+    public function listProfils($id){
+
+        $currentUserId = SESSION::getUser()->getId();
+        $userId = $_GET['id'];
+
+        // Créer une nouvelle instance de UserManager 
+        $userManager = new UserManager();
+
+        // Créer une nouvelle instance de EventManager 
+        $eventManager = new EventManager();
+
+        // créer une nouvelle instance de PublicationManager
+        $publicationManager = new PublicationManager();
+
+        // Créer une nouvelle instance de FollowManager 
+        $followManager = new FollowManager();
+
+        $user = $userManager->findOneById($userId);
+
+        // Recherche des amis de l'utilisateur en utilisant la méthode findFriendsByUser du UserManager
+        // Cette méthode retourne une liste des amis de l'utilisateur (s'il y en a)
+        $friends = $userManager->findFriendsByUser($currentUserId);
+
+        $friendByusers = $userManager->findFriendsByUser($userId);
+
+        // Recherche des publications de l'utilisateur avec la méthode findPublicationsByUser
+        // Cette méthode retourne une liste de publications postées par l'utilisateur
+        $publications = $publicationManager->findPublicationsByUser($userId);
+
+        // Vérifier si l'utilisateur connecté suit déjà cet utilisateur
+        $isFollowing = $followManager->following($currentUserId, $userId);
+        
+        // Récupére le nombre de personnes suivies par l'utilisateur
+        $following = $followManager->countFollowing($userId);
+        
+        // Récupére le nombre de personnes qui suivent l'utilisateur
+        $followers = $followManager->countFollowers($userId);
+
+        // Cette méthode retourne une liste des évènement postées par l'utilisateur
+        $events = $eventManager->findEventByUser($userId);
+
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/listProfilFriends.php",
+            "meta_description" => "Liste profil d'amis",
+            "data" => [
+
+            "user" => $user,
+            "friends" => $friends,
+            "friendByusers" => $friendByusers,
+            "publications" => $publications,
+            "isFollowing" => $isFollowing,
+            "following" => $following,
+            "followers" => $followers,
+            "events" => $events       
+        
+            ]
+
+        ];
+    }
+    
 
     public function addFavorites() {
 
@@ -268,7 +349,90 @@ class PublicationController extends AbstractController implements ControllerInte
         ];
     }
 
+    public function search() {
 
+        // Vérifier si la recherche a été soumise avec POST
+        if (isset($_POST['submit'])) {
+
+            $search = filter_input(INPUT_POST, "search", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            if ($search) {
+                
+                $eventManager = new EventManager();  
+                $userManager = new UserManager(); 
+                $publicationManager = new PublicationManager(); 
+                $categoryManager = new CategoryManager(); 
+                $topicManager = new TopicManager(); 
+
+                
+                $findEvents = $eventManager->searchEvents($search);
+
+                $findFriends = $userManager->searchUsers($search);
+
+                $findPublications = $publicationManager->searchPublications($search);
+
+                $findTopics = $topicManager->searchTopics($search);
+
+                $findCategories = $categoryManager->searchCategories($search);
+
+            }
+            return [
+                "view" => VIEW_DIR . "reseauSocial/homePublications.php",  
+                "meta_description" => "Résultats de recherche",
+                "data" => [
+
+                    "search" => $search,
+                    "findEvents" => $findEvents,
+                    "findFriends" => $findFriends,
+                    "findPublications" => $findPublications,
+                    "findTopics" => $findTopics,
+                    "findCategories" => $findCategories
+                    
+                ]
+            ];
+        }
+
+    }
+
+    public function repost($id) {
+    
+        $user_id = SESSION::getUser()->getId();
+        
+        
+        $publicationManager = new PostManager();
+        
+        
+        $repost = $publicationManager->findOneById($id);
+        
+        // Si la publication existe
+        if ($repost) {
+
+            // Récupérer le contenu de la publication d'origine
+            $content = $repost->getContent();
+
+            $data = ['content' => $content, 'photo'=>$photo, 'user_id' => $userId, 'publication_id' => $id];
+
+            // Ajouter la republication
+             $publicationManager->add($data);
+            
+            
+            $this->redirectTo('security', 'profile');
+            
+        } else {
+            // Rediriger ou afficher un message d'erreur si la publication n'existe pas
+            $this->redirectTo('plublication', 'index');
+        }
+
+        return [
+            "view" => VIEW_DIR . "reseauSocial/homePublications.php",  
+            "meta_description" => "Republier une publication",
+            "data" => [
+
+                
+                
+            ]
+        ];
+    }
 
     
 

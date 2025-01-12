@@ -361,7 +361,7 @@ class SecurityController extends AbstractController{
     public function updateProfile($id) {
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $id = SESSION::getUser()->getId();  // L'ID de l'utilisateur connecté
+            $id = SESSION::getUser()->getId(); 
             $nickName = filter_input(INPUT_POST, "nickName", FILTER_SANITIZE_FULL_SPECIAL_CHARS); 
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL); 
             $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_FULL_SPECIAL_CHARS); 

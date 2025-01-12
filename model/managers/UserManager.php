@@ -28,10 +28,10 @@ class UserManager extends Manager{
         );
     }
     
-    //trouve les amis de l'utilisateur en fonction de son ID
+    // Trouve les amis de l'utilisateur en fonction de son ID
     public function findFriendsByUser($id){
 
-        $sql = "SELECT u.id_user, u.nickName, u.avatar
+        $sql = "SELECT *
         FROM " . $this->tableName . " u 
         INNER JOIN follow f ON u.id_user = f.user_id_1
         WHERE f.user_id = :id";
@@ -74,7 +74,6 @@ class UserManager extends Manager{
        
     }
 
-    //trouve les amis de l'utilisateur en fonction de son ID
     public function getProfileAvatar($id){
 
         $sql = "SELECT u.avatar
@@ -89,15 +88,15 @@ class UserManager extends Manager{
 
     }
 
-    // Recherche d'un utilisateur (par exemple par nom)
+    // Recherche d'un utilisateur
     public function searchUsers($nickName) {
 
         $sql = "SELECT *
-        FROM " . $this->table_name ." u 
-        WHERE u.nickName = :nickName";
+        FROM " . $this->tableName . " u 
+        WHERE u.nickName LIKE :nickName";
 
         // Exécute la requête avec DAO::select et récupère un seul résultat
-        $result = DAO::select($sql, ['nickName' => $nickName], false);
+        $result = DAO::select($sql, ['nickName' => '%' . $nickName . '%'], true);
         
         // Retourne vrai si le comptage est supérieur à 0, faux sinon
         return $result;

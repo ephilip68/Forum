@@ -29,5 +29,19 @@ class EventManager extends Manager{
 
     }
 
+    // Recherche d'un utilisateur
+    public function searchEvents($title) {
+
+        $sql = "SELECT *
+        FROM " . $this->tableName . " e
+        WHERE e.title LIKE :title";
+
+        // Exécute la requête avec DAO::select et récupère un seul résultat
+        $result = DAO::select($sql, ['title' => '%' . $title . '%'], true);
+        
+        // Retourne vrai si le comptage est supérieur à 0, faux sinon
+        return $result;
+    }
+
 
 }

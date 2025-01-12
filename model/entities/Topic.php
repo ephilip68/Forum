@@ -182,22 +182,22 @@ final class Topic extends Entity{
 
         // Si la publication est dans moins de 1 minute mais plus d'instant
         if ($diff->i === 1 && $diff->h === 0 && $diff->d === 0 && $diff->m === 0 && $diff->y === 0) {
-            return "Il y a 1 minute"; 
+            return "Commencé il y a 1 minute"; 
         }
 
         // Moins de 1 heure : Affiche "Il y a X minute(s)"
         if ($diff->h === 0 && $diff->d === 0 && $diff->y === 0 && $diff->m === 0) {
-            return "Il y a " . $diff->i . " minute" . ($diff->i > 1 ? "s" : "");
+            return "Commencé il y a " . $diff->i . " minute" . ($diff->i > 1 ? "s" : "");
         }
 
         // Moins de 24 heures : Affiche "Il y a X heure(s)"
         if ($diff->d === 0 && $diff->y === 0 && $diff->m === 0) {
-            return "Il y a " . $diff->h . " heure" . ($diff->h > 1 ? "s" : "");
+            return "Commencé il y a " . $diff->h . " heure" . ($diff->h > 1 ? "s" : "");
         }
 
         // Hier : Affiche "Hier à Xh"
         if ($diff->d === 1) {
-            return "Hier à " . $creationDate->format('H\hi'); // Format : Hier à 10h30
+            return "Commencé hier à " . $creationDate->format('H\hi'); // Format : Hier à 10h30
         }
 
         // De 1 à 7 jours : (ex. : "Lundi 5 janvier à 11h").

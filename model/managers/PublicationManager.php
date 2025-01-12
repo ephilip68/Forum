@@ -29,4 +29,19 @@ class PublicationManager extends Manager{
         );
 
     }
+    
+    // Recherche d'une publication
+    public function searchPublications($nickName) {
+
+        $sql = "SELECT *
+        FROM " . $this->tableName . " p 
+        WHERE p.content LIKE :content";
+
+        // Exécute la requête avec DAO::select et récupère un seul résultat
+        $result = DAO::select($sql, ['content' => '%' . $content . '%'], true);
+        
+        // Retourne vrai si le comptage est supérieur à 0, faux sinon
+        return $result;
+    }
+
 }

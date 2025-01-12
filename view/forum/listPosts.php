@@ -61,13 +61,13 @@ include VIEW_DIR."template/nav.php";
                                 <a class="tooltip" href=""><i class="fa-regular fa-bookmark"></i></a>
                             </div>
                             <div class="cardReactionReply">
-                                <a class="tooltip" href="#modal-answer-post&id-post=<?= $post->getId()?>" uk-toggle>
+                                <a href="#modal-answer-post-<?= $post->getId()?>" uk-toggle>
                                     <i class="fa-solid fa-reply"></i>
                                     <span>Répondre</span>
                                 </a>
                             </div> 
                             <!-- Modal -->
-                            <div id="modal-answer-post" uk-modal>
+                            <div id="modal-answer-post-<?= $post->getId()?>" class="under" uk-modal>
                                 <div class="uk-modal-dialog uk-modal-body modal-post">
                                     <div class="modal-content">
                                         <a class="btn-close uk-modal-close close-post"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></a>

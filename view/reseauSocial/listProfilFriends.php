@@ -1,6 +1,7 @@
 <?php
     $user = $result["data"]["user"];
     $friends = $result["data"]["friends"];
+    $friendByusers = $result["data"]["friendByusers"];
     $publications = $result["data"]["publications"];
     $isFollowing = $result["data"]["isFollowing"];
     $following = $result["data"]["following"];
@@ -16,14 +17,25 @@
             <div class="side-wrapper">
                 <ul class="listNavEvent list-unstyled">
                     <div class="navEvent">
-                        <h2 style="font-weight:700">Profil</h2>
-                        <a href="index.php?ctrl=publication&action=getFavoritesPublications"><li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Enregistrements</span></li></a>
-                        <a href="index.php?ctrl=event&action=index"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Evènements</span></li></a>
-                        <a href="#"><li class="listContent"><i class="fa-solid fa-magnifying-glass"></i><span>Rechercher</span></li></a>
-                        <a href="#"><li class="listContent"><i class="fa-solid fa-envelope"></i><span>Newsletters</span></li></a>
-                        <li class="divider"></li>
-                        <a href="#"><li class="listContent"><i class="fa-solid fa-gear"></i><span>Paramètres</span></li></a>
-                        <a href="index.php?ctrl=security&action=logout"><li class="listContent"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Déconnexion</span></li></a>  
+                        <h2 style="font-weight:700">Ami(e)s</h2>
+                        <a href="index.php?ctrl=publication&action=listAmis"><li class="listContent"><i class="fa-solid fa-user-group"></i><span>Accueil</span></li></a>
+                        <li class="listContent"><i class="fa-solid fa-user"></i></i><span>Liste d'ami(e)s</span>
+                        <a href="index.php?ctrl=publication&action=listAmis" class="toggle-friends" data="<?= App\Session::getUser()->getId() ?>">
+                            <?php if (isset($_GET['id_user']) && $_GET['id_user'] == App\Session::getUser()->getId()) { ?>
+                                <i class="fa-solid fa-chevron-up"></i>
+                            <?php } else { ?>
+                                <i class="fa-solid fa-chevron-down"></i> 
+                            <?php } ?>
+                        </a>
+                        <div class="friends" data="<?= App\Session::getUser()->getId() ?>" style="display: <?= isset($_GET['id_user']) && $_GET['id_user'] == App\Session::getUser()->getId() ? 'block' : 'none' ?>;">
+                            <?php foreach($friends as $friend) { ?>
+                                <div class="profilFriends">
+                                    <img src="public/upload/<?=$friend->getAvatar()?>" class="status-img-nav"/>
+                                    <a href="index.php?ctrl=publication&action=listProfils&id=<?= $friend->getId() ?>"><?= ucfirst($friend->getNickName()) ?></a>
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </div>
+                            <?php } ?>
+                        </div>
                     </div>
                     <div class="footerHome">
                         <a class="" href="#">A Propos</a> - 
@@ -46,7 +58,8 @@
                     <?php } ?>      
                     <a href="#modal-avatar" uk-toggle ><i class="fa-solid fa-camera"></i></a>
                     <div class="profile-name"><?=ucfirst($user->getNickName())?></div>
-                    <div class="containerPublication">
+                    <div class="containerPublication"> 
+                
                         <!-- Modal -->
                         <div id="modal-avatar" uk-modal>
                             <div class="uk-modal-dialog uk-modal-body">
@@ -93,52 +106,17 @@
                         <?php } ?>
                     </div>
                     <div class="profile-menu-content">
-                        <?php if(App\Session::getUser() == $user){ ?>
 
-                            <a class="profile-menu-btn" href="#modal-edit" uk-toggle>Modifier profil</a>
+                        <?php if($isFollowing) { ?>
 
-                        <?php }elseif($isFollowing) { ?>
-
-                            <a class="profile-menu-suivi" href="index.php?ctrl=follow&action=deleteFollowing&id=<?=$user->getId()?>">Suivi(e)</a>
+                            <a class="profile-menu-suivi" href="index.php?ctrl=follow&action=deleteFollowing&id=<?=$friend->getId()?>">Suivi(e)</a>
 
                         <?php }else{ ?>
 
-                            <a class="profile-menu-suivre" href="index.php?ctrl=follow&action=addFollow&id=<?=$user->getId()?>">Suivre</a>
+                            <a class="profile-menu-suivre" href="index.php?ctrl=follow&action=addFollow&id=<?=$friend->getId()?>">Suivre</a>
 
                         <?php } ?>
                     </div> 
-                </div>
-                <div id="modal-edit" uk-modal>
-                    <div class="uk-modal-dialog uk-modal-body">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button class="modal-title">Modifier Profil</button>
-                                <hr>
-                                <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
-                            </div>
-                            <div class="modal-body">
-                                <form action="index.php?ctrl=security&action=updateProfile$id=" method="post">
-                                    <div class="modal-comment">
-                                        <div class="modal-Form">
-                                            <div><?= ucfirst(App\Session::getUser()->getNickName()) ?></div>
-                                            <input type="text" placeholder="Pseudo" name="nickName" value="" >
-
-                                            <div><?= ucfirst(App\Session::getUser()-> getEmail()) ?></div>
-                                            <input type="email" placeholder="Email" name="email" value="" >
-                                            
-                                            <div>Mot de passe</div>
-                                            <input type="password" placeholder="Nouveau mot de passe" name="pass1" value="" >
-
-                                            <div></div>
-                                            <input type="password" placeholder="Confirmer nouveau mot de passe" name="pass2" value="" >
-                                        </div>
-                                    </div>
-                                    <br/>
-                                    <input type="submit" name="submit" value="Modifier">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="timeline">
@@ -206,11 +184,15 @@
                         <div class="intro-title">
                             Amis
                         </div>
-                        <?php if(!empty($friends)) { ?>
-                            <?php foreach($friends as $friend) { ?>
+                        <?php if(!empty($friendByusers)) {?>
+                            <?php foreach($friendByusers as $friendByuser) { ?>                          
                                 <div class="profilFriends">
-                                    <img src="public/upload/<?=$friend->getAvatar()?>" class="status-img"/>
-                                    <a href="index.php?ctrl=security&action=profile&id=<?= $friend->getId() ?>"><?= ucfirst($friend->getNickName()) ?></a>
+                                    <?php if($friendByuser->getId() == App\Session::getUser()->getId()) { ?> 
+
+                                    <?php }else{ ?>
+                                        <img src="public/upload/<?= $friendByuser->getAvatar() ?>" class="status-img"/>                                    
+                                        <a href="index.php?ctrl=security&action=profile&id=<?= $friendByuser->getId() ?>"><?= ucfirst($friendByuser->getNickName()) ?></a> 
+                                    <?php } ?>
                                 </div> 
                             <?php } ?>
                         <?php }else{ ?>
@@ -416,7 +398,57 @@
         });
     });
 
-    
-</script>  
+    document.addEventListener('DOMContentLoaded', function () {
+    // Récupére tous les liens de "toggle-friends" pour la gestion des amis
+    var toggleFriendsLinks = document.querySelectorAll('.toggle-friends');
 
+    toggleFriendsLinks.forEach(function(link) {
+        // Ajout d'un événement de clic pour chaque lien d'affichage des amis
+        link.addEventListener('click', function(e) {
+            e.preventDefault();  // Empêche le comportement par défaut (rechargement de la page)
+
+            var userId = link.getAttribute('data');  // Récupére l'ID de l'utilisateur
+            var friendsList = document.querySelector('.friends[data="' + userId + '"]');  // Sélectionne la liste des amis par ID
+            var chevronIcon = link.querySelector('i');  // L'icône du chevron
+
+            // Vérifie si la liste des amis est déjà visible
+            if (friendsList.style.display === 'none' || friendsList.style.display === '') {
+                // Affiche la liste des amis et change l'icône du chevron
+                friendsList.style.display = 'block';
+                chevronIcon.classList.remove('fa-chevron-down');
+                chevronIcon.classList.add('fa-chevron-up');
+                // Sauvegarde l'état ouvert dans localStorage
+                localStorage.setItem('friendsVisible_' + userId, 'true');
+            } else {
+                // Masque la liste des amis et changer l'icône du chevron
+                friendsList.style.display = 'none';
+                chevronIcon.classList.remove('fa-chevron-up');
+                chevronIcon.classList.add('fa-chevron-down');
+                // Sauvegarde l'état fermé dans localStorage
+                localStorage.setItem('friendsVisible_' + userId, 'false');
+            }
+        });
+
+        // Vérifie l'état de chaque liste d'amis au chargement de la page
+        var userId = link.getAttribute('data');
+        var friendsList = document.querySelector('.friends[data="' + userId + '"]');
+        var chevronIcon = link.querySelector('i');
+
+        // Récupére l'état sauvegardé de la liste des amis pour cet utilisateur
+        var isVisible = localStorage.getItem('friendsVisible_' + userId);
+
+        if (isVisible === 'true') {
+            // Afficher la liste des amis et mettre l'icône en haut
+            friendsList.style.display = 'block';
+            chevronIcon.classList.remove('fa-chevron-down');
+            chevronIcon.classList.add('fa-chevron-up');
+        } else {
+            // Masquer la liste des amis et mettre l'icône en bas
+            friendsList.style.display = 'none';
+            chevronIcon.classList.remove('fa-chevron-up');
+            chevronIcon.classList.add('fa-chevron-down');
+        }
+    });
+});
+</script>  
 

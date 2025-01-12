@@ -10,7 +10,8 @@
             <div class="side-wrapper">
                 <ul class="listNavEvent list-unstyled">
                     <div class="navEvent">
-                        <a href="index.php?ctrl=security&action=profile&id=<?=App\Session::getUser()->getId()?>"><li class="listContent"><i><img src="public/upload/<?=App\Session::getUser()->getAvatar()?>" class="status-img-nav"/></i><span><?= ucfirst(App\Session::getUser()->getNickName())?></span></li></a>
+                        <h2 style="font-weight:700">Enregistrements</h2>
+                        <li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Accueil</span></li>
                     </div>
                     <div class="footerHome">
                         <a class="" href="#">A Propos</a> - 
