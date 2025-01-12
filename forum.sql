@@ -51,10 +51,10 @@ INSERT INTO `favorites` (`id_favorites`, `favoritesDate`, `publication_id`, `use
 INSERT INTO `follow` (`dateFollow`, `user_id`, `user_id_1`) VALUES
 	('2024-12-21 14:47:13', 13, 1),
 	('2024-12-22 20:20:50', 13, 2),
-	('2025-01-05 23:09:46', 25, 23),
 	('2025-01-05 23:10:00', 25, 1),
 	('2025-01-07 19:16:17', 23, 1),
-	('2025-01-07 20:24:18', 23, 25);
+	('2025-01-07 20:24:18', 23, 25),
+	('2025-01-12 22:10:27', 25, 23);
 
 -- Listage des données de la table forum_erwin.likemessage : ~4 rows (environ)
 INSERT INTO `likemessage` (`post_id`, `user_id`) VALUES
@@ -63,13 +63,19 @@ INSERT INTO `likemessage` (`post_id`, `user_id`) VALUES
 	(29, 25),
 	(36, 23);
 
--- Listage des données de la table forum_erwin.message : ~0 rows (environ)
+-- Listage des données de la table forum_erwin.message : ~6 rows (environ)
+INSERT INTO `message` (`id_message`, `dateMessage`, `messages`, `status`, `user_id`, `user_id_1`) VALUES
+	(1, '2025-01-11 20:30:55', 'egergtertert', 'read', 25, 23),
+	(3, '2025-01-11 21:20:29', 'tyrtytret', 'read', 25, 23),
+	(19, '2025-01-12 15:40:29', 'ZGGZRGRGEGR', 'unread', 23, 1),
+	(20, '2025-01-12 15:42:49', 'rgrgerqzrg', 'unread', 23, 1),
+	(21, '2025-01-12 16:02:58', 'yetheeret', 'read', 23, 25),
+	(22, '2025-01-12 17:03:52', 'tyeyteye(yeyeyt', 'read', 23, 25);
 
--- Listage des données de la table forum_erwin.newsletters : ~3 rows (environ)
+-- Listage des données de la table forum_erwin.newsletters : ~2 rows (environ)
 INSERT INTO `newsletters` (`id_subscribers`, `email`, `creationDate`, `user_id`) VALUES
-	(1, 'erwin@exemple.com', '2025-01-04 01:18:43', 25),
 	(3, 'david@exemple.com', '2025-01-04 01:23:55', 25),
-	(30, 'erwin.philip68@gmail.com', '2025-01-04 17:01:06', 26);
+	(31, 'erwin@exemple.com', '2025-01-12 22:26:41', 25);
 
 -- Listage des données de la table forum_erwin.post : ~11 rows (environ)
 INSERT INTO `post` (`id_message`, `text`, `creationDate`, `user_id`, `topic_id`) VALUES
@@ -94,13 +100,13 @@ INSERT INTO `publication` (`id_publication`, `content`, `publicationDate`, `phot
 
 -- Listage des données de la table forum_erwin.topic : ~7 rows (environ)
 INSERT INTO `topic` (`id_topic`, `title`, `user_id`, `category_id`, `creationDate`, `views`, `closed`) VALUES
-	(92, 'hteeeeeeeeee', 23, 34, '2024-12-27 19:21:28', 35, 0),
+	(92, 'hteeeeeeeeee', 23, 34, '2024-12-27 19:21:28', 51, 0),
 	(94, 'ghchfghhff', 23, 34, '2024-12-27 19:27:46', 9, 0),
 	(95, 'le prix d&#039;un ballon de basket', 23, 35, '2024-12-28 14:03:57', 0, 0),
 	(96, 'gchfxfxxhf', 23, 34, '2024-12-31 17:22:20', 4, 0),
 	(97, 'dgfgfgf', 25, 34, '2025-01-04 23:19:38', 15, 0),
 	(98, 'dgfgfgf', 25, 34, '2025-01-04 23:20:07', 3, 0),
-	(99, 'dgfgfgf', 25, 34, '2025-01-04 23:21:04', 3, 0);
+	(99, 'dgfgfgf', 25, 34, '2025-01-04 23:21:04', 4, 0);
 
 -- Listage des données de la table forum_erwin.undercommentpost : ~4 rows (environ)
 INSERT INTO `undercommentpost` (`text`, `commentDate`, `user_id`, `comment_id`) VALUES
