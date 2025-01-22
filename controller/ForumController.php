@@ -67,13 +67,14 @@ class ForumController extends AbstractController implements ControllerInterface{
                 'id_category' => $category->getId(),
                 'name' => $category->getName(),
                 'COUNT(*)' => $topicCount,
+                'last_id' => $lastTopic ? $lastTopic['id_topic'] : '',
                 'last_title' => $lastTopic ? $lastTopic['title'] : 'Aucun sujet',
                 'last_date' => $lastTopicDate ? $lastTopicDate : 'Aucune activité',
                 'last_user' => $lastTopic ? $lastTopic['user_id'] : '',
                 'last_avatar' => $lastUserAvatar ? $lastUserAvatar ['avatar'] : ''
 
             ];
-            // var_dump($lastUserAvatar['avatar']);die;
+            // var_dump($lastTopic);die;
         }
         
         // Envoie les données à la vue

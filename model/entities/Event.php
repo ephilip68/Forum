@@ -21,6 +21,8 @@ final class Event extends Entity{
     private $city;
     private $country;
     private $user;
+    private $limit;
+
 
 
     // chaque entité aura le même constructeur grâce à la méthode hydrate (issue de App\Entity)
@@ -255,7 +257,27 @@ final class Event extends Entity{
         return $this;
 
     }
+    
+    /**
+     * Get the value of limit
+     */ 
+    public function getLimit()
+    {
+        return $this->limit;
+    }
 
+    /**
+     * Set the value of limit
+     *
+     * @return  self
+     */ 
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+    
     public function getFormattedDate() {
 
         // Récupérer le fuseau horaire de la France (Europe/Paris)
@@ -275,6 +297,7 @@ final class Event extends Entity{
         return $formatter->format($eventDate);
        
     }
+
 }
 
 

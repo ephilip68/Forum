@@ -5,7 +5,7 @@ use App\Session;
 use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\UserManager;
-use Model\Managers\LikeMessageManager;
+use Model\Managers\LikePostManager;
 use Model\Managers\CategoryManager;
 use Model\Managers\TopicManager;
 use Model\Managers\PostManager;
@@ -30,7 +30,7 @@ class PostController extends AbstractController implements ControllerInterface{
         $commentPostManager = new CommentPostManager();
 
         // Créer une nouvelle instance de LikeMessage
-        $likeMessageManager = new LikeMessageManager();
+        $likeMessageManager = new LikePostManager();
 
         $underCommentPostManager = new UnderCommentPostManager();
 
@@ -45,6 +45,22 @@ class PostController extends AbstractController implements ControllerInterface{
 
         $underComments = $underCommentPostManager->findUnderCommentByCommentPost($post->getId());
         
+        $countComments = [];
+        if(!empty($comments)){
+            foreach ($comments as $comment) {
+                
+                $countUnderComments = $underCommentPostManager->countUnderCommentByCommentPost($comment['id_comment']);
+
+                $countComments[] = [
+
+                    'id' => $comment['id_comment'],
+                    'count' => $countUnderComments
+                    
+                ];
+
+            }
+        }
+
         // Récupérer le nombre de likes
         $countLike = $likeMessageManager->countLikes($post->getId());
 
@@ -70,7 +86,8 @@ class PostController extends AbstractController implements ControllerInterface{
                 "comments" => $comments,
                 "countLike" => $countLike,
                 "userLike" => $userLike,
-                "underComments" => $underComments
+                "underComments" => $underComments,
+                "countComments" => $countComments
 
             ]   
         ];

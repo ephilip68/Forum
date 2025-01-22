@@ -43,5 +43,40 @@ class EventManager extends Manager{
         return $result;
     }
 
+    public function findAllEvents($start, $limit) {
+
+        $sql = "SELECT * 
+                FROM " . $this->tableName . " e 
+                ORDER BY e.creationDate DESC 
+                LIMIT $start, $limit"; 
+        
+        return $this->getMultipleResults(
+            DAO::select($sql),
+            $this->className
+        );
+    }
+
+    public function totalEvents() {
+
+        $sql = "SELECT COUNT(*) 
+        FROM " . $this->tableName . " e ";
+        
+        $result = DAO::select($sql);
+    
+        return (int) $result[0]['COUNT(*)'];
+    }
+
+    public function limitMax($id) {
+        
+        $sql = "SELECT e.limit 
+        FROM " . $this->tableName . " e
+        WHERE e.id_event = :id";
+
+        // Exécute la requête avec DAO::select et récupère un seul résultat
+        $result = DAO::select($sql, ['id' => $id], false);
+    
+        return $result ['limit'] ?? 0;
+    }
+
 
 }

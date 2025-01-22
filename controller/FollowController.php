@@ -67,35 +67,5 @@ class FollowController extends AbstractController{
 
     }
 
-    // Recherche combinée des suivis et des followers
-    public function searchFollowedAndFollowers() {
-
-        // Récupérer la requête de recherche et l'ID utilisateur
-        $searchQuery = filter_input(INPUT_POST, "search", FILTER_SANITIZE_FULL_SPECIAL_CHARS);  // Récupère le texte de recherche
-        $user_id = SESSION::getUser()->getId();  // Récupère l'ID utilisateur depuis la session
-
-        if (!empty($searchQuery)) {
-
-            $followManager = new FollowManager();
-
-            // Recherche combinée des suivis et des followers
-            $users = $followManager->searchFollowedAndFollowers($searchQuery, $user_id);
-
-        } else {
-
-            // Si la recherche est vide, on retourne une liste vide
-            $users = [];
-
-        }
-
-        return [
-            "view" => VIEW_DIR."reseauSocial/messagerie.php",
-            "meta_description" => "Liste des utilisateurs ",
-            "data" => [ 
-                "users" => $users
-            ]
-        ];
-    }
-
 
 }

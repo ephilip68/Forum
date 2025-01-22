@@ -1,5 +1,8 @@
 <?php
     $events = $result["data"]["events"];
+    $page = $result["data"]["page"];
+    $totalPages = $result["data"]["totalPages"];
+    $countParticipants = $result["data"]["countParticipants"];
     
     include VIEW_DIR."template/nav.php";
 ?>
@@ -11,7 +14,8 @@
                 <ul class="listNavEvent list-unstyled">
                     <div class="navEvent">
                         <h2 style="font-weight:700">Evènements</h2>
-                        <li class="listContent"><i class="fa-solid fa-calendar"></i><span>Accueil</span></li>
+                        <a href="index.php?ctrl=event&action=index&page=<?= $page - 1; ?>"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Accueil</span></li></a>
+                        <li class="listContent"><i class="fa-solid fa-user"></i><span>Vos évènements</span></li>
                         <a href="#modal-event" uk-toggle class="newEvent"><i class="fa-solid fa-plus"></i>Créer un évnement</a>
                     </div>
                     <div class="footerHome">
@@ -29,7 +33,7 @@
         <div class="uk-modal-dialog uk-modal-body">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">Ajjouter un Evènement</h3>
+                    <h3 class="modal-title">Ajouter un Evènement</h3>
                     <hr>
                     <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
                 </div>
@@ -51,6 +55,7 @@
                                 <input id="content" type="time" name="eventHours" required>
                                 <input id="content" type="text" name="city" placeholder="lieu" required>
                                 <input id="content" type="text" name="country" placeholder="Pays" required>
+                                <input id="content" type="number" name="limit" placeholder="nombres de place" required>
                                 <textarea id="content" name="text" placeholder="Détail de lévènemnt"required></textarea>
                             </div>
                         </div>
@@ -63,10 +68,12 @@
         </div>
     </div>
 
-    <div class="main-container-home">
+    <div class="main-container-event">
         <div class="timeline-event">
             <div class="timeline-center-event">
-                <h3>Liste des évènements à venir</h3>
+                <div class="pagination">
+                    <h3>Liste des évènements à venir</h3>
+                </div>
                 <div class="status-event">
                     <?php foreach($events as $event) { ?>
                         <div class="status-content">
@@ -89,19 +96,49 @@
                             <div class="eventList">
                                 <div class="eventInfo">
                                     <p class="eventDate"><?= $event->getFormattedDate() ?> à <?= $event->getEventHours() ?></p>
-                                    <p class="eventTitle"><?= ucfirst($event->getTitle()) ?> | <?= ucfirst($event->getText()) ?></p>
+                                    <a href="index.php?ctrl=event&action=detailEvents&id=<?= $event->getId() ?>"><p class="eventTitle"><?= ucfirst($event->getTitle()) ?></p></a>
                                     <p class="eventSide"><?= ucfirst($event->getCity()) ?>, <?= ucfirst($event->getCountry()) ?></p>
+                                </div>
+                                <div class="eventPlace">
+                                    <?php foreach($countParticipants as $participant) { ?>
+                                        <?php if($participant['id'] == $event->getId()) { ?>
+                                            <span class="event-place"><?= $event->getLimit() ?> places | <?= $participant['numberParticipants'] ?> participant<?= $participant['numberParticipants'] > 1 ? "s" : ""  ?></span>
+                                            <?php if($participant['limitMax']) { ?> 
+                                                <span class="event-limit">Evènement complet</span>
+                                            <?php }else{ ?>
+                                            <?php } ?>   
+                                        <?php } ?>   
+                                    <?php } ?>    
                                 </div>  
                             </div>
                             <div class="eventButton">
                                 <div class="eventBtn">
-                                    <button class="btnInteresse"><i class="fa-regular fa-star"></i>Ça m'intéresse</button>
+                                    <a href="index.php?ctrl=event&action=detailEvents&id=<?= $event->getId() ?>"><button class="btnInteresse"><i class="fa-solid fa-plus"></i>Voir plus</button></a>
                                     <button class="btnShareEvent"><i class="fa-solid fa-share"></i></button>
                                 </div>
                             </div>
                         </div>
                     <?php } ?>
                 </div>
+                <ul class="uk-pagination uk-flex-center" uk-margin>
+                    <?php if ($page > 1) { ?>
+                        <li><a href="index.php?ctrl=event&action=index&page=<?= $page - 1; ?>"><span uk-pagination-previous></span></a></li>
+                    <?php } else { ?>
+                        <li class="uk-disabled"><span><span uk-pagination-previous></span></span></li>
+                    <?php } ?>
+
+                    <?php for ($pageNumber = 1; $pageNumber <= $totalPages; $pageNumber++) { ?>
+                        <li class="<?= ($pageNumber == $page) ? 'uk-active' : ''; ?>">
+                            <a href="index.php?ctrl=event&action=index&page=<?= $pageNumber; ?>" <?= ($pageNumber == $page) ? 'aria-current="page"' : ''; ?>><?= $pageNumber ?></a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if ($page < $totalPages) { ?>
+                        <li><a href="index.php?ctrl=event&action=index&page=<?= $page + 1; ?>"><span uk-pagination-next></span></a></li>
+                    <?php } else { ?>
+                        <li class="uk-disabled"><span><span uk-pagination-next></span></span></li>
+                    <?php } ?>
+                </ul>
             </div>
         </div>
     </div>

@@ -31,4 +31,17 @@ class UnderCommentPostManager extends Manager{
         // Retourne vrai si le comptage est supérieur à 0, faux sinon
         return $result;
     }
+
+    public function countUnderCommentByCommentPost($id) {
+
+        $sql = "SELECT COUNT(*) 
+        FROM " . $this->tableName . " u
+        WHERE u.comment_id = :id";
+    
+        // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
+        return $this->getSingleScalarResult(
+            DAO::select($sql, ['id' => $id], false),  
+            $this->className  
+        );
+    }
 }

@@ -1240,6 +1240,7 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 .card2 h2 {color: white;margin-bottom: 10px;}
 
 /***************************************************************** LISTE AMIS *********************************************************************/
+
 .friends{margin: 1em 1em 0 .5em;}
 
 .profilFriendsMenu{display: flex;width: 100%;align-items: center;gap: 10px;color: #151C27;font-size: 1.2em;height: 45px;margin-bottom: 20px;justify-content: space-between;}
@@ -1247,6 +1248,8 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 .friendsOptions i{font-size: 1em;}
 
 /***************************************************************** EVENTS *********************************************************************/
+
+.main-container-event {width: 75%;flex-grow: 1;overflow: auto;background-color: var(--base);height: 100vh;font-family: "Inter", sans-serif}
 
 .left-side-content {width: 21%;}
 
@@ -1262,35 +1265,51 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 
 .navEvent h2{padding-left: .3em;height: 30px;}
 
-.timeline-event { position: relative;z-index: 2;padding: 40px;}
+.timeline-event {position: relative;z-index: 2;padding: 15px 40px;}
 
-.timeline-center-event {border: 1px solid #d0d0d0ae; border-radius: 15px;width: 100% ;min-height: 50px; padding: 1em 2em 2em 2em;background-color: rgba(255, 255, 255, 0.782);}
+.timeline-center-event {border: 1px solid #d0d0d0ae; border-radius: 15px;width: 100% ;min-height: 50px; padding: 1em 2em 0 2em;background-color: rgba(255, 255, 255, 0.782);}
 
-.timeline-center-event h3{font-weight: 700;font-size: 1.7em;color: #151C27;}
+.timeline-center-event h3{font-weight: 700;font-size: 1.7em;color: #151C27; width: 40%;}
 
-.status-event{ display: flex;flex-wrap: wrap; margin-top: 20px;width: 100%;gap: 18px;}
+.pagination{display: flex;width: 100%;}
+
+.uk-pagination {margin-bottom: 2px;width: 100%;text-align: center;}
+
+.uk-pagination li a {padding: 5px 10px;margin: 0 5px;color: #151C27;}
+
+.status-event{ display: flex;flex-wrap: wrap; margin: 15px 0;width: 100%;gap: 18px;}
 
 .status-content{height: 350px;background-color: rgba(255, 255, 255, 0.782);border-radius: 15px;width: 24%;box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);}
 
 .eventPhoto{position: relative;width: 100%;height: 150px;}
 
-.eventPhoto img{width: 100%;height: 100%;object-fit: cover;border-top-left-radius: 15px;border-top-right-radius: 15px;}
+.eventPhoto img{width: 100%;height: 100%;object-fit: cover;object-position: top; border-top-left-radius: 15px;border-top-right-radius: 15px;}
 
-.eventList {width: 100%;height: 130px;padding: .5em 1em .5em 1em;}
+.eventList {width: 100%;height: 140px;padding: .5em 1em .5em 1em;display: flex;flex-direction: column;gap: 25px;}
 
 .eventList p {width: 100%;margin: 0;}
 
-.eventDate{font-weight: 600; color: #151C27; font-size: .85em;}
+.eventDate{font-weight: 600; color: #151C27; font-size: .9em;}
 
-.eventTitle{font-weight: 600; color: #151C27;font-size: 1em;padding: 2px 0;}
+.event-place{width: 100%;font-size: .9em;color: #0A4DC1;}
+
+.event-limit{width: 100%;font-size: .7em;color: red;}
+
+.eventTitle{font-weight: 600; color: #151C27;font-size: 1em;font-weight: 600;padding: 2px 0;}
+
+.eventInfo a:hover{color: #151C27;}
+
+.eventPlace{display: flex;flex-direction: column; width: 100%;}
 
 .eventSide{font-weight: 500;font-size: .9em; color: #676767;}
 
-.eventButton{ height: 50px;padding: 1em 1em .5em 1em;}
+.eventButton{ height: 60px;padding: .5em 1em .5em 1em;}
 
 .eventBtn{width: 100%;display: flex;justify-content: space-between;}
 
-.btnInteresse{width: 80%;height: 40px; display: flex; justify-content: center;align-items: center;border-radius: 5px;border: none;font-size: 1em;font-weight: 550; gap: 10px; color: #151C27; font-family: "Inter", sans-serif;background-color: var(--base);}
+.eventBtn a{width: 80%;height: 40px; display: flex; justify-content: center;align-items: center;border-radius: 5px;border: none;background-color: var(--base);}
+
+.btnInteresse{display: flex; justify-content: center;align-items: center;border: none;font-size: 1em;font-weight: 550; gap: 10px; color: #151C27; font-family: "Inter", sans-serif;background: none;}
 
 .btnInteresse i{height: 40px;align-content: center;font-size: 1.1em;}
 
@@ -1298,7 +1317,9 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 
 .btnShareEvent i{height: 40px;align-content: center;font-size: 1.5em;}
 
-.btnInteresse:hover{cursor: pointer; background-color: #eaeaea;}
+.btnInteresse:hover{cursor: pointer;}
+
+.eventBtn a:hover{cursor: pointer; background-color: #eaeaea;text-decoration: none;}
 
 .btnShareEvent:hover{cursor: pointer; background-color: #eaeaea;}
 
@@ -1317,6 +1338,12 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 .options-menu-event ul li a {text-decoration: none;color: #151C27;display: flex;gap: 10px;align-content: center;}
 
 .options-menu-event ul li:hover {background-color: #f0f0f0; border-radius: 5px;}
+
+/***************************************************************** DETAIL EVENT *********************************************************************/
+
+.profileEvent {position: relative;width: 85%;height: 450px;z-index: 1;}
+
+.profile-event-cover {width: 100%;height: 100%;object-fit: cover;object-position: center;border-radius: 0 0 15px 15px;}
 
 /***************************************************************** ENREGISTREMENT *********************************************************************/
 

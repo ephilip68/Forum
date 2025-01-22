@@ -31,7 +31,7 @@ class TopicManager extends Manager{
     // Récupérer la date du dernier topic publié dans cette catégorie
     public function lastTopicDateByCategory($category_id) {
         
-        $sql = "SELECT t.title, t.user_id, t.creationDate
+        $sql = "SELECT t.id_topic, t.title, t.user_id, t.creationDate
                 FROM ".$this->tableName." t
                 WHERE t.category_id = :category_id 
                 AND t.closed = 0

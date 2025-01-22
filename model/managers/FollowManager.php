@@ -16,6 +16,7 @@ class FollowManager extends Manager{
 
     // récupère les id afin de pouvoir vérifier si les utilisateur se suivent déja
     public function following($user_id, $friend_id) {
+        
         $sql = "SELECT COUNT(*) 
                 FROM " . $this->tableName . " f
                 WHERE f.user_id = :user_id
@@ -76,30 +77,5 @@ class FollowManager extends Manager{
 
     }
 
-    // Recherche les utilisateurs suivis et les followers d'un utilisateur
-    public function searchFollowedAndFollowers($searchQuery, $user_id) {
-
-        $searchQuery = '%' . $searchQuery . '%';  // Ajouter des jokers pour une recherche "contains"
-
-        // Recherche les suivis
-        $sql = "SELECT u.id_user, u.nickName, 'following' AS relationship
-        FROM user u
-        INNER JOIN follow f ON f.user_id_1 = u.id_user
-        WHERE f.user_id = :user_id
-        AND u.nickName LIKE :searchQuery
-        UNION
-        -- Recherche les followers
-        SELECT u.id_user, u.nickName, 'follower' AS relationship
-        FROM user u
-        INNER JOIN follow f ON f.user_id = u.id_user
-        WHERE f.user_id_1 = :user_id
-        AND u.nickName LIKE :searchQuery";
-
-        // la requête renvoie plusieurs enregistrements --> getMultipleResults
-        return $this->getMultipleResults(
-            DAO::select($sql, ['user_id' => $user_id, 'searchQuery' => $searchQuery]),  
-            $this->className 
-            );
-    }
             
 }

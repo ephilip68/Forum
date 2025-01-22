@@ -94,7 +94,7 @@ include VIEW_DIR."template/nav.php";
                             <img src="public/upload/<?= $topic['last_avatar'] ?>" alt="photo de profil" class="status-img">     
     
                         <?php } ?>
-                        <a href="index.php?ctrl=post&action=listPostsByTopic&id="><span class="last_info"><?= ucfirst($topic['last_title']) ?></span></a>
+                        <a href="index.php?ctrl=post&action=listPostsByTopic&id=<?= $topic['last_id'] ?>"><span class="last_info"><?= ucfirst($topic['last_title']) ?></span></a>
                         <?php } ?>
                     <?php } ?>
                     </div>

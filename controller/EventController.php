@@ -5,22 +5,64 @@ use App\AbstractController;
 use App\ControllerInterface;
 use App\Session;
 use Model\Managers\EventManager;
+use Model\Managers\ParticipantManager;
 
 class EventController extends AbstractController implements ControllerInterface {
 
-    public function index(){
+    public function index() {
 
         $eventManager = new EventManager();
 
-        // Afficher tous les événements à venir
-        $events = $eventManager->findAll();
+        $participantManager = new ParticipantManager();
+
+        $limit = 8; 
+
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+        
+        $totalEvents = $eventManager->totalEvents();
+        
+        // Calcul du nombre total de pages
+        $totalPages = ceil($totalEvents / $limit);
+    
+        // Si la page est au-delà du nombre total de pages, on la redirige à la dernière page
+        if ($page > $totalPages) {
+            $page = $totalPages;
+        }
+        
+        // Récupérer les événements pour la page actuelle
+        $start = ($page - 1) * $limit;
+
+        $events = iterator_to_array($eventManager->findAllEvents($start, $limit));
+
+        $countParticipants = [];
+
+        foreach($events as $event){
+
+            $limitPlace = $eventManager->limitMax($event->getId());
+            
+            $nombreParticipants = $participantManager->countNumberParticipants($event->getId());
+
+            $limitMax = ($nombreParticipants >= $limitPlace);
+
+            $countParticipants [] = [
+
+                'id' => $event->getId(),  
+                'numberParticipants' => $nombreParticipants,  
+                'limitMax' => $limitMax
+
+            ];
+        
+        }
         
         return [
-
-            "view" => VIEW_DIR."reseauSocial/listEvents.php",
+            "view" => VIEW_DIR . "reseauSocial/listEvents.php",
             "meta_description" => "Liste des évènements",
-            "data" => [ 
-                "events" => $events
+            "data" => [
+                "events" => $events,
+                "totalPages" => $totalPages,
+                "page" => $page,
+                "countParticipants" => $countParticipants
+                
             ]
         ];
     }
@@ -35,8 +77,9 @@ class EventController extends AbstractController implements ControllerInterface 
             $eventHours = filter_input(INPUT_POST, "eventHours", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $city = filter_input(INPUT_POST, "city", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $country = filter_input(INPUT_POST, "country", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $limit = filter_input(INPUT_POST, "limit", FILTER_VALIDATE_INT);
             
-            if($title && $text && $eventDate && $eventHours && $city && $country){
+            if($title && $text && $eventDate && $eventHours && $city && $country && $limit){
 
                 // Vérification si un fichier photo a été téléchargé et si aucune erreur n'a été rencontrée
                 if(isset($_FILES["photo"]) && $_FILES["photo"]["error"] == 0){
@@ -102,7 +145,7 @@ class EventController extends AbstractController implements ControllerInterface 
                 $userId = Session::getUser()->getId();
 
                 // Crée un tableau associatif contenant les données à insérer dans la base de données
-                $data = ['photo'=>$photo, 'title'=>$title, 'text'=>$text, 'eventDate'=>$eventDate, 'eventHours'=>$eventHours, 'city'=>$city, 'country'=>$country, 'user_id'=>$userId];
+                $data = ['photo'=>$photo, 'title'=>$title, 'text'=>$text, 'eventDate'=>$eventDate, 'eventHours'=>$eventHours, 'city'=>$city, 'country'=>$country, 'user_id'=>$userId, 'limit'=>$limit];
 
                 // Appelle la méthode 'add' de PublicationManager pour ajouter la nouvelle publication dans la base de données
                 $eventManager->add($data);
@@ -123,7 +166,8 @@ class EventController extends AbstractController implements ControllerInterface 
                         "eventHours" => $eventHours,
                         "city" => $city,
                         "country" => $country,
-                        "user_id" => $userId
+                        "user_id" => $userId,
+                        "limit" =>  $limit
         
                     ]
                 ];
@@ -146,6 +190,103 @@ class EventController extends AbstractController implements ControllerInterface 
             
         ];
     }
+
+    public function detailEvents($eventId){
+
+        $userId = Session::getUser()->getId();
+
+        $eventManager = new EventManager();
+
+        $participantManager = new ParticipantManager();
+
+        $event = $eventManager->findOneById($eventId);
+
+        $isParticipant = $participantManager->isParticipant($userId, $eventId);
+
+        // var_dump($isParticipant);die;
+
+        $limit = $eventManager->limitMax($eventId);
+
+        $nombreParticipants = $participantManager->countNumberParticipants($eventId);
+
+        $limitMax = ($nombreParticipants >= $limit);
+
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/detailEvent.php",
+            "meta_description" => "Détail des évenements",
+            "data" => [ 
+                "event" => $event,
+                "limit" => $limit,
+                "nombreParticipants" => $nombreParticipants,
+                "limitMax" => $limitMax,
+                "isParticipant" => $isParticipant
+            ]
+            
+        ];
+
+    } 
+    
+    public function addParticipant($id) {
+
+        $userId = Session::getUser()->getId();
+
+        $eventId = $_GET['id'];
+
+        $eventManager = new EventManager();
+
+        $participantManager = new ParticipantManager();
+
+        // Si l'utilisateur est déjà inscrit, on redirige
+        if ($isParticipant = $participantManager->isParticipant($eventId, $userId)) {
+
+            $this->redirectTo("event", "detailEvents&id=$eventId");
+            
+        }
+
+        $limitMax = $eventManager->limitMax($eventId);
+
+        $nombreParticipants = $participantManager->countNumberParticipants($eventId, $userId);
+
+        // Si la capacité est atteinte, on redirige 
+        if ($nombreParticipants >= $limitMax) {
+
+            $this->redirectTo("event", "detailEvents&id=$eventId");
+
+        }
+
+        $data = ['event_id' => $eventId, 'user_id' => $userId];
+
+        $participantManager->add($data);
+
+        $this->redirectTo("event", "detailEvents&id=$eventId");
+            
+    
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/detailEvent.php",
+            "meta_description" => "Ajouter participants"
+            
+            
+        ];
         
-   
+    }  
+    
+    public function deleteParticipant($id) {
+
+        $userId = SESSION::getUser()->getId();   
+    
+        $participantManager = new ParticipantManager();
+
+        $participantManager->deleteParticipant($userId, $id);
+
+        $this->redirectTo("event", "detailEvents&id=$id");
+
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/detailEvent.php",
+            "meta_description" => "Supprimer participant"
+
+        ];
+    }
 }
