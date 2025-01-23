@@ -33,7 +33,8 @@ class LikePostManager extends Manager {
 
         $sql = "SELECT COUNT(*) 
         FROM " . $this->tableName . " l
-        WHERE l.user_id = :userId AND l.post_id = :postId";
+        WHERE l.user_id = :userId 
+        AND l.post_id = :postId";
 
         // Exécute la requête avec DAO::select et récupère un seul résultat
         $result = DAO::select($sql, ['userId' => $userId, 'postId' => $postId], false);

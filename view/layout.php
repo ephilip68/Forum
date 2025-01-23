@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <title>SportLink</title>
         <script src="https://cdn.tiny.cloud/1/zg3mwraazn1b2ezih16je1tc6z7gwp5yd4pod06ae5uai8pa/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+        <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=67924a889b23f5001271592d&product=inline-share-buttons&source=platform" async="async"></script>
     </head>
 
    
@@ -27,9 +28,7 @@
                     <nav>
                         <div id="">
                             <a href="/">Accueil</a> -->
-                            <?php 
-                            // if(App\Session::isAdmin()){
-                                ?>
+                            <?php // if(App\Session::isAdmin()){ ?>
                                 <!-- <a href="index.php?ctrl=home&action=users">Voir la liste des gens</a> -->
                             <?php 
                         // } 

@@ -79,9 +79,9 @@
                     <?php if($isParticipant) { ?>
                         <a href="index.php?ctrl=event&action=deleteParticipant&id=<?= $event->getId() ?>"><i class="fa-solid fa-circle-check"></i>Je participe</a>
                     <?php } else { ?>
-                        <a href="index.php?ctrl=event&action=deleteParticipant&id=<?= $event->getId() ?>"><i class="fa-regular fa-circle-check"></i>Je participe</a>
+                        <a href="index.php?ctrl=event&action=addParticipant&id=<?= $event->getId() ?>"><i class="fa-regular fa-circle-check"></i>Je participe</a>
                     <?php } ?>
-                    <a href=""><i class="fa-solid fa-share"></i></a>
+                    <a href=""><i class="fa-solid fa-share"></i></a><div class="sharethis-inline-share-buttons"></div>
                 </div>
             </div>
             <div class="timeline">

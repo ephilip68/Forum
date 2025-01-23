@@ -10,12 +10,10 @@
     <div class="left-side-home">
         <div class="side-wrapper-home">
             <ul class="listNav list-unstyled">
-                <!-- si l'utilisateur est connecté  -->
-                <?php if(App\Session::getUser()){ ?>
-                    <a href="index.php?ctrl=security&action=profile&id=<?=App\Session::getUser()->getId()?>"><li class="listContent"><i><img src="public/upload/<?=App\Session::getUser()->getAvatar()?>" class="status-img-nav"/></i><span><?= ucfirst(App\Session::getUser()->getNickName())?></span></li></a>
-                <?php }else{ ?>
-                    <a href="#"><li class="listContent"><i class="fa-solid fa-user"></i><span>User</span></li></a>
-                <?php } ?> 
+                <a href="index.php?ctrl=security&action=profile&id=<?=App\Session::getUser()->getId()?>"><li class="listContent"><i><img src="public/upload/<?=App\Session::getUser()->getAvatar()?>" class="status-img-nav"/></i><span><?= ucfirst(App\Session::getUser()->getNickName())?></span></li></a>
+                <?php if(App\Session::isAdmin()){ ?>
+                    <a href="index.php?ctrl=home&action=users"><li class="listContent"><i class="fa-solid fa-user"></i><span>Liste Utilisateurs</span></li></a>
+                <?php } ?>
                 <a href="index.php?ctrl=publication&action=listAmis"><li class="listContent"><i class="fa-solid fa-user-group"></i><span>Amis</span></li></a>
                 <a href="index.php?ctrl=publication&action=getFavoritesPublications"><li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Enregistrements</span></li></a>
                 <a href="index.php?ctrl=event&action=index"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Evènements</span></li></a>

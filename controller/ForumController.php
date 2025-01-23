@@ -7,7 +7,7 @@ use App\Session;
 use App\AbstractController;
 use App\ControllerInterface;
 use Model\Managers\UserManager;
-use Model\Managers\LikeMessageManager;
+use Model\Managers\LikePostManager;
 use Model\Managers\CategoryManager;
 use Model\Managers\TopicManager;
 use Model\Managers\PostManager;
@@ -417,10 +417,10 @@ class ForumController extends AbstractController implements ControllerInterface{
         $userId = SESSION::getUser()->getId();
 
         // créer une nouvelle instance de LikeMessage
-        $likeMessageManager = new LikeMessageManager();
+        $likePostManager = new LikePostManager();
     
         // Vérifier si l'utilisateur suit déjà cet ami
-        $userLike = $likeMessageManager->userLike($userId, $postId);
+        $userLike = $likePostManager->userLike($userId, $postId);
     
         if ($userLike) {
             // Rediriger si déjà suivi
@@ -436,7 +436,7 @@ class ForumController extends AbstractController implements ControllerInterface{
             'user_id' => $userId
         ];
     
-        $likeMessageManager->add($data);
+        $likePostManager->add($data);
 
         $this->redirectTo("forum", "listPostsByTopic&id=$postId");
     

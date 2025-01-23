@@ -201,10 +201,10 @@ class EventController extends AbstractController implements ControllerInterface 
 
         $event = $eventManager->findOneById($eventId);
 
-        $isParticipant = $participantManager->isParticipant($userId, $eventId);
-
-        // var_dump($isParticipant);die;
-
+        if ($isParticipant = $participantManager->isParticipant($eventId, $userId)) {
+             
+        }
+        
         $limit = $eventManager->limitMax($eventId);
 
         $nombreParticipants = $participantManager->countNumberParticipants($eventId);
@@ -239,9 +239,9 @@ class EventController extends AbstractController implements ControllerInterface 
 
         // Si l'utilisateur est déjà inscrit, on redirige
         if ($isParticipant = $participantManager->isParticipant($eventId, $userId)) {
-
+    
             $this->redirectTo("event", "detailEvents&id=$eventId");
-            
+             
         }
 
         $limitMax = $eventManager->limitMax($eventId);
@@ -272,15 +272,15 @@ class EventController extends AbstractController implements ControllerInterface 
         
     }  
     
-    public function deleteParticipant($id) {
+    public function deleteParticipant($event_id) {
 
-        $userId = SESSION::getUser()->getId();   
+        $user_id = SESSION::getUser()->getId();   
     
         $participantManager = new ParticipantManager();
+        
+        $participantManager->deleteParticipant($event_id, $user_id);
 
-        $participantManager->deleteParticipant($userId, $id);
-
-        $this->redirectTo("event", "detailEvents&id=$id");
+        $this->redirectTo("event", "detailEvents&id=$event_id");
 
         return [
 

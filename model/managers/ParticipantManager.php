@@ -14,15 +14,15 @@ class ParticipantManager extends Manager{
         parent::connect();
     }
 
-    public function isParticipant($event_id, $user_id) {
+    public function isParticipant($eventId, $userId) {
 
-        $sql = "SELECT COUNT(*)  
+        $sql = "SELECT COUNT(*) 
         FROM " . $this->tableName . " p 
         WHERE p.event_id = :event_id 
         AND p.user_id = :user_id";
         
        // Exécute la requête avec DAO::select et récupère un seul résultat
-       $result = DAO::select($sql, ['event_id' => $event_id, 'user_id' => $user_id], false);
+       $result = DAO::select($sql, ['event_id' => $eventId, 'user_id' => $userId], false);
        
        // Retourne vrai si le comptage est supérieur à 0, faux sinon
        return $result ? $result['COUNT(*)'] > 0 : false;
@@ -43,14 +43,15 @@ class ParticipantManager extends Manager{
 
     public function deleteParticipant($event_id, $user_id) {
 
-        $sql = "DELETE 
+        $sql = "DELETE
         FROM " . $this->tableName . " p
         WHERE p.event_id = :event_id 
         AND p.user_id = :user_id";
     
-        $result = DAO::delete($sql, ['event_id' => $event_id, 'user_id' => $user_id]);
-
-        return $result > 0;
+        return $this->getMultipleResults(
+            DAO::delete($sql, ['event_id' => $event_id, 'user_id' => $user_id]),  
+            $this->className 
+        );
 
     }
 

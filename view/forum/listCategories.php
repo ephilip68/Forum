@@ -9,7 +9,7 @@
 include VIEW_DIR."template/nav.php";
 ?>
 
-<section class="pageCategorie">
+<div class="pageCategorie">
     <div class="categoryContent">
         <div class="categoryTitle">
             <div class="underTitle">
@@ -104,11 +104,8 @@ include VIEW_DIR."template/nav.php";
         <?php } ?>
         </div>
     </div>
-</section>
+</div>
 
-<?php
-include VIEW_DIR."template/footer.php";
-?>
 
 
 

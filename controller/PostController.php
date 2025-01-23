@@ -30,7 +30,7 @@ class PostController extends AbstractController implements ControllerInterface{
         $commentPostManager = new CommentPostManager();
 
         // Créer une nouvelle instance de LikeMessage
-        $likeMessageManager = new LikePostManager();
+        $likePostManager = new LikePostManager();
 
         $underCommentPostManager = new UnderCommentPostManager();
 
@@ -62,10 +62,10 @@ class PostController extends AbstractController implements ControllerInterface{
         }
 
         // Récupérer le nombre de likes
-        $countLike = $likeMessageManager->countLikes($post->getId());
+        $countLike = $likePostManager->countLikes($post->getId());
 
         // Vérifier si l'utilisateur a déjà liké ce topic
-        $userLike = $likeMessageManager->userLike($userId, $id);
+        $userLike = $likePostManager->userLike($userId, $id);
         
         // Nombre de vue du topic, la méthode topicViews incrémente les vues du topic par son Id
         // Si l'utilisateur connecté est celui qui à crée le topic les vues ne s'incrémenteront pas

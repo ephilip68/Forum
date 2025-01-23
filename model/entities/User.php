@@ -17,6 +17,7 @@ final class User extends Entity{
     private $dateInscription;
     private $avatar;
     private $email;
+    private $role;
 
     public function __construct($data){   
 
@@ -161,7 +162,37 @@ final class User extends Entity{
         
     }
     
+    /**
+     * Get the value of role
+     */ 
+    public function getRole()
+    {
+        return $this->role;
+    }
 
+    /**
+     * Set the value of role
+     *
+     * @return  self
+     */ 
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function hasRole($role){
+
+        if($this->role == $role){
+
+            return true;
+
+        }
+
+        return false;
+    }
+    
     /**
      * Format publication date based on time difference or full date
      *
@@ -177,5 +208,6 @@ final class User extends Entity{
         $formatter->setPattern('d MMMM yyyy'); // Format : Lundi 5 janvier 2025
         return $formatter->format($dateInscription);
     }
+
 
 }
