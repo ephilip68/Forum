@@ -14,7 +14,7 @@ class MessageManager extends Manager{
         parent::connect();
     }
 
-    public function getMessagesBetweenUsers($user_id, $recipientId) {
+    public function messagesBetweenUsers($user_id, $recipientId) {
 
         $sql = "SELECT m.*, u.nickName, u.avatar
         FROM " . $this->tableName . " m

@@ -109,6 +109,7 @@ class ForumController extends AbstractController implements ControllerInterface{
 
         // Récupérez le topic et le nombre de vues
         $topicViews = $topicManager->getTopicViews($id);  // Supposez que cette méthode existe pour récupérer un topic
+
         $views = $topicManager->topicViews($topicViews);  // Récupère le nombre de vues
 
         
@@ -259,6 +260,8 @@ class ForumController extends AbstractController implements ControllerInterface{
                 // Appelle la méthode 'add' de PublicationManager pour ajouter la nouvelle publication dans la base de données
                 $categoryManager->add($data);
 
+                SESSION::addFlash('success', "Catégorie ajoutée !");
+
                 // Redirige vers la page principale des publications après l'ajout
                 $this->redirectTo("forum", "index");
 
@@ -288,6 +291,8 @@ class ForumController extends AbstractController implements ControllerInterface{
         // Appelle la méthode 'delete' du CategoryManager pour supprimer la catégorie spécifiée par son ID
         // Cette méthode supprime la catégorie de la base de données en fonction de l'ID passé en paramètre
         $categoryManager->delete($id);
+
+        SESSION::addFlash('success', "Catégorie supprimée !");
 
         // Appelle la méthode redirectTo pour rediriger l'utilisateur vers une autre page
         $this->redirectTo($ctrl = "forum", $action = "index");;
@@ -344,6 +349,8 @@ class ForumController extends AbstractController implements ControllerInterface{
                 // Appelle la méthode 'add' du PostManager pour ajouter un premier post dans la base de données pour ce topic
                 $posts = $postManager->add($dataPost);
 
+                SESSION::addFlash('success', "Votre topic a bien été ajouté !");
+
                 $this->redirectTo("forum", "index.php?ctrl=forum&action=listTopicsByCategory&id=$category");
     
                
@@ -395,6 +402,8 @@ class ForumController extends AbstractController implements ControllerInterface{
             // Appelle la méthode 'add' du PostManager pour ajouter le nouveau post dans la base de données
             $postManager->add($data);
 
+            SESSION::addFlash('success', "Votre commentaire a bien été ajouté !");
+
             $this->redirectTo("forum", "listPostsByTopic&id=$topicId");
 
                 return [
@@ -424,7 +433,8 @@ class ForumController extends AbstractController implements ControllerInterface{
     
         if ($userLike) {
             // Rediriger si déjà suivi
-            echo "Vous aimez déjà ce post.";
+            SESSION::addFlash('error', "Vous aimez déja ce post !");
+
             $this->redirectTo("forum", "listPostsByTopic&id=$postId");
             return;
         }
@@ -437,6 +447,8 @@ class ForumController extends AbstractController implements ControllerInterface{
         ];
     
         $likePostManager->add($data);
+
+        SESSION::addFlash('success', "Like ajouté !");
 
         $this->redirectTo("forum", "listPostsByTopic&id=$postId");
     

@@ -34,9 +34,8 @@ class SecurityController extends AbstractController{
                 // Vérifie si la case des CGU a été cochée
                 if (!isset($_POST['accept_cgu'])) {
 
-                    echo "Vous devez accepter les Conditions Générales d'Utilisation.";
+                    SESSION::addFlash('error', "Vous devez accepter les Conditions Générales d'Utilisation !");
                     return;
-                    
                 }
                 
                 // Créer une nouvelle instance de UserManager 
@@ -47,6 +46,8 @@ class SecurityController extends AbstractController{
         
                 // Si un utilisateur avec cet email existe déjà
                 if($user){
+
+                    SESSION::addFlash('error', "Cet utilisateur existe déja !");
 
                     // Redirige vers la page d'accueil si l'email est déjà pris (utilisateur existe déjà)
                     $this->redirectTo($ctrl = "home", $action = "index");
@@ -67,20 +68,22 @@ class SecurityController extends AbstractController{
                             // Ajoute l'utilisateur dans la base de données via UserManager
                             $user = $userManager->add($data);
 
+                            SESSION::addFlash('success', "Votre compte a bien été créer !");
+
                         }else {
 
                             // Si le mot de passe ne respecte pas la regex
-                            echo "Le mot de passe doit contenir au moins une majuscule, un chiffre et un caractère spécial.";
+                            SESSION::addFlash('error', "Le mot de passe doit contenir au moins une majuscule, un chiffre et un caractère spécial !");
 
                         }
                     } else {
 
-                    echo "Les mots de passe ne sont pas identiques ou sont trop courts au moins 8 caractères(une majuscule, un chiffre, un caractère spécial).";
+                        SESSION::addFlash('error', "Les mots de passe ne sont pas identiques ou sont trop courts au moins 8 caractères(une majuscule, un chiffre, un caractère spécial) !");
                     }    
                 } 
             } else{
 
-            echo "Tous les champs doivent être remplis.";
+                SESSION::addFlash('error', "Tous les champs doivent être remplis !");
             
             }
 
@@ -108,7 +111,7 @@ class SecurityController extends AbstractController{
 
             if (!preg_match($emailRegex, $email)) {
 
-                echo "L'email fourni est invalide.";
+                SESSION::addFlash('error', "L'email fourni est invalide !");
 
                 $this->redirectTo("home", "index");
                 return;
@@ -120,7 +123,7 @@ class SecurityController extends AbstractController{
 
             if (!preg_match($passwordRegex, $password)) {
 
-                echo "Le mot de passe doit contenir au moins une majuscule, un chiffre et un caractère spécial, et avoir au moins 8 caractères.";
+                SESSION::addFlash('error', "Le mot de passe doit contenir au moins une majuscule, un chiffre et un caractère spécial, et avoir au moins 8 caractères !");
                 
                 $this->redirectTo("home", "index");
                 return;
@@ -146,22 +149,24 @@ class SecurityController extends AbstractController{
                         // Si le mot de passe est valide, on initialise la session utilisateur
                         Session::setUser($user);
 
+                        SESSION::addFlash('success', "Bienvenue sur SportLink !");
+
                         // Redirige vers la page des publications après connexion
                         $this->redirectTo("publication", "index");
                     }
                     else {
                         // Mot de passe incorrect, vous pouvez afficher un message d'erreur à l'utilisateur
-                        echo "Mot de passe incorrect.";
+                        SESSION::addFlash('error', "Mot de passe incorrect !");
                         $this->redirectTo("home", "index");
                     }
                 } else {
                     // L'email n'existe pas dans la base de données, afficher un message d'erreur
-                    echo "Utilisateur inconnu.";
+                    SESSION::addFlash('error', "Utilisateur inconnu !");
                     $this->redirectTo("home", "index");
                 }
             } else {
                 // Si l'email ou le mot de passe n'est pas rempli, afficher un message d'erreur
-                echo "Veuillez remplir tous les champs.";
+                SESSION::addFlash('error', "Veuillez remplir tous les champs !");
                 $this->redirectTo("home", "index");
             }
         }
@@ -181,6 +186,8 @@ class SecurityController extends AbstractController{
         // Cela permet de "déconnecter" l'utilisateur en supprimant ses données de session (comme l'ID de l'utilisateur)
         session_unset();
 
+        SESSION::addFlash('success', "Vous vous êtes deconnecté !");
+
         // redirige l'utilisateur vers la page de connexion
         $this->redirectTo("home", "index");
         
@@ -189,6 +196,7 @@ class SecurityController extends AbstractController{
     public function profile($id) {
 
         $currentUserId = SESSION::getUser()->getId();
+
         $user_id = $_GET['id'];
 
         // Créer une nouvelle instance de UserManager 
@@ -271,13 +279,13 @@ class SecurityController extends AbstractController{
 
                 // Vérifie si l'extension du fichier est dans la liste des extensions autorisées
                 if(!array_key_exists($ext, $allowed)) {
-                    die("Erreur : Veuillez sélectionner un format de fichier valide."); // Si l'extension n'est pas valide, on arrête l'exécution
+                    SESSION::addFlash('error', "Sélectionner un format de fichier valide !");die; // Si l'extension n'est pas valide, on arrête l'exécution
                 }
 
                 // Vérifie la taille du fichier, ici on limite à 5Mo
                 $maxsize = 5 * 1024 * 1024;
                 if($filesize > $maxsize) {
-                    die("Erreur : La taille du fichier est supérieure à la limite autorisée."); // Si la taille est trop grande, on arrête
+                    SESSION::addFlash('error', "La taille du fichier est supérieure à la limite autorisée !");die; // Si la taille est trop grande, on arrête
                 }
 
                 // Vérifie que le type MIME du fichier est valide
@@ -294,13 +302,13 @@ class SecurityController extends AbstractController{
                         move_uploaded_file($_FILES["photo"]["tmp_name"], "public/upload/" . $_FILES["photo"]["name"]);
 
                         // Si le téléchargement a réussi
-                        echo "Votre fichier a été téléchargé avec succès."; 
+                        SESSION::addFlash('success', "Votre fichier a été téléchargé avec succès !");
                     }
 
                 } else{
 
                     // Si le type MIME n'est pas autorisé
-                    echo "Erreur : Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer."; 
+                    SESSION::addFlash('error', "Problème lors du téléchargement. Réessayer !");
                 }
 
                 // Créer une nouvelle instance de PublicationManager 
@@ -314,13 +322,15 @@ class SecurityController extends AbstractController{
                 // Appelle la méthode 'updateProfilPhoto' de UserManager pour modifier la photo dans la base de données
                 $userManager->updateProfilPhoto($userId, $photo);
 
+                SESSION::addFlash('success', "Photo de profil mis a jour !");
+
                 // Redirige vers la page profil de l'utilisateur connecté après l'ajout
                 $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$userId");
 
             } else{
 
                 // Si le téléchargement du fichier a échoué, on affiche l'erreur associée
-                echo "Erreur: " . $_FILES["photo"]["error"];
+                SESSION::addFlash('error', "Erreur !");
             }
             
             return [
@@ -338,7 +348,6 @@ class SecurityController extends AbstractController{
         }    
     }
     
-   
     public function editProfile($id) {
 
         // L'ID de l'utilisateur connecté
@@ -370,7 +379,7 @@ class SecurityController extends AbstractController{
             // Validation des champs
             if (empty($nickName) || empty($email)) {
 
-                echo "Le nom d'utilisateur et l'email sont obligatoires.";
+                SESSION::addFlash('error', "Le nom d'utilisateur et l'email sont obligatoires !");
 
                 $this->redirectTo("security", "editProfile");
 
@@ -388,13 +397,13 @@ class SecurityController extends AbstractController{
 
             if ($updateValid) {
 
-                echo "Profil mis à jour avec succès.";
+                SESSION::addFlash('success', "Profil mis à jour avec succès !");
                 // Redirige l'utilisateur vers son profil
                 $this->redirectTo("security", "profile");
 
             } else {
 
-                echo "Une erreur est survenue lors de la mise à jour.";
+                SESSION::addFlash('success', "Une erreur est survenue lors de la mise à jour !");
 
                 $this->redirectTo("security", "editProfile");
 

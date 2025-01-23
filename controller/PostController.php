@@ -123,6 +123,8 @@ class PostController extends AbstractController implements ControllerInterface{
 
             $CommentPostManager->add($data);
 
+            SESSION::addFlash('success', "Votre commentaire a bien été ajouté !");
+
             $this->redirectTo("post", "listPostsByTopic&id=$topic");
 
                 return [
@@ -163,6 +165,8 @@ class PostController extends AbstractController implements ControllerInterface{
 
             
             $underCommentManager->add($data);
+
+            SESSION::addFlash('success', "Votre commentaire a bien été ajouté !");
 
             $this->redirectTo("post", "listPostsByTopic&id=$topicId");
 

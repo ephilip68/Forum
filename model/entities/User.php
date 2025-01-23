@@ -165,8 +165,8 @@ final class User extends Entity{
     /**
      * Get the value of role
      */ 
-    public function getRole()
-    {
+    public function getRole(){
+        
         return $this->role;
     }
 
@@ -175,8 +175,8 @@ final class User extends Entity{
      *
      * @return  self
      */ 
-    public function setRole($role)
-    {
+    public function setRole($role){
+
         $this->role = $role;
 
         return $this;

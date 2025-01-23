@@ -31,7 +31,7 @@ class NewsletterController extends AbstractController implements ControllerInter
             // Vérifier si l'email est déjà abonné
             if ($newsletterManager->isSubscribed($email)) {
                 
-                echo "Cet email est déjà abonné à la newsletter.";
+                SESSION::addFlash('error', "Cet email est déjà utilisé !");
 
                 $this->redirectTo("newsletter", "index");
            
@@ -52,14 +52,17 @@ class NewsletterController extends AbstractController implements ControllerInter
                 // Envoi de la newsletter après l'inscription
                 $newsletterController->sendEmail($to, $email, $subject, $message, $headers);
 
-                
-                echo "Vous êtes maintenant inscrit à la newsletter et vous avez reçu notre dernière édition !";
+                SESSION::addFlash('success', "Vous êtes maintenant inscrit à la newsletter !");
 
             } else {
-                echo "Une erreur est survenue, veuillez réessayer.";  
+
+                SESSION::addFlash('error', "Une erreur est survenue, veuillez réessayer !"); 
+
             }
         } else {
-            echo "L'adresse email est requise.";
+
+            SESSION::addFlash('error', "L'adresse email est requise !");
+
         }
             
         $this->redirectTo("newsletter", "index");
@@ -97,14 +100,13 @@ class NewsletterController extends AbstractController implements ControllerInter
             $sent = mail($to, $email, $subject, $message, $headers);
 
             if ($sent) {
-                echo "E-mail envoyé à : " . $email . "<br>";
+                SESSION::addFlash('success', "E-mail envoyé à : " . $email . "<br>"); 
             } else {
-                echo "Erreur lors de l'envoi à : " . $email . "<br>";
+                SESSION::addFlash('error', "Erreur lors de l'envoi à : " . $email . "<br>");
             }
         }
 
-        echo "Newsletter envoyée à tous les abonnés !";
-        return;
+        SESSION::addFlash('success', "Newsletter envoyée à tous les abonnés !");
         
         $this->redirectTo("newsletter", "index");
 
@@ -138,20 +140,18 @@ class NewsletterController extends AbstractController implements ControllerInter
             // Envoyer l'email à chaque abonné
             foreach ($subscribers as $subscriber) {
         
-        
                 // Envoi de l'email
                 $sent = mail($to, $email, $subject, $message, $headers);
         
                 if ($sent) {
-                    echo "E-mail envoyé à : " . $email . "<br>";
+                    SESSION::addFlash('success', "E-mail envoyé à : " . $email . "<br>"); 
                 } else {
-                    echo "Erreur lors de l'envoi à : " . $email . "<br>";
+                    SESSION::addFlash('error', "Erreur lors de l'envoi à : " . $email . "<br>");
                 }
             }
         
-            echo "Newsletter envoyée à tous les abonnés !";
+            SESSION::addFlash('success', "Newsletter envoyée à tous les abonnés !");
         
-            // Redirection après envoi
             $this->redirectTo("newsletter", "index");
             return; 
         

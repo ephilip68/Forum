@@ -150,6 +150,8 @@ class EventController extends AbstractController implements ControllerInterface 
                 // Appelle la méthode 'add' de PublicationManager pour ajouter la nouvelle publication dans la base de données
                 $eventManager->add($data);
 
+                SESSION::addFlash('success', "L'évnèment a bien été ajouté !");
+
                 // Redirige vers la page principale des publications après l'ajout
                 $this->redirectTo("event", "index");
             
@@ -180,6 +182,8 @@ class EventController extends AbstractController implements ControllerInterface 
         $eventManager = new EventManager();
 
         $eventManager->delete($id);
+
+        SESSION::addFlash('success', "L'évènement a bien été supprimé !");
 
         $this->redirectTo("event", "index");
 
@@ -239,6 +243,8 @@ class EventController extends AbstractController implements ControllerInterface 
 
         // Si l'utilisateur est déjà inscrit, on redirige
         if ($isParticipant = $participantManager->isParticipant($eventId, $userId)) {
+
+            SESSION::addFlash('error', "Vous participé déja à cet évènement");
     
             $this->redirectTo("event", "detailEvents&id=$eventId");
              
@@ -251,6 +257,8 @@ class EventController extends AbstractController implements ControllerInterface 
         // Si la capacité est atteinte, on redirige 
         if ($nombreParticipants >= $limitMax) {
 
+            SESSION::addFlash('error', "Cet évènement est complet !");
+
             $this->redirectTo("event", "detailEvents&id=$eventId");
 
         }
@@ -258,6 +266,8 @@ class EventController extends AbstractController implements ControllerInterface 
         $data = ['event_id' => $eventId, 'user_id' => $userId];
 
         $participantManager->add($data);
+
+        SESSION::addFlash('success', "Votre inscription a bien été effectué !");
 
         $this->redirectTo("event", "detailEvents&id=$eventId");
             
@@ -279,6 +289,8 @@ class EventController extends AbstractController implements ControllerInterface 
         $participantManager = new ParticipantManager();
         
         $participantManager->deleteParticipant($event_id, $user_id);
+
+        SESSION::addFlash('success', "Désinscription effectué !");
 
         $this->redirectTo("event", "detailEvents&id=$event_id");
 

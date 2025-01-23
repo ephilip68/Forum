@@ -14,6 +14,24 @@
 <div class="container-home" >
     <div class="left-side-content">
         <div class="left-side-event">
+            <div class="alert">
+                <!-- c'est ici que les messages (erreur ou succès) s'affichent-->
+                <?php 
+                    $successMessage = App\Session::getFlash("success");
+                    $errorMessage = App\Session::getFlash("error");
+                    if($successMessage) { ?>
+                    <div class="uk-alert-primary message" uk-alert>
+                        <a href class="uk-alert-close" uk-close></a>
+                        <p><?= $successMessage ?></p>
+                    </div>
+                <?php }elseif($errorMessage){ ?>
+                    <div class="uk-alert-danger message" uk-alert>
+                        <a href class="uk-alert-close" uk-close></a>
+                        <p><?= $errorMessage ?></p>
+                    </div>
+                <?php }else{ ?>
+                <?php } ?>
+            </div>
             <div class="side-wrapper">
                 <ul class="listNavEvent list-unstyled">
                     <div class="navEvent">

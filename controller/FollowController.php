@@ -16,7 +16,7 @@ class FollowController extends AbstractController{
     
         // Vérifier que l'utilisateur ne s'ajoute pas lui-même
         if ($user_id == $friend_id) {
-            echo "Vous ne pouvez pas vous suivre vous-même.";
+            SESSION::addFlash('error', "Vous ne pouvez pas vous suivre !");
             return;
         }
     
@@ -28,7 +28,8 @@ class FollowController extends AbstractController{
     
         if ($following) {
             // Rediriger si déjà suivi
-            echo "Vous suivez déjà cet utilisateur.";
+            SESSION::addFlash('error', "Vous suivez déjà cet utilisateur !");
+
             $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$friend_id");
             return;
         }
@@ -42,6 +43,8 @@ class FollowController extends AbstractController{
     
         $followManager->add($data);
 
+        SESSION::addFlash('success', "Vous suivez désormais cet utilisateur !");
+
         $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$friend_id");
     
     }
@@ -54,7 +57,7 @@ class FollowController extends AbstractController{
 
         $followManager->deleteFollow($user_id, $friend_id);
 
-        echo "Vous ne suivez plus cet utilisateur.";
+        SESSION::addFlash('success', "Vous ne suivez plus cet utilisateur !");
 
         $this->redirectTo("security", "index.php?ctrl=security&action=profile&id=$friend_id");
 

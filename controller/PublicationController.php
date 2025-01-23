@@ -85,13 +85,13 @@ class PublicationController extends AbstractController implements ControllerInte
 
                     // Vérifie si l'extension du fichier est dans la liste des extensions autorisées
                     if(!array_key_exists($ext, $allowed)) {
-                        die("Erreur : Veuillez sélectionner un format de fichier valide."); // Si l'extension n'est pas valide, on arrête l'exécution
+                        SESSION::addFlash('error', "Sélectionner un format de fichier valide !");die; // Si l'extension n'est pas valide, on arrête l'exécution
                     }
 
                     // Vérifie la taille du fichier, ici on limite à 5Mo
                     $maxsize = 5 * 1024 * 1024;
                     if($filesize > $maxsize) {
-                        die("Erreur : La taille du fichier est supérieure à la limite autorisée."); // Si la taille est trop grande, on arrête
+                        SESSION::addFlash('error', "La taille du fichier est supérieure à la limite autorisée !");die; // Si la taille est trop grande, on arrête
                     }
 
                     // Vérifie que le type MIME du fichier est valide
@@ -108,19 +108,19 @@ class PublicationController extends AbstractController implements ControllerInte
                             move_uploaded_file($_FILES["photo"]["tmp_name"], "public/upload/" . $_FILES["photo"]["name"]);
 
                             // Si le téléchargement a réussi
-                            echo "Votre fichier a été téléchargé avec succès."; 
+                            SESSION::addFlash('success', "Votre fichier a été téléchargé avec succès !"); 
                         }
 
                     } else{
 
                         // Si le type MIME n'est pas autorisé
-                        echo "Erreur : Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer."; 
+                        SESSION::addFlash('error', "Problème lors du téléchargement. Réessayer !");
                     }
 
                 } else{
 
-                    // Si le téléchargement du fichier a échoué, on affiche l'erreur associée
-                    echo "Erreur: " . $_FILES["photo"]["error"];
+                    // Si le téléchargement du fichier a échoué
+                    SESSION::addFlash('error', "Erreur !");
                 }
 
                 // Créer une nouvelle instance de PublicationManager 
@@ -137,6 +137,8 @@ class PublicationController extends AbstractController implements ControllerInte
 
                 // Appelle la méthode 'add' de PublicationManager pour ajouter la nouvelle publication dans la base de données
                 $publicationManager->add($data);
+
+                SESSION::addFlash('success', "Votre publication a été ajoutée !");
 
                 // Redirige vers la page principale des publications après l'ajout
                 $this->redirectTo("publication", "index");
@@ -165,6 +167,8 @@ class PublicationController extends AbstractController implements ControllerInte
         // Appelle la méthode 'delete' du PublicationManager pour supprimer la publication par son ID
         // L'ID de la publication est passé en paramètre à la méthode delete
         $publicationManager->delete($id);
+
+        SESSION::addFlash('success', "Publication supprimée !");
 
         // Après la suppression de la publication, on redirige l'utilisateur vers la page principale des publications
         $this->redirectTo("publication", "index");
@@ -278,7 +282,7 @@ class PublicationController extends AbstractController implements ControllerInte
         // Si oui, il sera redirigé et reçevra un message d'erreur
         if($isFavorites){
 
-            echo "Publication déja enregistrée !";
+            SESSION::addFlash('error', "Publication déja enregistrée !");
 
             $this->redirectTo("publication", "index");
             return;
@@ -290,7 +294,7 @@ class PublicationController extends AbstractController implements ControllerInte
 
         $favoritesManager->add($data);
 
-        echo "Publication enregistrée !";
+        SESSION::addFlash('success', "Publication enregistrée !");
 
         // Après l'ajout de la publication dans les enregistrements, on redirige l'utilisateur vers la page principale des publications
         $this->redirectTo("publication", "index");
@@ -313,6 +317,8 @@ class PublicationController extends AbstractController implements ControllerInte
         $favoritesManager = new FavoritesManager();
 
         $favoritesManager->deleteFavorites($userId, $publicationId);
+
+        SESSION::addFlash('success', "Publication supprimée des favoris !");
 
         // Après la suppression de la publication, on redirige l'utilisateur vers la page principale des enregistrements
         $this->redirectTo("publication", "index.php?ctrl=publication&action=getFavoritesPublications");

@@ -46,7 +46,7 @@ class MessageController extends AbstractController implements ControllerInterfac
             // Marquer les messages comme lus 
             $messageManager->markAsRead($user_id, $recipientId);
 
-            $messages = $messageManager->getMessagesBetweenUsers($user_id, $recipientId);
+            $messages = $messageManager->messagesBetweenUsers($user_id, $recipientId);
     
             $recipient = $userManager->findOneById($recipientId);
         }
@@ -85,12 +85,15 @@ class MessageController extends AbstractController implements ControllerInterfac
 
                 $data = ['messages' => $message, 'user_id' => $user, 'user_id_1' => $userId];
                 
-                $messageManager->add($data);  
+                $messageManager->add($data);
+                
+                SESSION::addFlash('success', "Message envoyé !");
     
                 $this->redirectTo("message", "index&id=$id");
 
             } else {
-                echo "Le message est vide ou le destinataire est invalide.";
+
+                SESSION::addFlash('error', "Destinataire ou message invalide !");
             }
         }
     

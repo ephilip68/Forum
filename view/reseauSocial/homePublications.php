@@ -7,12 +7,30 @@
 ?>
 
 <div class="container-home" >
+    <div class="alert">
+        <!-- c'est ici que les messages (erreur ou succès) s'affichent-->
+        <?php 
+            $successMessage = App\Session::getFlash("success");
+            $errorMessage = App\Session::getFlash("error");
+            if($successMessage) { ?>
+            <div class="uk-alert-primary message" uk-alert>
+                <a href class="uk-alert-close" uk-close></a>
+                <p><?= $successMessage ?></p>
+            </div>
+        <?php }elseif($errorMessage){ ?>
+            <div class="uk-alert-danger message" uk-alert>
+                <a href class="uk-alert-close" uk-close></a>
+                <p><?= $errorMessage ?></p>
+            </div>
+        <?php }else{ ?>
+        <?php } ?>
+    </div>
     <div class="left-side-home">
         <div class="side-wrapper-home">
             <ul class="listNav list-unstyled">
                 <a href="index.php?ctrl=security&action=profile&id=<?=App\Session::getUser()->getId()?>"><li class="listContent"><i><img src="public/upload/<?=App\Session::getUser()->getAvatar()?>" class="status-img-nav"/></i><span><?= ucfirst(App\Session::getUser()->getNickName())?></span></li></a>
                 <?php if(App\Session::isAdmin()){ ?>
-                    <a href="index.php?ctrl=home&action=users"><li class="listContent"><i class="fa-solid fa-user"></i><span>Liste Utilisateurs</span></li></a>
+                    <a href="index.php?ctrl=admin&action=users"><li class="listContent"><i class="fa-solid fa-user"></i><span>Dashboard</span></li></a>
                 <?php } ?>
                 <a href="index.php?ctrl=publication&action=listAmis"><li class="listContent"><i class="fa-solid fa-user-group"></i><span>Amis</span></li></a>
                 <a href="index.php?ctrl=publication&action=getFavoritesPublications"><li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Enregistrements</span></li></a>
