@@ -42,4 +42,14 @@ class LikePostManager extends Manager {
         // Retourne vrai si le comptage est supérieur à 0, faux sinon
         return $result ? $result['COUNT(*)'] > 0 : false;
     }
+
+    public function deleteLikes($userId) {
+    
+        $sql = "DELETE 
+        FROM " . $this->tableName . " l
+        WHERE l.user_id = :userId";
+
+        $result = DAO::delete($sql, ['userId' => $userId]);
+        return $result;
+    }
 }

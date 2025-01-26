@@ -244,7 +244,7 @@ class EventController extends AbstractController implements ControllerInterface 
         // Si l'utilisateur est déjà inscrit, on redirige
         if ($isParticipant = $participantManager->isParticipant($eventId, $userId)) {
 
-            SESSION::addFlash('error', "Vous participé déja à cet évènement");
+            SESSION::addFlash('error', "Vous participé déja à cet évènement !");
     
             $this->redirectTo("event", "detailEvents&id=$eventId");
              

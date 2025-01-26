@@ -38,5 +38,14 @@ class NewsletterManager extends Manager{
         $this->className
         );
     }
-   
+    
+    public function deleteNewsletters($userId) {
+    
+        $sql = "DELETE 
+        FROM " . $this->tableName . " n
+        WHERE n.user_id = :userId";
+
+        $result = DAO::delete($sql, ['userId' => $userId]);
+        return $result;
+    }
 }

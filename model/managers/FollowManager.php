@@ -46,6 +46,16 @@ class FollowManager extends Manager{
 
     }
 
+    public function deleteAllFollow($userId) {
+        // Supprimer toutes les relations où l'utilisateur est soit un "suiveur", soit un "suivi"
+        $sql = "DELETE 
+        FROM " . $this->tableName . " f
+        WHERE f.user_id = :userId OR f.user_id_1 = :userId";
+
+        $result = DAO::delete($sql, ['userId' => $userId]);
+        return $result;
+    }
+
     //compte le nombre de follow d'un unique utilisateur
     public function countFollowing($user_id) {
     
@@ -76,6 +86,5 @@ class FollowManager extends Manager{
             );
 
     }
-
-            
+          
 }

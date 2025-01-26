@@ -176,7 +176,7 @@ include VIEW_DIR."template/nav.php";
                                             <div class="messageProfilComment">
                                                 <img src="public/upload/<?= $underComment['avatar'] ?>" alt="photo de profil" class="status-img-nav" >
                                                 <div class="messageProfilInfo">
-                                                    <span ><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $UnderComment['user_id'] ?>"><?= ucfirst($underComment['nickName']) ?></a></span>
+                                                    <span ><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $underComment['user_id'] ?>"><?= ucfirst($underComment['nickName']) ?></a></span>
                                                     <p><?= ucfirst($underComment['text']) ?></p>
                                                     <div class="messageProfilDate">
                                                         <span class="album-ucomment-date"><?= $underComment['commentDate'] ?></span>

@@ -29,5 +29,16 @@ class CommentPostManager extends Manager{
         return $result;
     }
 
+    public function anonymizeCommentsByUser($id){
+
+        $sql = " UPDATE ".$this->tableName." c
+        SET c.user_id = NULL
+        WHERE c.user_id = :userId";
+
+        $result = DAO::update($sql, ["userId" => $id]);
+
+        return $result;
+
+    }
     
 }

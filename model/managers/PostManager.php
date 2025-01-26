@@ -26,7 +26,18 @@ class PostManager extends Manager{
        return $this->getOneOrNullResult(
         DAO::select($sql, ['id' => $id], false), 
         $this->className  
-    );
-        
+        );  
+    }
+
+    public function anonimyzePostsByUser($id){
+
+        $sql = " UPDATE ".$this->tableName." p
+        SET p.user_id = NULL
+        WHERE p.user_id = :userId";
+
+        $result = DAO::update($sql, ["userId" => $id]);
+
+        return $result;
+
     }
 }

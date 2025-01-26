@@ -26,4 +26,71 @@ class adminController extends AbstractController implements ControllerInterface 
             ]
         ];
     }
+
+    public function banUser($id) {
+        
+        $userManager = new UserManager();
+    
+        $userId = $userManager->findOneById($id);
+    
+        if ($userId) {
+            
+            $userManager->banUser($userId->getId()); 
+    
+            SESSION::addFlash('success', "L'utilisateur a été banni !");
+            
+        } else {
+            
+            SESSION::addFlash('error', "Utilisateur introuvable !");
+        }
+    
+        $this->redirectTo("admin", "users");
+    }
+
+    public function unBanUser($id){
+
+        $userManager = new UserManager();
+
+        $userId = $userManager->findOneById($id);
+    
+        if ($userId) {
+            
+            $userManager->unBanUser($userId->getId()); 
+    
+            SESSION::addFlash('success', "L'utilisateur a été banni !");
+            
+        } else {
+            
+            SESSION::addFlash('error', "Utilisateur introuvable !");
+        }
+    
+        $this->redirectTo("admin", "users");
+        
+    }
+
+    public function changeRole() {
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            $userId = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+            $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            if ($userId && $role) {
+                
+                $userManager = new UserManager();
+                
+                $userManager->changeRole($role, $userId);
+
+                SESSION::addFlash('success', "Le rôle de cet utilisateur a bien été modifié !");
+
+            } else {
+
+                SESSION::addFlash('error', "Erreur lors de la modification du rôle !");
+
+            }
+        }
+    
+        $this->redirectTo("admin", "users");
+    }
 }

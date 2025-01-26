@@ -8,10 +8,18 @@ use Model\Managers\UserManager;
 use Model\Managers\FollowManager;
 use Model\Managers\PublicationManager;
 use Model\Managers\EventManager;
+use Model\Managers\ParticipantManager;
+use Model\Managers\FavoritesManager;
+use Model\Managers\LikePostManager;
+use Model\Managers\CategoryManager;
+use Model\Managers\TopicManager;
+use Model\Managers\PostManager;
+use Model\Managers\CommentPostManager;
+use Model\Managers\UnderCommentPostManager;
+use Model\Managers\NewsletterManager;
+use Model\Managers\MessageManager;
 
 class SecurityController extends AbstractController{
-
-   
 
     // contiendra les méthodes liées à l'authentification : register, login et logout
 
@@ -146,13 +154,23 @@ class SecurityController extends AbstractController{
                     // Vérifie si le mot de passe fourni correspond au mot de passe hashé
                     if (password_verify($password, $hash)){
                         
-                        // Si le mot de passe est valide, on initialise la session utilisateur
-                        Session::setUser($user);
+                        if ($user->getIsBanned() == 'actif') {
 
-                        SESSION::addFlash('success', "Bienvenue sur SportLink !");
+                            // Si le mot de passe est valide et que l'utilisateur est actif, on initialise la session utilisateur
+                            Session::setUser($user);
 
-                        // Redirige vers la page des publications après connexion
-                        $this->redirectTo("publication", "index");
+                            SESSION::addFlash('success', "Bienvenue sur SportLink !");
+
+                            // Redirige vers la page reseau social après connexion
+                            $this->redirectTo("publication", "index");
+                        }else{
+
+                            //Si l'utilisateur est banni, accès refusé
+                            SESSION::addFlash('error', "Vous avez été banni, vous ne pouvez pas accéder au site pour le moment !");
+
+                            $this->redirectTo("home", "index");
+
+                        }
                     }
                     else {
                         // Mot de passe incorrect, vous pouvez afficher un message d'erreur à l'utilisateur
@@ -408,6 +426,75 @@ class SecurityController extends AbstractController{
                 $this->redirectTo("security", "editProfile");
 
             }
+        }
+    }
+
+    public function deleteAccount(){
+        // Récupère les données de l'utilisateur en cours
+        $user = Session::getUser();
+    
+        if ($user){
+            $userManager = new UserManager;
+            $publicationManager = new PublicationManager;
+            $eventManager = new EventManager;
+            $participantManager = new ParticipantManager;
+            $favoritesManager = new FavoritesManager;
+            $followManager = new FollowManager;
+            $likePostManager = new LikePostManager;
+            $messageManager = new MessageManager;
+            $commentPostManager = new CommentPostManager;
+            $underCommentPostManager = new UnderCommentPostManager;
+            $postManager = new PostManager;
+            $topicManager = new TopicManager;
+            $newsletterManager = new NewsletterManager; 
+    
+            // Anonymiser les posts de l'utilisateur
+            $postManager->anonimyzePostsByUser($user->getId());
+    
+            // Anonymiser les commentaires de l'utilisateur
+            $commentPostManager->anonymizeCommentsByUser($user->getId());
+    
+            // Anonymiser les sous-commentaires de l'utilisateur
+            $underCommentPostManager->anonymizeUnderCommentsByUser($user->getId());
+    
+            // Anonymiser les topics de l'utilisateur
+            $topicManager->anonimyzeTopicByUser($user->getId());
+    
+            // Supprimer toutes les publications associées à l'utilisateur
+            $publicationManager->delete($user->getId()); 
+    
+            // Supprimer tous les événements associés à l'utilisateur
+            $eventManager->delete($user->getId()); 
+    
+            // Supprimer toutes les participations de l'utilisateur
+            $participantManager->delete($user->getId()); 
+    
+            // Supprimer tous les favoris de l'utilisateur
+            $favoritesManager->delete($user->getId()); 
+    
+            // Supprimer tous les suivis de l'utilisateur
+            $followManager->deleteAllFollow($user->getId()); 
+    
+            // Supprimer tous les likes de l'utilisateur
+            $likePostManager->deleteLikes($user->getId()); 
+    
+            // Supprimer tous les messages envoyés par l'utilisateur
+            $messageManager->delete($user->getId()); 
+    
+            // Supprimer l'abonnement à la newsletter
+            $newsletterManager->deleteNewsletters($user->getId()); 
+    
+            // Supprimer l'utilisateur lui-même
+            $userManager->delete($user->getId()); 
+    
+            // Détruit la session
+            Session::setUser(null);
+    
+            // Affiche un message de confirmation
+            $_SESSION['success'] = "Votre compte a été supprimé avec succès.";
+    
+            // Redirige l'utilisateur
+            $this->redirectTo("forum", "index");
         }
     }
 }

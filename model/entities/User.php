@@ -18,6 +18,7 @@ final class User extends Entity{
     private $avatar;
     private $email;
     private $role;
+    private $isBanned;
 
     public function __construct($data){   
 
@@ -194,6 +195,26 @@ final class User extends Entity{
     }
     
     /**
+     * Get the value of isBanned
+     */ 
+    public function getIsBanned()
+    {
+        return $this->isBanned;
+    }
+
+    /**
+     * Set the value of isBanned
+     *
+     * @return  self
+     */ 
+    public function setIsBanned($isBanned)
+    {
+        $this->isBanned = $isBanned;
+
+        return $this;
+    }
+    
+    /**
      * Format publication date based on time difference or full date
      *
      * @return string
@@ -208,6 +229,7 @@ final class User extends Entity{
         $formatter->setPattern('d MMMM yyyy'); // Format : Lundi 5 janvier 2025
         return $formatter->format($dateInscription);
     }
+
 
 
 }

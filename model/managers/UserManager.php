@@ -102,6 +102,44 @@ class UserManager extends Manager{
         return $result;
     }
 
+    public function banUser($userId){
+
+        $sql = "UPDATE ". $this->tableName . " u 
+        SET u.isBanned = 'inactif' 
+        WHERE u.id_user = :userId";
+
+        // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
+        return $this->getOneOrNullResult(
+            DAO::update($sql, ['userId' => $userId], false), 
+            $this->className  
+        );
+
+    }
+
+    public function unBanUser($userId){
+
+        $sql = "UPDATE ". $this->tableName . " u 
+        SET u.isBanned = 'actif' 
+        WHERE u.id_user = :userId";
+
+        // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
+        return $this->getOneOrNullResult(
+            DAO::update($sql, ['userId' => $userId], false), 
+            $this->className  
+        );
+
+    }
+
+    public function changeRole($role, $userId){
+
+        $sql = "UPDATE ". $this->tableName . " u 
+        SET u.role = :role 
+        WHERE u.id_user = :userId";
+
+        $result = DAO::update($sql, ['role' => $role, 'userId' => $userId]);
+          
+        return $result;
+    }
     
 
 }

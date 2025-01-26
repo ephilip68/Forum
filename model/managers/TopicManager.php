@@ -100,6 +100,18 @@ class TopicManager extends Manager{
         return $result;
     }
 
+    public function anonimyzeTopicByUser($id){
+
+        $sql = " UPDATE ".$this->tableName." t
+        SET t.user_id = NULL
+        WHERE t.user_id = :userId";
+
+        $result = DAO::update($sql, ["userId" => $id]);
+
+        return $result;
+
+    }
+
     
 }
 

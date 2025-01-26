@@ -44,4 +44,16 @@ class UnderCommentPostManager extends Manager{
             $this->className  
         );
     }
+
+    public function anonymizeUnderCommentsByUser($id){
+
+        $sql = " UPDATE ".$this->tableName." u
+        SET u.user_id = NULL
+        WHERE u.user_id = :userId";
+
+        $result = DAO::update($sql, ["userId" => $id]);
+
+        return $result;
+
+    }
 }
