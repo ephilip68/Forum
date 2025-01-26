@@ -64,7 +64,7 @@ abstract class DAO{
         }
     }
     
-    public static function delete($sql, $params){
+    public static function delete($sql, $params){ //prépare la requête de suppression
         try{
             $stmt = self::$bdd->prepare($sql);
             

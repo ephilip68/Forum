@@ -67,7 +67,7 @@ include VIEW_DIR."template/nav.php";
                 <div class="cardCategoryTitle">
                     <figure>
                         <p><a href="index.php?ctrl=forum&action=listTopicsByCategory&id=<?= $category->getId() ?>"><?= ucfirst($category->getName()) ?></a></p>
-                        <img class="imgCategory" src="public/upload/<?= $category->getPhoto() ?>" alt="" srcset="">
+                        <img class="imgCategory" src="public/upload/<?= $category->getPhoto() ?>" alt="image catégorie">
                     </figure>
                 </div>
                 <div class="categoryActivity">

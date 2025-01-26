@@ -126,7 +126,8 @@ class SecurityController extends AbstractController{
 
             }
 
-            // Vérifie si le mot de passe respecte les conditions (une majuscule, un chiffre, un caractère spécial et un minimun de 8 caractères)
+            // Vérifie si le mot de passe respecte les conditions 
+            //(une majuscule, un chiffre, un caractère spécial et un minimun de 8 caractères)
             $passwordRegex = '/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/';
 
             if (!preg_match($passwordRegex, $password)) {

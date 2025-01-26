@@ -99,7 +99,7 @@
                         </div>
                     </div>
                 </div>
-                <img src="public/img/37236783-ai-generato-beautuful-sportivo-sfondo-con-copia-spazio-gratuito-foto.jpg" alt="" class="profile-cover">
+                <img src="public/img/37236783-ai-generato-beautuful-sportivo.jpg" alt="image sportive(plusieurs ballon de sport)" class="profile-cover">
                 
                 <div class="profile-menu">
                     <div class="followers">
