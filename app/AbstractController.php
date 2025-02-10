@@ -2,7 +2,8 @@
 namespace App;
 
 /*
-    En programmation orientée objet, une classe abstraite est une classe qui ne peut pas être instanciée directement. Cela signifie que vous ne pouvez pas créer un objet directement à partir d'une classe abstraite.
+    En programmation orientée objet, une classe abstraite est une classe qui ne peut pas être instanciée directement. 
+    Cela signifie que vous ne pouvez pas créer un objet directement à partir d'une classe abstraite.
     Les classes abstraites : 
     -- peuvent contenir à la fois des méthodes abstraites (méthodes sans implémentation) et des méthodes concrètes (méthodes avec implémentation).
     -- peuvent avoir des propriétés (variables) avec des valeurs par défaut.

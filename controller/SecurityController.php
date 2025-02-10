@@ -151,13 +151,13 @@ class SecurityController extends AbstractController{
                     
                     // Récupère le mot de passe hashé de l'utilisateur
                     $hash = $user->getPassword();
-    
+                    
                     // Vérifie si le mot de passe fourni correspond au mot de passe hashé
                     if (password_verify($password, $hash)){
                         
+                        // Si le mot de passe est valide et que l'utilisateur est actif, on initialise la session utilisateur
                         if ($user->getIsBanned() == 'actif') {
 
-                            // Si le mot de passe est valide et que l'utilisateur est actif, on initialise la session utilisateur
                             Session::setUser($user);
 
                             SESSION::addFlash('success', "Bienvenue sur SportLink !");
@@ -254,7 +254,6 @@ class SecurityController extends AbstractController{
         // Cette méthode retourne une liste des évènement postées par l'utilisateur
         $events = $eventManager->findEventByUser($id);
 
-
         return [
 
             "view" => VIEW_DIR."security/profil.php",
@@ -269,12 +268,8 @@ class SecurityController extends AbstractController{
                 "following" => $following,
                 "followers" => $followers,
                 "events" => $events
-                
-
             ]
-        
         ];   
-
     } 
 
     public function addPhoto() {

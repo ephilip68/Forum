@@ -43,6 +43,7 @@ class EventManager extends Manager{
         return $result;
     }
 
+    // Récupère tous les évènements avec pagination
     public function findAllEvents($start, $limit) {
 
         $sql = "SELECT * 
@@ -66,6 +67,7 @@ class EventManager extends Manager{
         return (int) $result[0]['COUNT(*)'];
     }
 
+    // Vérifier si l'évènement est complet
     public function limitMax($id) {
         
         $sql = "SELECT e.limit 

@@ -19,7 +19,7 @@
     --green: #01e777;
     --blue: #0091e9;
     --orange: #fda14c;
-    --base: #f2f4f7;
+    --base: #F2F4F7;
     --grey: #363e47;
     --grey-accent: #303841;
     --light-grey: #3f4953;
@@ -434,7 +434,7 @@ h1 {
 
 #content:after {
 
-    top: -15%;
+    top: 0%;
     right: 0;
     border-width: 4px 4px 0 0;
 
@@ -442,7 +442,7 @@ h1 {
 
 #content>:first-child:after {
 
-    bottom: 15%;
+    bottom: 0%;
     left: 0;
     border-width: 0 0 4px 4px;
 
@@ -486,6 +486,8 @@ form.formulaire {
     color: #011A46;
 
 }
+
+.checkbox a:hover{color: #0a4dc1;}
 
 .input:focus {
     outline: none;
@@ -1011,7 +1013,9 @@ nav {
     width: 10%;
     height: 100%;
     font-size: 1.5em;
-    color: rgba(10, 77, 193, 1);
+    background: linear-gradient(0deg, rgba(10,77,193,1) 30%, rgba(116,212,253,1) 100%);
+    background-clip: text;
+    color: transparent;
     border-left: none;
     margin-left: .5em;
     align-content: center;

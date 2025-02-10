@@ -27,25 +27,34 @@ class adminController extends AbstractController implements ControllerInterface 
         ];
     }
 
-    public function banUser($id) {
+// Fonction pour bannir un utilisateur par son ID
+public function banUser($id) {
+    // Créer une nouvelle instance de UserManager
+    $userManager = new UserManager();
+    
+    // Appel à la méthode findOneById() pour trouver un utilisateur avec l'ID donné
+    $userId = $userManager->findOneById($id);
+
+    // Vérifie si un utilisateur a été trouvé avec l'ID donné
+    if ($userId) {
         
-        $userManager = new UserManager();
-    
-        $userId = $userManager->findOneById($id);
-    
-        if ($userId) {
-            
-            $userManager->banUser($userId->getId()); 
-    
-            SESSION::addFlash('success', "L'utilisateur a été banni !");
-            
-        } else {
-            
-            SESSION::addFlash('error', "Utilisateur introuvable !");
-        }
-    
-        $this->redirectTo("admin", "users");
+        // Si l'utilisateur existe, on appelle la méthode banUser() pour bannir cet utilisateur
+        $userManager->banUser($userId->getId()); 
+
+        // Ajout d'un message de succès à la session avec SESSION::addFlash()
+        // Ce message pourra être affiché dans la vue pour informer l'administrateur que l'utilisateur a été banni
+        SESSION::addFlash('success', "L'utilisateur a été banni !");
+        
+    } else {
+        
+        // Si aucun utilisateur n'a été trouvé avec cet ID, on ajoute un message d'erreur dans la session
+        // Le message sera affiché pour informer l'administrateur que l'utilisateur n'existe pas
+        SESSION::addFlash('error', "Utilisateur introuvable !");
     }
+
+    // Rediriger l'administrateur vers la liste des utilisateurs dans la page d'administration
+    $this->redirectTo("admin", "users");
+}
 
     public function unBanUser($id){
 

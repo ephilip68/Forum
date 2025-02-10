@@ -14,6 +14,7 @@ class ParticipantManager extends Manager{
         parent::connect();
     }
 
+    // Vérifie si le participant est déja inscrit à l'évènement
     public function isParticipant($eventId, $userId) {
 
         $sql = "SELECT COUNT(*) 
@@ -29,6 +30,7 @@ class ParticipantManager extends Manager{
 
     }
 
+    // Compte le nombre d'utilisateur participant à un évènement
     public function countNumberParticipants($id) {
 
         $sql = "SELECT COUNT(*)  

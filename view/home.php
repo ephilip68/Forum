@@ -67,7 +67,7 @@
                                 <input class="input" type="password" name="pass2" id="pass2" placeholder="Confirmer mot de passe" required>
 
                                 <label class="checkbox">
-                                    <input type="checkbox" name="accept_cgu" required> J'accepte les <a href="view/security/cgu.php" target="_blank">Conditions Générales d'Utilisation</a>.
+                                    <input type="checkbox" name="accept_cgu" required> J'accepte les <a href="view/security/cgu.php" target="_blank"><strong>Conditions Générales d'Utilisation</strong></a>.
                                 </label>
 
                                 

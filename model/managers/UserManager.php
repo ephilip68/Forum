@@ -102,12 +102,14 @@ class UserManager extends Manager{
         return $result;
     }
 
+    // Bannir un utilisateur
     public function banUser($userId){
 
         $sql = "UPDATE ". $this->tableName . " u 
         SET u.isBanned = 'inactif' 
         WHERE u.id_user = :userId";
 
+        // Exécution de la requête SQL via la méthode DAO::update
         // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
         return $this->getOneOrNullResult(
             DAO::update($sql, ['userId' => $userId], false), 

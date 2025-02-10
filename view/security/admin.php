@@ -56,9 +56,11 @@
                                 </div>
                             </div>
                             <?php if ($user->getIsBanned() == 'actif'){ ?>
+                                <!-- Si l'utilisateur n'est pas banni (isBanned est 'actif'), afficher un lien pour le bannir -->
                                 <a href="index.php?ctrl=admin&action=banUser&id=<?= $user->getId() ?>">Bannir</a>
-                            <?php }else{ ?>
-                                <a href="index.php?ctrl=admin&action=unBanUser&id=<?= $user->getId()?>">Débannir</a>
+                            <?php } else { ?>
+                                <!-- Si l'utilisateur est déjà banni (isBanned est différent de 'actif'), afficher un lien pour le débannir -->
+                                <a href="index.php?ctrl=admin&action=unBanUser&id=<?= $user->getId() ?>">Débannir</a>
                             <?php } ?>
                         </td>
                     </tr>  
