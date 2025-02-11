@@ -43,13 +43,14 @@ class PostController extends AbstractController implements ControllerInterface{
         // Récupère les informations du topic en utilisant son ID
         $comments = $commentPostManager->findCommentsByPost($post->getId());
 
-        $underComments = $underCommentPostManager->findUnderCommentByCommentPost($post->getId());
+        $underComments = $underCommentPostManager->findUnderComment($post->getId());
+        var_dump($underComments);die;
         
         $countComments = [];
         if(!empty($comments)){
             foreach ($comments as $comment) {
                 
-                $countUnderComments = $underCommentPostManager->countUnderCommentByCommentPost($comment['id_comment']);
+                $countUnderComments = $underCommentPostManager->countUnderComment($comment['id_comment']);
 
                 $countComments[] = [
 
@@ -163,7 +164,6 @@ class PostController extends AbstractController implements ControllerInterface{
             // On crée un tableau avec le texte du post et l'ID du topic auquel ce post est associé
             $data = ['text' => $text, 'user_id'=>$userId, 'comment_id' => $commentId];
 
-            
             $underCommentManager->add($data);
 
             SESSION::addFlash('success', "Votre commentaire a bien été ajouté !");

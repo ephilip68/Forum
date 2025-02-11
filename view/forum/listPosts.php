@@ -26,19 +26,16 @@ include VIEW_DIR."template/nav.php";
                             <p><?php echo ucfirst($topic->getTitle())?></p>
                         </div>
                         <div class="cardProfil">
-                        
-                        
                             <?php if (!empty($topic->getUser()->getAvatar())){ ?>
-
                                 <img src="public/upload/<?= $topic->getUser()->getAvatar() ?>" alt="photo de profil" class="status-img">     
-    
                             <?php }else{ ?>
-    
-                                <img src="public/img/default-avatar.webp" alt="photo de profil par défaut" class="img_profil">
-    
-                            <?php } ?>      
-                            
-                            <p><?= ucfirst($topic->getUser()->getNickName()) ?></p>
+                            <?php } ?> 
+
+                            <?php if (!empty($topic->getUser()->getNickName())){ ?>
+                                <p><?= ucfirst($topic->getUser()->getNickName()) ?></p>
+                            <?php }else{ ?>
+                                <p>Profil supprimé !</p>
+                            <?php } ?>
                         </div>
                         <div class="cardText">
                             
@@ -125,9 +122,16 @@ include VIEW_DIR."template/nav.php";
                     <?php foreach($comments as $comment){ ?>
                         <div class="messageAnswer">
                             <div class="messageProfil">
-                                <img src="public/upload/<?= $comment['avatar'] ?>" alt="photo de profil" class="status-img-nav" >
+                                <?php if(!empty($comments['avatar'])){ ?>
+                                    <img src="public/upload/<?= $comment['avatar'] ?>" alt="photo de profil" class="status-img-nav" >
+                                <?php }else{ ?>
+                                <?php } ?>
                                 <div class="messageProfilInfo">
-                                    <span ><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $comment['user_id'] ?>"><?= ucfirst($comment['nickName']) ?></a></span>
+                                    <?php if(!empty($comment['nickName'])){ ?>
+                                        <span><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $comment['user_id'] ?>"><?= ucfirst($comment['nickName']) ?></a></span>
+                                    <?php }else{ ?>
+                                        <p>Profil supprimé !</p>
+                                    <?php } ?>
                                     <span class="album-comment-date"><?= $comment['commentDate'] ?></span>
                                 </div>
                             </div>
@@ -170,22 +174,32 @@ include VIEW_DIR."template/nav.php";
                             </div>
 
                             <div class="underpost-comments" data="<?= $comment['id_comment'] ?>" style="display: <?= isset($_GET['comment_id']) && $_GET['comment_id'] == $comment['id_comment'] ? 'block' : 'none' ?>;">
-                                <?php foreach($underComments as $underComment){ ?>
-                                    <?php if ($underComment['comment_id'] == $comment['id_comment']){ ?>
-                                        <div class="messageAnswerComment">
-                                            <div class="messageProfilComment">
-                                                <img src="public/upload/<?= $underComment['avatar'] ?>" alt="photo de profil" class="status-img-nav" >
-                                                <div class="messageProfilInfo">
-                                                    <span ><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $underComment['user_id'] ?>"><?= ucfirst($underComment['nickName']) ?></a></span>
-                                                    <p><?= ucfirst($underComment['text']) ?></p>
-                                                    <div class="messageProfilDate">
-                                                        <span class="album-ucomment-date"><?= $underComment['commentDate'] ?></span>
-                                                    </div>
+                                <?php if(!empty($underComments)){ ?>
+                                    <?php foreach($underComments as $underComment){ ?>
+                                        <?php if($underComment['comment_id'] == $comment['id_comment']){ ?>
+                                            <div class="messageAnswerComment">
+                                                <div class="messageProfilComment">
+                                                    <?php if(!empty($underComment['avatar'])){ ?>
+                                                        <img src="public/upload/<?= $underComment['avatar'] ?>" alt="photo de profil" class="status-img-nav">
+                                                    <?php }else{ ?>
+                                                    <?php } ?>
+                                                    <div class="messageProfilInfo">
+                                                        <?php if(!empty($underComment['nickName'])){ ?>
+                                                            <span ><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $underComment['user_id'] ?>"><?= ucfirst($underComment['nickName']) ?></a></span>
+                                                        <?php }else{ ?>
+                                                            <p>Profil supprimé !</p>
+                                                        <?php } ?>
+                                                        <p><?= ucfirst($underComment['text']) ?></p>
+                                                        <div class="messageProfilDate">
+                                                            <span class="album-ucomment-date"><?= $underComment['commentDate'] ?></span>
+                                                        </div>
+                                                    </div>  
                                                 </div>  
-                                            </div>  
-                                        </div>
+                                            </div>
+                                        <?php } ?>
                                     <?php } ?>
-                                <?php } ?>
+                                <?php }else{ ?>
+                                <?php } ?>   
                             </div>
                         
                             <!-- Modal -->

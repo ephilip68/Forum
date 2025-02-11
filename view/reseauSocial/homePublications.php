@@ -196,7 +196,7 @@
     </div>
     <div class="grid-item " id="card">
         <div class="card1">
-            <h2>Sujets Récent</h2>
+            <h2>Sujets Récents</h2>
             <?php if(!empty($lastTwoTopics)) { ?>
                 <?php foreach($lastTwoTopics as $topic) {  ?>
                     <div class="profilTopics">

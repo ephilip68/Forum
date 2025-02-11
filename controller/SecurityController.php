@@ -490,7 +490,7 @@ class SecurityController extends AbstractController{
             $_SESSION['success'] = "Votre compte a été supprimé avec succès.";
     
             // Redirige l'utilisateur
-            $this->redirectTo("forum", "index");
+            $this->redirectTo("home", "index");
         }
     }
 }

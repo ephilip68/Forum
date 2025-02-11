@@ -16,7 +16,7 @@ class UnderCommentPostManager extends Manager{
 
 
     // Méthode pour récupérer les sous-commentaires d'un commentaire
-    public function findUnderCommentByCommentPost($id) {
+    public function findUnderComment($id) {
     
         // Requête pour récupérer les sous-commentaires
         $sql = "SELECT u.text, u.commentDate, u.user_id, u.comment_id, s.nickName, s.avatar
@@ -32,7 +32,7 @@ class UnderCommentPostManager extends Manager{
         return $result;
     }
 
-    public function countUnderCommentByCommentPost($id) {
+    public function countUnderComment($id) {
 
         $sql = "SELECT COUNT(*) 
         FROM " . $this->tableName . " u
@@ -54,6 +54,5 @@ class UnderCommentPostManager extends Manager{
         $result = DAO::update($sql, ["userId" => $id]);
 
         return $result;
-
     }
 }
