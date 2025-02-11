@@ -400,44 +400,48 @@ class PublicationController extends AbstractController implements ControllerInte
 
     }
 
-    public function repost($id) {
-    
-        $user_id = SESSION::getUser()->getId();
-        
-        
-        $publicationManager = new PostManager();
-        
-        
-        $repost = $publicationManager->findOneById($id);
-        
-        // Si la publication existe
-        if ($repost) {
+    public function addCommentPublication($id){
 
-            // Récupérer le contenu de la publication d'origine
-            $content = $repost->getContent();
+        // Vérifie si le formulaire a été soumis via la méthode POST
+        if (isset($_POST["submit"])) {
+        
+        // La fonction filter_input() permet de valider et nettoyer les données transmises via le formulaire
+        // Le filtre FILTER_SANITIZE_FULL_SPECIAL_CHARS supprime ou encode les caractères spéciaux et les balises HTML pour prévenir les injections de code (XSS)
+        $content = filter_input(INPUT_POST, "content", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        // $creationDate = filter_input(INPUT_POST, "creationDate", FILTER_SANITIZE_NUMBER_INT);
+        // $closed = filter_input(INPUT_POST, "closed", FILTER_SANITIZE_NUMBER_INT);
+        
+        // On récupère l'ID de la publication à partir de l'URL, en utilisant $_GET['id']
+        $publicationId = $_GET['id'];
 
-            $data = ['content' => $content, 'photo'=>$photo, 'user_id' => $userId, 'publication_id' => $id];
+        // Récupérer l'utilisateur connecté
+        $userId = SESSION::getUser()->getId();
 
-            // Ajouter la republication
-             $publicationManager->add($data);
-            
-            
-            $this->redirectTo('security', 'profile');
-            
-        } else {
-            // Rediriger ou afficher un message d'erreur si la publication n'existe pas
-            $this->redirectTo('plublication', 'index');
-        }
+        // Vérifie si le texte du post n'est pas vide après nettoyage
+        if ($content) {
 
-        return [
-            "view" => VIEW_DIR . "reseauSocial/homePublications.php",  
-            "meta_description" => "Republier une publication",
-            "data" => [
+            // Crée une instance de CommentPostManager 
+            $CommentPublicationManager = new CommentPublicationManager();
 
-                
-                
-            ]
-        ];
+            // Prépare les données à insérer dans la base de données
+            // On crée un tableau avec le texte du post et l'ID du topic auquel ce post est associé
+            $data = ['content' => $content, 'user_id'=>$userId, 'publication_id' => $publicationId];
+
+            $CommentPublicationManager->add($data);
+
+            SESSION::addFlash('success', "Votre commentaire a bien été ajouté !");
+
+            $this->redirectTo("publication", "index");
+
+                return [
+
+                    "view" => VIEW_DIR."reseauSocial/homePublications.php",
+                    "meta_description" => "Commenter une publicationq"
+ 
+                ];
+
+            }
+        }    
     }
 
     

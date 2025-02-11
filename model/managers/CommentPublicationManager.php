@@ -4,23 +4,23 @@ namespace Model\Managers;
 use App\Manager;
 use App\DAO;
 
-class CommentPostManager extends Manager{
+class CommentPublicationManager extends Manager{
 
     // on indique la classe POO et la table correspondante en BDD pour le manager concerné
-    protected $className = "Model\Entities\CommentPost";
-    protected $tableName = "comment_post";
+    protected $className = "Model\Entities\CommentPublication";
+    protected $tableName = "comment_publication";
 
     public function __construct(){
         parent::connect();
     }
 
-    // récupérer tous les commentaires d'une catégorie spécifique (par son id)
-    public function findCommentsByPost($id){
+    // récupérer tous les commentaires d'une publication spécifique (par son id)
+    public function findCommentsByPublication($id){
 
-        $sql = "SELECT c.id_comment, c.text, c.commentDate, c.post_id, c.user_id, u.avatar, u.nickName
+        $sql = "SELECT c.id_comment, c.content, c.commentDate, c.publication_id, c.user_id, u.avatar, u.nickName
         FROM ".$this->tableName." c
         INNER JOIN user u ON c.user_id = u.id_user
-        WHERE c.post_id = :id";
+        WHERE c.publication_id = :id";
        
         // Exécute la requête avec DAO::select et récupère un seul résultat
         $result = DAO::select($sql, ['id' => $id], true);

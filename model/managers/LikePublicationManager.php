@@ -7,14 +7,14 @@ use App\DAO;
 class LikePostManager extends Manager {
 
     // on indique la classe POO et la table correspondante en BDD pour le manager concerné
-    protected $className = "Model\Entities\LikePost";
-    protected $tableName = "like_post";
+    protected $className = "Model\Entities\LikePublication";
+    protected $tableName = "like_publication";
 
     public function __construct(){
         parent::connect();
     }
 
-    // Fonction pour récupérer le nombre de likes d'un post
+    // Fonction pour récupérer le nombre de likes d'une publication
     public function countLikes($id) {
 
         $sql = "SELECT COUNT(*) 
@@ -28,7 +28,7 @@ class LikePostManager extends Manager {
         );
     }
 
-    // Fonction pour vérifier si un utilisateur a déjà liké un topic
+    // Fonction pour vérifier si un utilisateur a déjà liké une publication
     public function userLike($userId, $postId) {
 
         $sql = "SELECT COUNT(*) 

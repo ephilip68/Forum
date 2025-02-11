@@ -44,7 +44,7 @@ class PostController extends AbstractController implements ControllerInterface{
         $comments = $commentPostManager->findCommentsByPost($post->getId());
 
         $underComments = $underCommentPostManager->findUnderComment($post->getId());
-        var_dump($underComments);die;
+        // var_dump($underComments);die;
         
         $countComments = [];
         if(!empty($comments)){

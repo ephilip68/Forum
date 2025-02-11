@@ -8,7 +8,7 @@ class UnderCommentPostManager extends Manager{
 
     // on indique la classe POO et la table correspondante en BDD pour le manager concerné
     protected $className = "Model\Entities\UnderCommentPost";
-    protected $tableName = "undercommentpost";
+    protected $tableName = "under_comment_post";
 
     public function __construct(){
         parent::connect();
@@ -21,7 +21,7 @@ class UnderCommentPostManager extends Manager{
         // Requête pour récupérer les sous-commentaires
         $sql = "SELECT u.text, u.commentDate, u.user_id, u.comment_id, s.nickName, s.avatar
         FROM ".$this->tableName." u
-        INNER JOIN commentpost c ON u.comment_id = c.id_comment
+        INNER JOIN comment_post c ON u.comment_id = c.id_comment
         INNER JOIN user s ON u.user_id = s.id_user
         WHERE c.post_id = :id";
 

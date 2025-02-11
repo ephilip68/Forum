@@ -122,16 +122,13 @@ include VIEW_DIR."template/nav.php";
                     <?php foreach($comments as $comment){ ?>
                         <div class="messageAnswer">
                             <div class="messageProfil">
-                                <?php if(!empty($comments['avatar'])){ ?>
+                                
                                     <img src="public/upload/<?= $comment['avatar'] ?>" alt="photo de profil" class="status-img-nav" >
-                                <?php }else{ ?>
-                                <?php } ?>
+                                
                                 <div class="messageProfilInfo">
-                                    <?php if(!empty($comment['nickName'])){ ?>
+                                    
                                         <span><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $comment['user_id'] ?>"><?= ucfirst($comment['nickName']) ?></a></span>
-                                    <?php }else{ ?>
-                                        <p>Profil supprimé !</p>
-                                    <?php } ?>
+                                    
                                     <span class="album-comment-date"><?= $comment['commentDate'] ?></span>
                                 </div>
                             </div>
