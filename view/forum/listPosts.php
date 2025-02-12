@@ -8,6 +8,7 @@ $userLike = $result["data"]["userLike"];
 $underComments = $result["data"]["underComments"];
 $countComments = $result["data"]["countComments"];
 
+
 include VIEW_DIR."template/nav.php";
 
 ?>
@@ -45,7 +46,7 @@ include VIEW_DIR."template/nav.php";
                         <div class="cardReaction">
                             <div class="cardReactionLike">
                                 <?php if (!$userLike){ ?>
-                                    <form action="index.php?ctrl=forum&action=likePost&id=<?= $post->getId() ?>" method="POST">
+                                    <form action="index.php?ctrl=post&action=likePost&id=<?= $post->getId() ?>" method="POST">
                                         <button class="tooltip" type="submit" name="submit"><?= $countLike ?><i class="fa-solid fa-heart"></i></button>
                                     </form>
                                 <?php }else{ ?>
@@ -179,12 +180,13 @@ include VIEW_DIR."template/nav.php";
                                                     <?php if(!empty($underComment['avatar'])){ ?>
                                                         <img src="public/upload/<?= $underComment['avatar'] ?>" alt="photo de profil" class="status-img-nav">
                                                     <?php }else{ ?>
+                                                        <img src="public\upload\default-avatar.webp" alt="photo de profil" class="status-img-nav">
                                                     <?php } ?>
                                                     <div class="messageProfilInfo">
                                                         <?php if(!empty($underComment['nickName'])){ ?>
-                                                            <span ><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $underComment['user_id'] ?>"><?= ucfirst($underComment['nickName']) ?></a></span>
+                                                            <span><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $underComment['user_id'] ?>"><?= ucfirst($underComment['nickName']) ?></a></span>
                                                         <?php }else{ ?>
-                                                            <p>Profil supprimé !</p>
+                                                            <span><a class="album-title-comment" href="#">Profil supprimé !</a></span>
                                                         <?php } ?>
                                                         <p><?= ucfirst($underComment['text']) ?></p>
                                                         <div class="messageProfilDate">

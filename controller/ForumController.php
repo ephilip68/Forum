@@ -57,7 +57,7 @@ class ForumController extends AbstractController implements ControllerInterface{
 
             if ($lastTopic) {
 
-                $lastUserAvatar = $userManager->getProfileAvatar($lastTopic['user_id']);
+                $lastUserAvatar = $userManager->getProfile($lastTopic['user_id']);
 
             }
 
@@ -415,48 +415,5 @@ class ForumController extends AbstractController implements ControllerInterface{
 
             }
         }    
-    }
-
-
-
-    public function likePost($id) {
-
-        $postId = $_GET['id'];
-
-        $userId = SESSION::getUser()->getId();
-
-        // créer une nouvelle instance de LikeMessage
-        $likePostManager = new LikePostManager();
-    
-        // Vérifier si l'utilisateur suit déjà cet ami
-        $userLike = $likePostManager->userLike($userId, $postId);
-    
-        if ($userLike) {
-            // Rediriger si déjà suivi
-            SESSION::addFlash('error', "Vous aimez déja ce post !");
-
-            $this->redirectTo("forum", "listPostsByTopic&id=$postId");
-            return;
-        }
-        
-    
-        // Ajouter like dans la base de données
-        $data = [
-            'post_id' => $postId,
-            'user_id' => $userId
-        ];
-    
-        $likePostManager->add($data);
-
-        SESSION::addFlash('success', "Like ajouté !");
-
-        $this->redirectTo("forum", "listPostsByTopic&id=$postId");
-    
-        return [
-
-            "view" => VIEW_DIR."forum/listPosts.php",
-            "meta_description" => "Liste des posts du forum"
-
-        ];
     }
 }

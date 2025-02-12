@@ -11,6 +11,7 @@ use IntlDateFormatter;
 
 final class UnderCommentPost extends Entity{
 
+    private $id;
     private $text;
     private $commentDate;
     private $user;
@@ -18,6 +19,26 @@ final class UnderCommentPost extends Entity{
 
     public function __construct($data){         
         $this->hydrate($data);        
+    }
+
+     /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -99,4 +120,5 @@ final class UnderCommentPost extends Entity{
 
         return $this;
     }
+
 }

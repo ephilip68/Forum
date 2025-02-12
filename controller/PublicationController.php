@@ -6,6 +6,7 @@ use App\ControllerInterface;
 use App\Session;
 use Model\Managers\UserManager;
 use Model\Managers\PublicationManager;
+use Model\Managers\CommentPublicationManager;
 use Model\Managers\CategoryManager;
 use Model\Managers\FollowManager;
 use Model\Managers\FavoritesManager;

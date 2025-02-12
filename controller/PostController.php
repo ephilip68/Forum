@@ -22,6 +22,8 @@ class PostController extends AbstractController implements ControllerInterface{
         
         // créer une nouvelle instance de PostManager
         $postManager = new PostManager();
+
+        $userManager = new UserManager();
         
         // créer une nouvelle instance de TopicManager
         $topicManager = new TopicManager();
@@ -43,13 +45,14 @@ class PostController extends AbstractController implements ControllerInterface{
         // Récupère les informations du topic en utilisant son ID
         $comments = $commentPostManager->findCommentsByPost($post->getId());
 
-        $underComments = $underCommentPostManager->findUnderComment($post->getId());
-        // var_dump($underComments);die;
-        
         $countComments = [];
+        $underComments = '';
         if(!empty($comments)){
             foreach ($comments as $comment) {
-                
+
+                // Récupère les sous commentaire d'un commentaire spécifique en passant par l'ID comment
+                $underComments = $underCommentPostManager->findUnderComment($comment['id_comment']);
+
                 $countUnderComments = $underCommentPostManager->countUnderComment($comment['id_comment']);
 
                 $countComments[] = [
@@ -58,7 +61,6 @@ class PostController extends AbstractController implements ControllerInterface{
                     'count' => $countUnderComments
                     
                 ];
-
             }
         }
 
@@ -88,6 +90,7 @@ class PostController extends AbstractController implements ControllerInterface{
                 "countLike" => $countLike,
                 "userLike" => $userLike,
                 "underComments" => $underComments,
+                // "userUnderComment" => $userUnderComment,
                 "countComments" => $countComments
 
             ]   
@@ -179,5 +182,45 @@ class PostController extends AbstractController implements ControllerInterface{
 
             }
         }    
+    }
+
+    public function likePost($id) {
+
+        $postId = $_GET['id'];
+
+        $userId = SESSION::getUser()->getId();
+
+        // créer une nouvelle instance de LikeMessage
+        $likePostManager = new LikePostManager();
+    
+        // Vérifier si l'utilisateur suit déjà cet ami
+        $userLike = $likePostManager->userLike($userId, $postId);
+    
+        if ($userLike) {
+            // Rediriger si déjà suivi
+            SESSION::addFlash('error', "Vous aimez déja ce post !");
+
+            $this->redirectTo("post", "listPostsByTopic&id=$postId");
+            return;
+        }
+        
+        // Ajouter like dans la base de données
+        $data = [
+            'post_id' => $postId,
+            'user_id' => $userId
+        ];
+    
+        $likePostManager->add($data);
+
+        SESSION::addFlash('success', "Like ajouté !");
+
+        $this->redirectTo("post", "listPostsByTopic&id=$postId");
+    
+        return [
+
+            "view" => VIEW_DIR."forum/listPosts.php",
+            "meta_description" => "Liste des posts du forum"
+
+        ];
     }
 }

@@ -74,9 +74,9 @@ class UserManager extends Manager{
        
     }
 
-    public function getProfileAvatar($id){
+    public function getProfile($id){
 
-        $sql = "SELECT u.avatar
+        $sql = "SELECT u.avatar, u.nickName
         FROM " . $this->tableName . " u 
         WHERE u.id_user = :id";
 
