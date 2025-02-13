@@ -7,6 +7,7 @@ use App\Session;
 use Model\Managers\UserManager;
 use Model\Managers\PublicationManager;
 use Model\Managers\CommentPublicationManager;
+use Model\Managers\LikePublicationManager;
 use Model\Managers\CategoryManager;
 use Model\Managers\FollowManager;
 use Model\Managers\FavoritesManager;
@@ -22,6 +23,12 @@ class PublicationController extends AbstractController implements ControllerInte
         // créer une nouvelle instance de PublicationManager
         $publicationManager = new PublicationManager();
 
+        // créer une nouvelle instance de PublicationManager
+        $commentPublicationManager = new commentPublicationManager();
+
+        // créer une nouvelle instance de PublicationManager
+        $likePublicationManager = new LikePublicationManager();
+
         // Créer une nouvelle instance de UserManager 
         $userManager = new UserManager();
 
@@ -29,7 +36,27 @@ class PublicationController extends AbstractController implements ControllerInte
         $topicManager = new TopicManager();
 
         // récupére la liste de toutes les publications 
-        $publications = $publicationManager->findAll();
+        $publications = iterator_to_array($publicationManager->findAll());
+
+        $commentPublications = '';
+        $countLikes = [];
+        $userLike = '';
+        foreach($publications as $publication) {
+
+            $commentPublications = $commentPublicationManager->findCommentsByPublication($publication->getId()); 
+             // Récupérer le nombre de likes
+            $countLike = $likePublicationManager->countLikes($publication->getId());
+            // Vérifier si l'utilisateur a déjà liké cette publication
+            $userLike = $likePublicationManager->userLike($id, $publication->getId());
+
+            $countLikes[] = [
+
+                'id' => $publication->getId(),
+                'count' => $countLike
+                
+            ];
+            
+        }
 
         $friends = $userManager->findFriendsByUser($id);
 
@@ -44,16 +71,17 @@ class PublicationController extends AbstractController implements ControllerInte
             "data" => [
 
                 "publications" => $publications,
+                "commentPublications" => $commentPublications,
                 "friends" => $friends,
-                "lastTwoTopics" =>$lastTwoTopics
-                
+                "lastTwoTopics" =>$lastTwoTopics,
+                "countLikes" =>$countLikes,
+                "userLike" =>$userLike
+   
             ]
         ];
     }
 
     public function listPublicationsByUser(){
-
-
 
     }
 
@@ -442,12 +470,72 @@ class PublicationController extends AbstractController implements ControllerInte
                 ];
 
             }
-        }    
+        } 
     }
 
-    
+    public function likePublication($id) {
 
+        $publicationId = $_GET['id'];
+
+        $userId = SESSION::getUser()->getId();
+
+        // créer une nouvelle instance de LikeMessage
+        $likePublicationManager = new LikePublicationManager();
     
+        // Vérifier si l'utilisateur suit déjà cet ami
+        $userLike = $likePublicationManager->userLike($userId, $publicationId);
+    
+        if ($userLike) {
+            // Rediriger si déjà liké
+            SESSION::addFlash('error', "Vous aimez déja cette publication !");
+
+            $this->redirectTo("publication", "index");
+            return;
+        }
+        
+        // Ajouter like dans la base de données
+        $data = [
+            'publication_id' => $publicationId,
+            'user_id' => $userId
+        ];
+    
+        $likePublicationManager->add($data);
+
+        SESSION::addFlash('success', "Like ajouté !");
+
+        $this->redirectTo("publication", "index");
+    
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/homePublications.php",
+            "meta_description" => "Ajouter commentaire"
+
+        ];
+    } 
+
+    public function unlikePublication($publicationId) {
+    
+        // Récupérer l'ID de l'utilisateur et de la publication
+        $userId = Session::getUser()->getId();
+
+        // Créer une nouvelle instance de UserManager 
+        $likePublicationManager = new likePublicationManager();
+
+        $likePublicationManager->deleteLikes($userId, $publicationId);
+
+        SESSION::addFlash('success', "Like supprimé !");
+
+        // Après la suppression de la publication, on redirige l'utilisateur vers la page principale des enregistrements
+        $this->redirectTo("publication", "index");
+
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/homePublications.php",
+            "meta_description" => "Supprimer enregistrements"
+
+        ];
+    
+    }
 
 }
 

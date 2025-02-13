@@ -1,7 +1,10 @@
 <?php
     $publications = $result["data"]["publications"];
+    $commentPublications = $result["data"]["commentPublications"];
     $friends = $result["data"]["friends"];
     $lastTwoTopics = $result["data"]["lastTwoTopics"];
+    $userLike = $result["data"]["userLike"];
+    $countLikes = $result["data"]["countLikes"];
 
     include VIEW_DIR."template/nav.php";
 ?>
@@ -174,7 +177,19 @@
                                 </div>
                                 <div class="album-actions-home">
                                     <div class="action-reaction">
-                                        <a href=""><i class="fa-solid fa-heart" style="color:red"></i></a>
+                                        <div>
+                                            <?php foreach($countLikes as $count){ ?>
+                                                <?php if($publication->getId() == $count['id']){ ?>
+                                                    <?php if($count['count'] > 0){ ?>
+                                                        <i class="fa-solid fa-heart" style="color:red"></i>
+                                                        <span><?= $count['count'] ?></span>
+                                                    <?php }else{ ?>
+                                                        <i class="fa-regular fa-heart"></i>
+                                                        <span><?= $count['count'] ?></span>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </div>
                                         <div class="action-number">
                                             <span>Commentaire</span>
                                             <span>Partage</span>
@@ -182,14 +197,91 @@
                                     </div>
                                     <div class="divider-home"></div>
                                     <div class="action-reactions">
-                                        <a href="#"><i class="fa-regular fa-heart"></i>J'aime</a>
-                                        <a href="#"><i class="fa-regular fa-comment"></i>Commenter</a>
+                                        <?php if (!$userLike){ ?>
+                                            <form action="index.php?ctrl=publication&action=likePublication&id=<?= $publication->getId() ?>" method="POST">
+                                                <button type="submit" name="submit"><i class="fa-regular fa-heart"></i>J'aime</button>
+                                            </form>
+                                        <?php }else{ ?>
+                                            <form action="index.php?ctrl=publication&action=unlikePublication&id=<?= $publication->getId() ?>" method="POST">
+                                                <button type="submit" name="submit"><i class="fa-solid fa-heart" style="color:red"></i>Je n'aime plus</button>
+                                            </form>   
+                                        <?php } ?>
+                                        <a href="#modal-comment" uk-toggle><i class="fa-regular fa-comment"></i>Commenter</a>
                                         <a href="#"><i class="fa-solid fa-share"></i>Republier</a>
                                     </div>    
                                 </div>    
                             </div>
                         </div>
                     <?php } ?>
+                    <!-- modal comment -->
+                    <div id="modal-comment" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Publication de <?= ucfirst($publication->getUser()->getNickName()) ?></h3>
+                                    <hr>
+                                    <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
+                                </div>
+                                <div class="status-main-content">
+                                    <div class="status-main-home">
+                                        <img src="public/upload/<?=$publication->getUser()->getAvatar()?>" class="status-img"/>
+                                        <div class="album-detail-home">
+                                            <div class="album-title-home"><a href="index.php?ctrl=security&action=profile&id=<?=$publication->getUser()->getId()?>"><?=ucfirst($publication->getUser()->getNickName())?></a></div>
+                                            <div class="album-date-home"><?=$publication->getFormattedPublicationDate()?></div>
+                                        </div>
+                                        <div class="home-option">
+                                            <?php if(App\Session::getUser()->getId() == $publication->getUser()->getId()) { ?>
+                                                <button type="button" class="options-btn"><span uk-icon="icon: more"></span></button>
+                                                <a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?> "><i class="fa-solid fa-xmark home-close"></i></a>
+                                            <?php }else{ ?>
+                                                <button type="button" class="options-btn"><span uk-icon="icon: more"></span></button>
+                                            <?php } ?>
+                                        </div>
+                                        <div class="options-menu" id="optionsMenu">
+                                            <div class="arrow"></div>
+                                            <ul>
+                                                <li><a href="index.php?ctrl=publication&action=addFavorites&id=<?= $publication->getId() ?>"><span uk-icon="icon: bookmark"></span>Enregistrer la publication</a></li>
+                                                <li><a href="#"><span uk-icon="icon: warning"></span>Signaler la publication</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="album-content-home">
+                                        <p><?=ucfirst($publication->getContent())?></p>
+                                    </div>
+                                    <div class="album-photos-home">
+                                        <img src="public/upload/<?=$publication->getPhoto()?>" alt="" class="album-photo-home"/>
+                                    </div>
+                                    <div class="album-actions-home">
+                                        <div class="action-reaction">
+                                            <a href=""><i class="fa-solid fa-heart" style="color:red"></i></a>
+                                            <div class="action-number">
+                                                <span>Commentaire</span>
+                                                <span>Partage</span>
+                                            </div>
+                                        </div>
+                                        <div class="divider-home"></div>
+                                        <div class="action-reactions">
+                                            <a href="#"><i class="fa-regular fa-heart"></i>J'aime</a>
+                                            <a href="#modal-comment" uk-toggle><i class="fa-regular fa-comment"></i>Commenter</a>
+                                            <a href="#"><i class="fa-solid fa-share"></i>Republier</a>
+                                        </div>    
+                                    </div>    
+                                </div>
+                            </div>
+                            <div>
+                                <form action="index.php?ctrl=publication&action=addCommentPublication&id=<?= $publication->getId() ?>" method="POST">
+                                    <div class="modal-comment">
+                                        <textarea class="editor-comment" name="content" cols="30" rows="10" placeholder="Vous en pensez-quoi?"></textarea>
+                                    </div>
+                                    <div class="modal-submit">
+                                        <div class="modal-button">
+                                            <button class="btn-submit" type="submit" name="submit">Envoyer</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>               
         </div>

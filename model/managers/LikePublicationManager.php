@@ -4,7 +4,7 @@ namespace Model\Managers;
 use App\Manager;
 use App\DAO;
 
-class LikePostManager extends Manager {
+class LikePublicationManager extends Manager {
 
     // on indique la classe POO et la table correspondante en BDD pour le manager concerné
     protected $className = "Model\Entities\LikePublication";
@@ -19,7 +19,7 @@ class LikePostManager extends Manager {
 
         $sql = "SELECT COUNT(*) 
         FROM " . $this->tableName . " l
-        WHERE l.post_id = :id";
+        WHERE l.publication_id = :id";
     
         // la requête renvoie un seul résultat ou `null` si rien n'est trouvé.
         return $this->getSingleScalarResult(
@@ -34,7 +34,7 @@ class LikePostManager extends Manager {
         $sql = "SELECT COUNT(*) 
         FROM " . $this->tableName . " l
         WHERE l.user_id = :userId 
-        AND l.post_id = :postId";
+        AND l.publication_id = :postId";
 
         // Exécute la requête avec DAO::select et récupère un seul résultat
         $result = DAO::select($sql, ['userId' => $userId, 'postId' => $postId], false);
@@ -43,13 +43,19 @@ class LikePostManager extends Manager {
         return $result ? $result['COUNT(*)'] > 0 : false;
     }
 
-    public function deleteLikes($userId) {
-    
-        $sql = "DELETE 
-        FROM " . $this->tableName . " l
-        WHERE l.user_id = :userId";
+    public function deleteLikes($userId, $publicationId) {
 
-        $result = DAO::delete($sql, ['userId' => $userId]);
-        return $result;
+        $sql = "DELETE 
+        FROM " . $this->tableName . " f
+        WHERE f.user_id = :user_id 
+        AND f.publication_id = :publication_id";
+    
+        // la requête renvoie plusieurs enregistrements --> getMultipleResults
+        return $this->getMultipleResults(
+            DAO::delete($sql, ['user_id' => $userId, 'publication_id' => $publicationId]),  
+            $this->className 
+        );
+
     }
+
 }

@@ -31,7 +31,7 @@ class PostController extends AbstractController implements ControllerInterface{
         // Crée une instance de CommentPostManager 
         $commentPostManager = new CommentPostManager();
 
-        // Créer une nouvelle instance de LikeMessage
+        // Créer une nouvelle instance de LikePost
         $likePostManager = new LikePostManager();
 
         $underCommentPostManager = new UnderCommentPostManager();
