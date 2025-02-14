@@ -40,14 +40,14 @@ class PublicationController extends AbstractController implements ControllerInte
 
         $commentPublications = '';
         $countLikes = [];
-        $userLike = '';
+        $userLike = [];
         foreach($publications as $publication) {
 
             $commentPublications = $commentPublicationManager->findCommentsByPublication($publication->getId()); 
              // Récupérer le nombre de likes
             $countLike = $likePublicationManager->countLikes($publication->getId());
             // Vérifier si l'utilisateur a déjà liké cette publication
-            $userLike = $likePublicationManager->userLike($id, $publication->getId());
+            $userLike[$publication->getId()] = $likePublicationManager->userLike($id, $publication->getId());
 
             $countLikes[] = [
 

@@ -19,7 +19,7 @@ class UnderCommentPostManager extends Manager{
     public function findUnderComment($id) {
     
         // Requête pour récupérer les sous-commentaires
-        $sql = "SELECT u.text, u.commentDate, u.user_id, u.comment_id, s.avatar, s.nickName
+        $sql = "SELECT u.*, s.avatar, s.nickName
         FROM ".$this->tableName." u
         INNER JOIN comment_post c ON u.comment_id = c.id_comment
         LEFT JOIN user s ON u.user_id = s.id_user

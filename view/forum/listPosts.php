@@ -57,7 +57,8 @@ include VIEW_DIR."template/nav.php";
                                 <a class="tooltip" href=""><i class="fa-solid fa-up-right-from-square "></i></a>
                             </div>
                             <div class="cardReactionShare">
-                                <a class="tooltip" href=""><i class="fa-regular fa-bookmark"></i></a>
+                                <a class="tooltip" href="index.php?ctrl=forum&action=addFavoritesPost&id=<?= $post->getId() ?>"><i class="fa-regular fa-bookmark"></i></a>
+                                
                             </div>
                             <div class="cardReactionReply">
                                 <a href="#modal-answer-post-<?= $post->getId()?>" uk-toggle>
@@ -128,7 +129,7 @@ include VIEW_DIR."template/nav.php";
                                 
                                 <div class="messageProfilInfo">
                                     
-                                        <span><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $comment['user_id'] ?>"><?= ucfirst($comment['nickName']) ?></a></span>
+                                    <span><a class="album-title-comment" href="index.php?ctrl=security&action=profile&id=<?= $comment['user_id'] ?>"><?= ucfirst($comment['nickName']) ?></a></span>
                                     
                                     <span class="album-comment-date"><?= $comment['commentDate'] ?></span>
                                 </div>

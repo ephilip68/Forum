@@ -2,7 +2,7 @@
     <div class="grid2">
         <div class="left">
             <figure class="left-logo">
-                <img src="" alt="Logo SportLink">
+                <img src="public\img\logo erwin.png" alt="Logo SportLink">
             </figure>
         </div>
         <div class="right">

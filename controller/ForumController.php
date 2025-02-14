@@ -12,6 +12,7 @@ use Model\Managers\CategoryManager;
 use Model\Managers\TopicManager;
 use Model\Managers\PostManager;
 use Model\Managers\CommentPostManager;
+use Model\Managers\FavoritesPostManager;
 
 class ForumController extends AbstractController implements ControllerInterface{
 
@@ -416,4 +417,70 @@ class ForumController extends AbstractController implements ControllerInterface{
             }
         }    
     }
+
+    public function addFavoritesPost() {
+
+        // Récupérer l'ID de l'utilisateur et du post
+        $userId = Session::getUser()->getId();
+        $postId = $_GET['id']; 
+
+        // Créer une nouvelle instance de FavoritesPostManager 
+        $favoritesPostManager = new FavoritesPostManager();
+
+        // Vérifie si l'utilisateur à déja enregistré un post
+        $isFavorites = $favoritesPostManager->isFavorites($userId, $postId);
+
+        // Si oui, il sera redirigé et reçevra un message d'erreur
+        if($isFavorites){
+
+            SESSION::addFlash('error', "Post déja enregistré !");
+
+            $this->redirectTo("post", "listPostsByTopic&id=$postId");
+            return;
+
+        }
+
+        // Si non, le post sera ajouté à la BDD
+        $data = ['post_id' => $postId, 'user_id' => $userId];
+
+        $favoritesPostManager->add($data);
+
+        SESSION::addFlash('success', "Post enregistré !");
+
+        // Après l'ajout du post dans les enregistrements, on redirige l'utilisateur 
+        $this->redirectTo("post", "index");
+
+        return [
+
+            "view" => VIEW_DIR."forum/listPosts.php",
+            "meta_description" => "Enregistrer un post"
+           
+        ];
+
+    }
+
+    public function deleteFavorites($postId) {
+    
+        // Récupérer l'ID de l'utilisateur et de la publication
+        $userId = Session::getUser()->getId();
+
+        // Créer une nouvelle instance de FavoritesPostManager 
+        $favoritesPostManager = new FavoritesPostManager();
+
+        $favoritesPostManager->delete($userId, $postId);
+
+        SESSION::addFlash('success', "Post supprimé des favoris !");
+
+        // Après la suppression du post, on redirige l'utilisateur vers la page principale des enregistrements
+        $this->redirectTo("publication", "index.php?ctrl=publication&action=getFavoritesPublications");
+
+        return [
+
+            "view" => VIEW_DIR."forum/listPosts.php",
+            "meta_description" => "Supprimer enregistrements"
+
+        ];
+    
+    }
+
 }

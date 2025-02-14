@@ -17,7 +17,7 @@ class PublicationManager extends Manager{
     //récupère la liste de publications postées par l'utilisateur
     public function findPublicationsByUser($id){
 
-        $sql = "SELECT p.id_publication, p.content, p.publicationDate, p.photo, p.video, p.user_id, u.nickName
+        $sql = "SELECT p.*, u.nickName
         FROM " . $this->tableName . " p 
         INNER JOIN user u ON p.user_id = u.id_user
         WHERE u.id_user = :id";

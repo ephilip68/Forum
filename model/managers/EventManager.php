@@ -16,7 +16,7 @@ class EventManager extends Manager{
 
     public function findEventByUser($id){
 
-        $sql = "SELECT e.id_event, e.creationDate, e.photo, e.title, e.text, e.eventDate, e.eventHours, e.city, e.country, e.user_id, u.nickName
+        $sql = "SELECT e.*, u.nickName
         FROM " . $this->tableName . " e 
         INNER JOIN user u ON e.user_id = u.id_user
         WHERE u.id_user = :id";

@@ -197,12 +197,12 @@
                                     </div>
                                     <div class="divider-home"></div>
                                     <div class="action-reactions">
-                                        <?php if (!$userLike){ ?>
-                                            <form action="index.php?ctrl=publication&action=likePublication&id=<?= $publication->getId() ?>" method="POST">
+                                        <?php if (!$userLike[$publication->getId()]) { ?>
+                                            <form class="like" action="index.php?ctrl=publication&action=likePublication&id=<?= $publication->getId() ?>" method="POST">
                                                 <button type="submit" name="submit"><i class="fa-regular fa-heart"></i>J'aime</button>
                                             </form>
                                         <?php }else{ ?>
-                                            <form action="index.php?ctrl=publication&action=unlikePublication&id=<?= $publication->getId() ?>" method="POST">
+                                            <form class="like" action="index.php?ctrl=publication&action=unlikePublication&id=<?= $publication->getId() ?>" method="POST">
                                                 <button type="submit" name="submit"><i class="fa-solid fa-heart" style="color:red"></i>Je n'aime plus</button>
                                             </form>   
                                         <?php } ?>
