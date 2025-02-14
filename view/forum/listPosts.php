@@ -40,7 +40,7 @@ include VIEW_DIR."template/nav.php";
                         </div>
                         <div class="cardText">
                             
-                                <p><?= $post->getText() ?></p>
+                            <p><?= $post->getText() ?></p>
                             
                         </div>
                         <div class="cardReaction">
@@ -58,7 +58,6 @@ include VIEW_DIR."template/nav.php";
                             </div>
                             <div class="cardReactionShare">
                                 <a class="tooltip" href="index.php?ctrl=forum&action=addFavoritesPost&id=<?= $post->getId() ?>"><i class="fa-regular fa-bookmark"></i></a>
-                                
                             </div>
                             <div class="cardReactionReply">
                                 <a href="#modal-answer-post-<?= $post->getId()?>" uk-toggle>

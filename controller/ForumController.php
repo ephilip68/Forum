@@ -467,7 +467,7 @@ class ForumController extends AbstractController implements ControllerInterface{
         // Créer une nouvelle instance de FavoritesPostManager 
         $favoritesPostManager = new FavoritesPostManager();
 
-        $favoritesPostManager->delete($userId, $postId);
+        $favoritesPostManager->deleteFavorites($userId, $postId);
 
         SESSION::addFlash('success', "Post supprimé des favoris !");
 
@@ -481,6 +481,27 @@ class ForumController extends AbstractController implements ControllerInterface{
 
         ];
     
+    }
+
+    public function getFavoritesPost() {
+
+        // Récupérer l'ID de l'utilisateur et de la publication
+        $userId = Session::getUser()->getId();
+
+
+        $this->redirectTo("publication", "index.php?ctrl=publication&action=getFavoritesPublications");
+
+        return [
+
+            "view" => VIEW_DIR."reseauSocial/listEnregistrements.php",
+            "meta_description" => "Liste des favoris",
+            "data" => [
+
+            "favoritesPosts" => $favoritesPosts        
+        
+            ]
+
+        ];
     }
 
 }

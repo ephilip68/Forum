@@ -45,16 +45,16 @@ class FavoritesPostManager extends Manager{
         );
     }
 
-    public function deleteFavorites($userId, $publicationId) {
+    public function deleteFavorites($userId, $postId) {
 
         $sql = "DELETE 
         FROM " . $this->tableName . " f
         WHERE f.user_id = :user_id 
-        AND f.publication_id = :publication_id";
+        AND f.post_id = :post_id";
     
         // la requête renvoie plusieurs enregistrements --> getMultipleResults
         return $this->getMultipleResults(
-            DAO::delete($sql, ['user_id' => $userId, 'publication_id' => $publicationId]),  
+            DAO::delete($sql, ['user_id' => $userId, 'post_id' => $postId]),  
             $this->className 
         );
 

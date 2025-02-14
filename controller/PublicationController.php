@@ -11,6 +11,7 @@ use Model\Managers\LikePublicationManager;
 use Model\Managers\CategoryManager;
 use Model\Managers\FollowManager;
 use Model\Managers\FavoritesManager;
+use Model\Managers\FavoritesPostManager;
 use Model\Managers\TopicManager;
 use Model\Managers\EventManager;
 
@@ -371,13 +372,19 @@ class PublicationController extends AbstractController implements ControllerInte
 
         $favorites = $favoritesManager->getFavorites($userId);
 
+        // Créer une nouvelle instance de UserManager 
+        $favoritesPostManager = new FavoritesPostManager();
+
+        $favoritesPosts = $favoritesPostManager->getFavorites($userId);
+
         return [
 
             "view" => VIEW_DIR."reseauSocial/listEnregistrements.php",
             "meta_description" => "Liste des favoris",
             "data" => [
 
-            "favorites" => $favorites        
+            "favorites" => $favorites,        
+            "favoritesPosts" => $favoritesPosts        
         
             ]
 

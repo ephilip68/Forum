@@ -1362,25 +1362,25 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 
 /***************************************************************** ENREGISTREMENT *********************************************************************/
 
-.timeline-favorites{width: 100%;justify-items: center;padding: 40px;}
+.timeline-favorites{width: 100%;padding: 40px;display: flex;gap: 20px;}
 
-.timeline-center-favorites{border: 1px solid #d0d0d0ae; border-radius: 15px;width: 80% ;min-height: 50px; padding: 1em 1em 1em 1em;background-color: rgba(255, 255, 255, 0.782);margin-top: 1em;}
+.timeline-center-favorites{border: 1px solid #d0d0d0ae; border-radius: 15px;width: 100% ;min-height: 50px; padding: 1em 1em 1em 1em;background-color: rgba(255, 255, 255, 0.782);margin-top: 1em;}
 
-.favoritesTitle{width: 80%;text-align: left;}
+.favoritesTitle{width: 100%;text-align: left;}
 
 .favoritesTitle h3{font-weight: 700;font-size: 1.7em;color: #151C27;width: 80%;}
 
 .favoritesStatus{width: 100%;height: 220px; display: flex;gap: 20px;position: relative;}
 
-.favoritesPhoto{width: 20%;}
+.favoritesPhoto{width: 45%;}
 
 .favoritesPhoto img{width: 100%;height: 100%; object-fit: cover;border-radius: 15px;}
 
 .favoritesList{width: 77.5%;display: flex;flex-direction: column;justify-content: space-between;}
 
-.favotitesInfo{height: 130px;width: 100%;}
+.favoritesInfo{height: 130px;width: 100%;}
 
-.favotitesInfo h4{font-size: 1.5em;font-weight: 500;margin: 0;height: 70px;text-align: justify;}
+.favoritesInfo h4{font-size: 1.5em;font-weight: 500;margin: 0;min-height: 70px;text-align: left;}
 
 .favoritesDescriptions{display: flex;width:100%;align-items: center;gap: 10px;height: 50px;}
 
@@ -1392,17 +1392,17 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 
 .favoritesButton{display: flex;width:100%;height: 50px;gap: 20px;}
 
-.btnSharefavorites{width: 8%;height: 40px;border: none; border-radius: 5px;background-color: var(--base);box-shadow: 0px 3px 3px rgba(0, 0, 0, .1);}
+.btnSharefavorites{width: 30%;height: 40px;border: none; border-radius: 5px;background-color: var(--base);box-shadow: 0px 3px 3px rgba(0, 0, 0, .1);}
 
 .btnSharefavorites i{font-size: 1.5em;color: #151C27;}
 
-.options-btn-favorites{width: 8%;height: 40px;border: none; border-radius: 5px; background-color: var(--base);box-shadow: 0px 3px 3px rgba(0, 0, 0, .1);}
+.options-btn-favorites{width: 30%;height: 40px;border: none; border-radius: 5px; background-color: var(--base);box-shadow: 0px 3px 3px rgba(0, 0, 0, .1);}
 
 .btnSharefavorites:hover{background-color: #eaeaea;cursor: pointer;}
 
 .options-btn-favorites:hover{background-color: #eaeaea;cursor: pointer;}
 
-.options-menu-favorites {display: none;position: absolute;top: 235px;right: 40%;background-color: var(--white);box-shadow: 0 7px 25px rgba(0, 0, 0, .5);border-radius: 5px;z-index: 10;width: 300px;}
+.options-menu-favorites {display: none;position: absolute;top: 235px;right: -20%;background-color: var(--white);box-shadow: 0 7px 25px rgba(0, 0, 0, .5);border-radius: 5px;z-index: 10;width: 300px;}
 
 .options-menu-favorites .arrow {position: absolute;top: -18px; left: 0; width: 0;height: 0;border-right: 20px solid transparent;border-bottom:20px solid var(--white);z-index: 0;}
 
