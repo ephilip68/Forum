@@ -143,5 +143,29 @@ class UserManager extends Manager{
         return $result;
     }
     
+     // Récupère tous les évènements avec pagination
+     public function findAllUsers($start, $limit) {
+
+        $sql = "SELECT * 
+                FROM " . $this->tableName . " u 
+                ORDER BY u.dateInscription DESC 
+                LIMIT $start, $limit"; 
+        
+        return $this->getMultipleResults(
+            DAO::select($sql),
+            $this->className
+        );
+    }
+
+    public function totalUsers() {
+
+        $sql = "SELECT COUNT(*) 
+        FROM " . $this->tableName . " u ";
+        
+        $result = DAO::select($sql);
+    
+        return (int) $result[0]['COUNT(*)'];
+    }
+
 
 }

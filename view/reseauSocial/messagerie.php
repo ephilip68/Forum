@@ -32,7 +32,7 @@
             <div class="side-wrapper">
                 <ul class="listNavEvent list-unstyled">
                     <div class="navEvent">
-                        <a href="index.php?ctrl=security&action=profile&id=<?=App\Session::getUser()->getId()?>"><li class="listContent"><i><img src="public/upload/<?=App\Session::getUser()->getAvatar()?>" class="status-img-nav"/></i><span><?= ucfirst(App\Session::getUser()->getNickName())?></span></li></a>
+                        <a href="index.php?ctrl=security&action=profile&id=<?= App\Session::getUser()->getId()?>"><li class="listContent"><i><img src="public/upload/<?=App\Session::getUser()->getAvatar()?>" class="status-img-nav"/></i><span><?= ucfirst(App\Session::getUser()->getNickName())?></span></li></a>
                         <a href="index.php?ctrl=publication&action=listAmis"><li class="listContent"><i class="fa-solid fa-user-group"></i><span>Amis</span></li></a>
                         <a href="index.php?ctrl=publication&action=getFavoritesPublications"><li class="listContent"><i class="fa-solid fa-bookmark"></i><span>Enregistrements</span></li></a>
                         <a href="index.php?ctrl=event&action=index"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Evènements</span></li></a>
@@ -55,57 +55,58 @@
     <div class="messagerie_container">
         <div class="message_content">
             <div class="message_profil">
-                <figure>
-                    <img src="" alt="">
-                </figure>
+                    <img src="public/upload/<?= App\Session::getUser()->getAvatar()?>" class="status-img-msg"/>
                 <div class="profil_informations">
-                    <p></p>
+                    <p><?= ucfirst(App\Session::getUser()->getNickName()) ?></p>
                     <p></p>
                 </div>
             </div>
             <div class="message_search">
                 <form action="index.php?ctrl=message&action=index" method="POST">
                     <input type="text" name="search" placeholder="Rechercher un utilisateur" required>
-                    <input type="submit" name="submit" value="Rechercher">
+                    <button type="submit" name="submit">Rechercher</button>
                 </form>
-                <!-- Affichage des résultats de recherche (si disponibles) -->
-                <?php if (!empty($searchResults)) { ?>
-                    <h3>Résultats de la recherche :</h3>
-                    <ul>
-                        <?php foreach ($searchResults as $user) { ?>
-                            <li>
-                                <?= $user['nickName'] ?> 
-                                <a href="index.php?ctrl=message&action=index&id=<?= $user['id_user'] ?>">Envoyer un message</a>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                <?php } ?>
             </div>
             <div class="messages">
+                 <!-- Affichage des résultats de recherche (si disponibles) -->
+                 <?php if (!empty($searchResults)) { ?>
+                    <div class="messages-search">
+                        <h3>Résultats de la recherche :</h3>
+                        <?php foreach ($searchResults as $user) { ?>
+                            <div class="search-result">
+                                <img class="status-img-nav" src="public/upload/<?= $user['avatar']?>" alt="photo de <?= ucfirst($user['nickName']) ?>">
+                                <p><?= ucfirst($user['nickName']) ?></p> 
+                                <a href="index.php?ctrl=message&action=index&id=<?= $user['id_user'] ?>">Envoyer un message</a>
+                            </div>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
                  <!-- Affichage de la notification si des messages non lus existent -->
                 <?php if ($unreadMessagesCount > 0){ ?>
                     <div class="notification" style="color:black">
                         <p>Vous avez <?= $unreadMessagesCount ?> nouveaux message(s)</p>
                     </div>
                 <?php } ?>
-                <?php foreach ($conversations as $conversation){ ?>
-                    <div>
-                        <a href="index.php?ctrl=message&action=index&id=<?= $conversation['id_user'] ?>">
-                        <p><?= $conversation['nickName'] ?></p>
-                    </div>
-                <?php } ?>
+                <?php if(!empty($conversations)){ ?>
+                    <?php foreach ($conversations as $conversation){ ?>
+                        <div class="contacts">
+                           <a class="contacts-menu" href="index.php?ctrl=message&action=index&id=<?= $conversation['id_user'] ?>">
+                                <img src="public/upload/<?= $conversation['avatar']?>" alt="photo de <?= ucfirst($conversation['nickName']) ?>">
+                                <p><?= ucfirst($conversation['nickName']) ?></p>
+                            </a> 
+                        </div>
+                    <?php } ?>
+                <?php } ?>    
             </div>
         </div>
         <div class="message_content2">
             <!-- Affichage des informations du destinataire -->
             <div class="message_contact">
                 <?php if (isset($recipient)){ ?>
-                    <figure>
                         <!-- Afficher l'avatar du destinataire -->
-                        <img src="public/upload/<?= $recipient->getAvatar()?>" class="status-img-nav" alt="<?= $recipient->getNickName() ?>" >
-                    </figure>
+                        <img src="public/upload/<?= $recipient->getAvatar()?>" alt=" photo de <?= $recipient->getNickName() ?>" >
                     <div class="profil_name">
-                        <p><?= $recipient->getNickName() ?></p>
+                        <p><?= ucfirst($recipient->getNickName()) ?></p>
                     </div>
                 <?php } ?>
             </div>
@@ -114,14 +115,25 @@
             <div class="message_discussion">
                 <?php if (!empty($messages)){ ?>
                     <?php foreach ($messages as $message){ ?>
-                        <div class="messages">
-                            <strong>De : <?= $message['nickName'] ?></strong>
-                            <p><a href="index.php?ctrl=message&action=index&id=<?= $message['id_message'] ?>"><?= $message['messages'] ?></a></p>
-                            <small>Envoyé le : <?= $message['dateMessage'] ?></small>
-                        </div>
+                        <?php if (App\Session::getUser()->getId() == $message['user_id']){ ?>
+                            <div class="messages-send">
+                                <div class="discussion-profil">
+                                    <p><?= ucfirst($message['messages']) ?></p>  
+                                    <img src="public/upload/<?= App\Session::getUser()->getAvatar()?>" class="status-img-nav"/>
+                                </div>
+                                <small>le <?= $message['dateMessage'] ?></small>
+                            </div>
+                        <?php }else{ ?>
+                            <div class="messages-users">
+                                <div class="discussion-users">
+                                    <img src="public/upload/<?= $message['avatar'] ?>" class="status-img-nav"/>
+                                    <p><?= ucfirst($message['messages']) ?></p>
+                                </div>
+                                <small>le <?= $message['dateMessage'] ?></small>
+                            </div>
+                        <?php } ?>
                     <?php } ?>
                 <?php } else { ?>
-                    <p>Aucun message à afficher.</p>
                 <?php } ?>
             </div>
 
@@ -130,12 +142,11 @@
                 <?php if (isset($recipient)){ ?>
                     <form method="post" action="index.php?ctrl=message&action=sendMessage&id=<?= $recipient->getId() ?>">
                         <textarea name="messages" placeholder="Écrire votre message" required></textarea>
-                        <input type="submit" name="submit_message" value="Envoyer">
+                        <button type="submit" name="submit_message"><i class="fa-solid fa-paper-plane"></i></button>
                     </form>
                 <?php } ?>
             </div>
         </div>
-    </div>
-      
- </div>
+    </div>  
+</div>
 

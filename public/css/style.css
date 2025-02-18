@@ -74,6 +74,7 @@ body {
 
 .grid2 {
     width: 100%;
+    height: 90vh;
     display: flex;
     padding: .5em 0 .5em 0;
 }
@@ -90,20 +91,22 @@ body {
     height: 100%;
     text-align: center;
     align-content: center;
+   
     
 }
 .left-logo img {
-    width: 50%;
-    
+    width: 100%;  
 }
 
 /******************************** Grid Right *************************/
 
 .right {
 
-    width: 40%;
+    width: 50%;
     margin: 2em 0;
+    padding-left: 4em;
     position: relative;
+    align-content: center;
 
 }
 
@@ -111,7 +114,7 @@ body {
 
 .welcomeTitle {
 
-    width: 100%;
+    width: 50%;
     font-family: "Inter", sans-serif;
     text-align: left;
     display: flex;
@@ -171,7 +174,7 @@ body {
 
 .btnInscription {
 
-    width: 75%;
+    width: 50%;
     height: 50px;
     background: white;
     border: none;
@@ -186,8 +189,8 @@ body {
     font-family: "Inter", sans-serif;
     font-weight: 600;
     font-size: 1.2em;
-    color: #011A46;
-    text-decoration: none;
+    color: #151C27;
+    
 
 }
 
@@ -197,11 +200,18 @@ body {
 
 }
 
+.btnInscription a:hover {
+
+    text-decoration: none;
+    color: #151C27;
+
+}
+
 /****************** Divider ******************/
 
 .separation2 {
 
-    width: 75%;
+    width: 50%;
     position: relative;
     margin-top: 1em;
     text-align: center;
@@ -239,13 +249,13 @@ body {
 
 .formInscription {
 
-    width: 100%;
+    width: 50%;
 
 }
 
 .submit2 {
 
-    width: 75%;
+    width: 100%;
     height: 50px;
     background: rgb(10, 44, 193);
     border: none;
@@ -262,7 +272,7 @@ body {
 
 .submit3 {
 
-    width: 75%;
+    width: 100%;
     height: 50px;
     background: none;
     border: 1px solid white;
@@ -317,12 +327,10 @@ body {
 
 footer {
 
-    border-top: 2px solid white;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    position: fixed;
     width: 100%;
     height: 80px;
 
@@ -330,7 +338,7 @@ footer {
 
 .footer {
 
-    width: 50%;
+    width: 100%;
     height: 100%;
     align-content: center;
 
@@ -359,6 +367,9 @@ small {
     font-family: "Inter", sans-serif;
     font-weight: 300;
     background-color: #011A46;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
 }
 
@@ -1528,86 +1539,121 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 
 .options-menu-profil ul li:hover {background-color: #f0f0f0; border-radius: 5px;}
 
+/***************************************************************** POST **************************************************************************/
+
 /***************************************************************** MESSAGEIRE **************************************************************************/
-.grid3 {
-    width: 100%;
-    height: 93vh;
-    display: flex;
-}
 
-.messagerie_container {
+.messagerie_container {width: 79%;height: 100%;display: flex;font-family: "Inter", sans-serif;}
 
-    box-shadow: 7px 7px 7px rgba(0, 0, 0, .1);
+.message_content {width: 40%;height: 100%;background-color: rgba(255, 255, 255, 0.782);border-right: 4px solid var(--base);}
 
-    width: 70%;
-    height: 90%;
-    display: flex;
-    margin: 2.7em 0 0 10em;
-    border-radius: 25px;
+.message_profil {width: 100%;height: 17%;display: flex;align-items: center;padding: 0 2em;gap: 15px;}
+
+.status-img-msg{ width: 60px;height: 60px;object-fit: cover;border-radius: 50%;}
+
+.profil_informations{height: 100%;align-content: center;}
+
+.profil_informations p{margin: 0;color: #151C27;font-size: 1.5em;font-weight: 700;}
+
+.message_search {width: 100%;height: 7%;background: #151C27;}
+
+.message_search form {width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;position: relative;}
+
+.message_search input {width: 90%;height: 60%; background-color: white;border: none;padding: 0 1em;border-radius: 20px;}
+
+.message_search button {width: 20%;height: 40%;border-radius: 20px;position: absolute;border: none;right: 6%;background: #74D4FD;color: #151C27;}
+
+.message_search button:hover {cursor: pointer;}
+
+.messages{width: 100%;overflow: auto;display: flex;flex-direction: column;}
+
+.messages-search{width: 100%;padding: 0 2em;}
+
+.messages-search h3{color: #151C27;font-size: 1.5em;font-weight: 700;}
+
+.search-result{width: 100%;display: flex;gap: 10px;padding: .5em 0;align-items: center;}
+
+.search-result p{color: #151C27;font-size: 1em;font-weight: 550;margin: 0;}
+
+.search-result a{color: #0A4DC1;font-size: 1em;font-weight: 550;margin: 0;}
+
+.contacts {display: flex;width: 100%;height: 80px; align-items: center;}
+
+.contacts-menu {display: flex;width: 100%;height: 100%; padding: 2em 2em;gap: 10px;align-items: center;list-style: none;}
+
+.contacts-menu:hover {background-color: #74d4fd45;text-decoration: none;}
+
+.contacts p {width: 80%;margin: 0;color: #151C27;font-size: 1em;font-weight: 550;}
+
+.contacts-menu img{ width: 45px;height: 45px;object-fit: cover;border-radius: 50%;}
+
+.message_content2 {width: 60%;height: 100%;background-color: rgba(255, 255, 255, 0.782);}
+
+.message_contact {width: 100%;height: 10%;display: flex;padding: 1em 2em;align-items: center;gap: 10px;}
+
+.message_contact img{ width: 45px;height: 45px;object-fit: cover;border-radius: 50%;}
+
+.message_contact p {width: 100%;margin: 0;color: #151C27;font-size: 1em;font-weight: 550;}
+
+.message_discussion {width: 100%;height: 85%;background: var(--base);padding: 1em 2em;}
+
+.messages-send {width: 100%;display: flex;flex-direction: column;padding: 1em 0;}
+
+.discussion-profil{display: flex;justify-content: right;width: 100%; gap: 10px;}
+
+.discussion-profil p{color: white;font-size: 1em;font-weight: 500;background: #151C27;text-align: right;border-radius: 25px;padding: .5em 1em;margin: 0;}
+
+.messages-send small{color: #151C27;font-size: .8em;font-weight: 300;text-align: right;width: 100%;padding: .5em 4em 0 0;}
+
+.messages-users {width: 100%;display: flex;flex-direction: column;padding: 1em 0;}
+
+.discussion-users{display: flex;justify-content: left;width: 100%;gap: 10px;}
+
+.discussion-users p{color: white;font-size: 1em;font-weight: 500;background: #151C27;text-align: right;border-radius: 25px;padding: .5em 1em;margin: 0;}
+
+.messages-users small{color: #151C27;font-size: .8em;font-weight: 300;text-align: left;width: 100%;padding: .5em 0 0 4em;}
+
+.send_message{width: 100%;height: 5%;}
+
+.send_message form{display: flex;width: 100%;height: 100%;}
+
+.send_message form textarea{width: 92%;height: 100%; border: none;align-content: center;padding-left: 1em;}
+
+.send_message form button{width: 8%;height: 100%; border: none;align-content: center;background: #0A4DC1;cursor: pointer;}
+
+.send_message form button:hover{background: #151C27;}
+
+.send_message form button i{color: white;}
 
 
-}
-
-.message_content {
-
-    width: 40%;
-    height: 100%;
-    background: white;
-    border-bottom-left-radius: 25px;
-    border-top-left-radius: 25px;
-
-}
-
-.message_profil {
-
-    width: 100%;
-    height: 17%;
-    background: linear-gradient(90deg, rgba(116, 212, 253, 1) 0%, rgba(10, 77, 193, 1));
-    border-top-left-radius: 25px;
-
-}
-
-.message_search {
-
-    width: 100%;
-    height: 5%;
-    background: #0a4dc1;
-
-}
-
-.message_search form {
-
-    width: 80%;
-    text-align: center;
-}
-
-.message_content2 {
-
-    width: 60%;
-    height: 100%;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-
-}
-
-.message_contact {
-
-    background: white;
-    width: 100%;
-    height: 60px;
-    border-top-right-radius: 25px;
-}
-
-.message_discussion {
-
-    width: 100%;
-    height: 560px;
-    background: #f6f6f6;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-}
 
 /*===================================================================== FORUM ===========================================================================*/
+
+#category{width: 100%;border-bottom: 1px solid #BEBEBE;}
+
+#title-category th{ color: #676767;font-size: 1.1em;font-weight: 600; }
+
+#title-topic{width: 40%;}
+
+#title-user{width: 25%; text-align: center;}
+
+#title-reply{width: 25%;text-align: center;}
+
+#title-view{width: 10%;text-align: center;}
+
+#product-hover{border-bottom: 1px solid #BEBEBE;}
+
+#product-hover:hover{background-color: #74d4fd45;cursor: pointer;}
+
+#topic{font-weight: 600;align-content: center;}
+
+.user-topic{display: flex;align-items: center;gap: 10px;justify-content: left;}
+
+.user-topic p{margin: 0;}
+
+.user-topic a:hover {color: #151C27;scale: 1.12;transition: .3s;}
+
+.info-topic{text-align: center;}
 
 /***************************************************************** CATEGORY **************************************************************************/
 
@@ -1920,8 +1966,6 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 }
 
 .container-topic{ width: 100%;font-family: "Inter", sans-serif;color: #151C27;}
-
-#recap{}
 
 #category{width: 100%;border-bottom: 1px solid #BEBEBE;}
 

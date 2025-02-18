@@ -15,14 +15,33 @@ class adminController extends AbstractController implements ControllerInterface 
 
         $manager = new UserManager();
 
-        $users = $manager->findAll(['dateInscription', 'DESC']);
+        $limit = 5; 
+
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+        
+        $totalUsers = $manager->totalUsers();
+        
+        // Calcul du nombre total de pages
+        $totalPages = ceil($totalUsers / $limit);
+    
+        // Si la page est au-delà du nombre total de pages, on la redirige à la dernière page
+        if ($page > $totalPages) {
+            $page = $totalPages;
+        }
+        
+        // Récupérer les événements pour la page actuelle
+        $start = ($page - 1) * $limit;
+
+        $users = iterator_to_array($manager->findAllUsers($start, $limit));
 
         return [
             
             "view" => VIEW_DIR."security\admin.php",
             "meta_description" => "Liste des utilisateurs du forum",
             "data" => [ 
-                "users" => $users
+                "users" => $users,
+                "page" => $page,
+                "totalPages" => $totalPages
             ]
         ];
     }
