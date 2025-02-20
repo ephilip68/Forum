@@ -148,15 +148,19 @@
                         <div class="album-home box-box">
                             <div class="status-main-content">
                                 <div class="status-main-home">
-                                    <img src="public/upload/<?=$publication->getUser()->getAvatar()?>" class="status-img"/>
+                                    <img src="public/upload/<?= htmlspecialchars($publication->getUser()->getAvatar()) ?>" class="status-img"/>
                                     <div class="album-detail-home">
-                                        <div class="album-title-home"><a href="index.php?ctrl=security&action=profile&id=<?=$publication->getUser()->getId()?>"><?=ucfirst($publication->getUser()->getNickName())?></a></div>
-                                        <div class="album-date-home"><?=$publication->getFormattedPublicationDate()?></div>
+                                        <div class="album-title-home">
+                                            <a href="index.php?ctrl=security&action=profile&id=<?= htmlspecialchars($publication->getUser()->getId()) ?>">
+                                                <?= htmlspecialchars(ucfirst($publication->getUser()->getNickName())) ?>
+                                            </a>
+                                        </div>
+                                        <div class="album-date-home"><?= htmlspecialchars($publication->getFormattedPublicationDate()) ?></div>
                                     </div>
                                     <div class="home-option">
                                         <?php if(App\Session::getUser()->getId() == $publication->getUser()->getId()) { ?>
                                             <button type="button" class="options-btn"><span uk-icon="icon: more"></span></button>
-                                            <a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?> "><i class="fa-solid fa-xmark home-close"></i></a>
+                                            <a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?>"><i class="fa-solid fa-xmark home-close"></i></a>
                                         <?php }else{ ?>
                                             <button type="button" class="options-btn"><span uk-icon="icon: more"></span></button>
                                         <?php } ?>
@@ -170,10 +174,10 @@
                                     </div>
                                 </div>
                                 <div class="album-content-home">
-                                    <p><?=ucfirst($publication->getContent())?></p>
+                                    <p><?= htmlspecialchars(ucfirst($publication->getContent())) ?></p>
                                 </div>
                                 <div class="album-photos-home">
-                                    <img src="public/upload/<?=$publication->getPhoto()?>" alt="" class="album-photo-home"/>
+                                    <img src="public/upload/<?= htmlspecialchars($publication->getPhoto()) ?>" alt="" class="album-photo-home"/>
                                 </div>
                                 <div class="album-actions-home">
                                     <div class="action-reaction">
@@ -182,10 +186,10 @@
                                                 <?php if($publication->getId() == $count['id']){ ?>
                                                     <?php if($count['count'] > 0){ ?>
                                                         <i class="fa-solid fa-heart" style="color:red"></i>
-                                                        <span><?= $count['count'] ?></span>
+                                                        <span><?= htmlspecialchars($count['count']) ?></span>
                                                     <?php }else{ ?>
                                                         <i class="fa-regular fa-heart"></i>
-                                                        <span><?= $count['count'] ?></span>
+                                                        <span><?= htmlspecialchars($count['count']) ?></span>
                                                     <?php } ?>
                                                 <?php } ?>
                                             <?php } ?>

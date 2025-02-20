@@ -105,7 +105,7 @@ class PublicationController extends AbstractController implements ControllerInte
                     // Liste des extensions et types MIME autorisés pour l'image
                     $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png", "webp" => "image/webp");
                     
-                    // Récupère le nom du fichier, son type MIME et sa taille
+                    // Récupère le nom du fichier
                     $filename = $_FILES["photo"]["name"];
                     $filetype = $_FILES["photo"]["type"];
                     $filesize = $_FILES["photo"]["size"];
@@ -121,7 +121,8 @@ class PublicationController extends AbstractController implements ControllerInte
                     // Vérifie la taille du fichier, ici on limite à 5Mo
                     $maxsize = 5 * 1024 * 1024;
                     if($filesize > $maxsize) {
-                        SESSION::addFlash('error', "La taille du fichier est supérieure à la limite autorisée !");die; // Si la taille est trop grande, on arrête
+                        // Si la taille est trop grande, on arrête le téléchargement
+                        SESSION::addFlash('error', "La taille du fichier est supérieure à la limite autorisée !");die; 
                     }
 
                     // Vérifie que le type MIME du fichier est valide
@@ -134,6 +135,7 @@ class PublicationController extends AbstractController implements ControllerInte
                             echo $_FILES["photo"]["name"] . " existe déjà."; 
 
                         } else{
+                            
                             // Si tout est correct, on déplace le fichier téléchargé vers le dossier "public/upload"
                             move_uploaded_file($_FILES["photo"]["tmp_name"], "public/upload/" . $_FILES["photo"]["name"]);
 

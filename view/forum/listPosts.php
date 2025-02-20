@@ -232,14 +232,13 @@ include VIEW_DIR."template/nav.php";
                     <?php } ?>
                 <?php }else{ ?>
                 <?php } ?>
-            </div>
-            
+            </div>   
         </div>
     </div>
 </section>
 <script>
 
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         // Récupérer tous les liens de "toggle-comments"
         var toggleLinks = document.querySelectorAll('.toggle-comments');
 
