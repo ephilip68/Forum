@@ -33,9 +33,9 @@ class MessageManager extends Manager{
     // Méthode pour récupérer le nombre de messages non lus
     public function unreadMessagesCount($user_id) {
         // SQL pour récupérer le nombre de messages non lus pour l'utilisateur
-        $sql = "SELECT COUNT(*) 
+        $sql = "SELECT COUNT(*)
         FROM " . $this->tableName . " m
-        WHERE user_id_1 = :user_id AND m.status = 'unread'";
+        WHERE m.user_id_1 = :user_id AND m.status = 'unread'";
 
         return $this->getSingleScalarResult(
             DAO::select($sql, ['user_id' => $user_id], false),  
@@ -60,12 +60,12 @@ class MessageManager extends Manager{
 
     public function getConversations($user_id){
 
-        $sql =" SELECT u.id_user, u.nickName, u.avatar
+        $sql =" SELECT u.id_user, u.nickName, u.avatar, m.user_id_1
         FROM " . $this->tableName . " m
         INNER JOIN user u ON u.id_user = m.user_id_1 AND m.user_id = :user_id
         OR m.user_id = u.id_user AND m.user_id_1 = :user_id
         WHERE m.user_id = :user_id OR m.user_id_1 = :user_id
-        GROUP BY u.id_user";
+        GROUP BY m.user_id";
 
         // Exécute la requête avec DAO::select et récupère un seul résultat
        $result = DAO::select($sql, ['user_id' => $user_id], true);

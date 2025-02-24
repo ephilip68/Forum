@@ -36,6 +36,8 @@ include VIEW_DIR."template/nav.php";
                     </div>
                     <div class="modal-body">
                         <form action="index.php?ctrl=forum&action=addCategory" method="post" enctype="multipart/form-data">
+                            <!-- Champ pour le token CSRF -->
+                            <input type="hidden" name="csrf_token" value="<?php echo \App\Session::generateCsrfToken(); ?>">
                             <div class="modal-comment">
                                 <div class="modal-Form">
                                     <input id="content" type="text" name="title" placeholder="Nom de la catégorie">

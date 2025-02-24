@@ -56,24 +56,24 @@
                     <a class="btn-close uk-modal-close close-close" ><i class="fa-solid fa-xmark"></i></a>
                 </div>
                 <div class="modal-body">
-                    <form action="index.php?ctrl=event&action=addEvent" method="post" enctype="multipart/form-data">
-                        <div uk-form-custom >
-                            <input type="file" name="photo" id="fileUpload" data-target="image-5">
-                            <div class="js-upload uk-placeholder uk-text-center">
-                                <span uk-icon="icon: cloud-upload"></span>
-                                <span class="uk-text-middle">Ajouter des photos/vidéos</span>
-                                <span class="link">ou faites glisser-déposer</span>
-                                <img src="#" alt="" class="image-5" style="margin-top: 20px;">
-                            </div>
-                        </div> 
+                    <form action="index.php?ctrl=event&action=addEvent" method="POST" enctype="multipart/form-data">
                         <div class="modal-comment">
                             <div class="modal-Form">
+                                <div uk-form-custom >
+                                    <input type="file" name="photo" id="fileUpload" data-target="image-5">
+                                    <div class="js-upload uk-placeholder uk-text-center">
+                                        <span uk-icon="icon: cloud-upload"></span>
+                                        <span class="uk-text-middle">Ajouter des photos/vidéos</span>
+                                        <span class="link">ou faites glisser-déposer</span>
+                                        <img src="#" alt="" class="image-5" style="margin-top: 20px;">
+                                    </div>
+                                </div> 
                                 <input id="content" name="title" placeholder="Titre de l'évènement!" required>
                                 <input id="content" type="date" name="eventDate" required>
                                 <input id="content" type="time" name="eventHours" required>
                                 <input id="content" type="text" name="city" placeholder="lieu" required>
                                 <input id="content" type="text" name="country" placeholder="Pays" required>
-                                <input id="content" type="number" name="limit" placeholder="nombres de place" required>
+                                <input id="content" type="number" name="limits" placeholder="nombres de place" required>
                                 <textarea id="content" name="text" placeholder="Détail de lévènemnt"required></textarea>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                                 <div class="eventPlace">
                                     <?php foreach($countParticipants as $participant) { ?>
                                         <?php if($participant['id'] == $event->getId()) { ?>
-                                            <span class="event-place"><?= $event->getLimit() ?> places | <?= $participant['numberParticipants'] ?> participant<?= $participant['numberParticipants'] > 1 ? "s" : ""  ?></span>
+                                            <span class="event-place"><?= $event->getLimits() ?> places | <?= $participant['numberParticipants'] ?> participant<?= $participant['numberParticipants'] > 1 ? "s" : ""  ?></span>
                                             <?php if($participant['limitMax']) { ?> 
                                                 <span class="event-limit">Evènement complet</span>
                                             <?php }else{ ?>

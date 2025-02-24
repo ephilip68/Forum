@@ -14,6 +14,7 @@ use Model\Managers\FavoritesManager;
 use Model\Managers\FavoritesPostManager;
 use Model\Managers\TopicManager;
 use Model\Managers\EventManager;
+use Model\Managers\MessageManager;
 
 class PublicationController extends AbstractController implements ControllerInterface {
 
@@ -35,6 +36,9 @@ class PublicationController extends AbstractController implements ControllerInte
 
         // Créer une nouvelle instance de TopicManager
         $topicManager = new TopicManager();
+
+        // Créer une nouvelle instance de MessageManager
+        $messageManager = new MessageManager();
 
         // récupére la liste de toutes les publications 
         $publications = iterator_to_array($publicationManager->findAll());
@@ -64,6 +68,9 @@ class PublicationController extends AbstractController implements ControllerInte
         // Récupére les 2 derniers topics du forum
         $lastTwoTopics = $topicManager->findLastTwoTopics();
 
+        // Vérifie les messages non lus
+        $unreadMessagesCount = $messageManager->unreadMessagesCount($id);
+
         
         return [
 
@@ -74,9 +81,10 @@ class PublicationController extends AbstractController implements ControllerInte
                 "publications" => $publications,
                 "commentPublications" => $commentPublications,
                 "friends" => $friends,
-                "lastTwoTopics" =>$lastTwoTopics,
-                "countLikes" =>$countLikes,
-                "userLike" =>$userLike
+                "lastTwoTopics" => $lastTwoTopics,
+                "countLikes" => $countLikes,
+                "userLike" => $userLike,
+                "unreadMessagesCount" => $unreadMessagesCount
    
             ]
         ];

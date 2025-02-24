@@ -44,4 +44,27 @@ class Session{
         }
         return false;
     }
+
+    /**
+     * Génère ou récupère le token CSRF.
+     *
+     * @return string
+     */
+    public static function generateCsrfToken() {
+        if (!isset($_SESSION['csrf_token'])) {
+            // Utilisation de random_bytes pour obtenir une chaîne cryptographiquement sûre
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['csrf_token'];
+    }
+
+    /**
+     * Vérifie la validité du token CSRF fourni.
+     *
+     * @param string $token
+     * @return bool
+     */
+    public static function verifyCsrfToken($token) {
+        return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+    }
 }

@@ -29,6 +29,7 @@ class EventManager extends Manager{
 
     }
 
+
     // Recherche d'un utilisateur
     public function searchEvents($title) {
 
@@ -70,14 +71,14 @@ class EventManager extends Manager{
     // Vérifier si l'évènement est complet
     public function limitMax($id) {
         
-        $sql = "SELECT e.limit 
+        $sql = "SELECT e.limits 
         FROM " . $this->tableName . " e
         WHERE e.id_event = :id";
 
         // Exécute la requête avec DAO::select et récupère un seul résultat
         $result = DAO::select($sql, ['id' => $id], false);
     
-        return $result ['limit'] ?? 0;
+        return $result ['limits'] ?? 0;
     }
 
 

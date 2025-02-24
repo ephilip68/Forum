@@ -21,7 +21,7 @@ final class Event extends Entity{
     private $city;
     private $country;
     private $user;
-    private $limit;
+    private $limits;
 
 
 
@@ -261,9 +261,9 @@ final class Event extends Entity{
     /**
      * Get the value of limit
      */ 
-    public function getLimit()
+    public function getLimits()
     {
-        return $this->limit;
+        return $this->limits;
     }
 
     /**
@@ -271,9 +271,9 @@ final class Event extends Entity{
      *
      * @return  self
      */ 
-    public function setLimit($limit)
+    public function setLimits($limits)
     {
-        $this->limit = $limit;
+        $this->limits = $limits;
 
         return $this;
     }

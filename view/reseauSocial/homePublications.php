@@ -5,9 +5,17 @@
     $lastTwoTopics = $result["data"]["lastTwoTopics"];
     $userLike = $result["data"]["userLike"];
     $countLikes = $result["data"]["countLikes"];
+    $unreadMessagesCount = $result["data"]["unreadMessagesCount"];
 
     include VIEW_DIR."template/nav.php";
 ?>
+
+ <!-- Affichage de la notification si des messages non lus existent -->
+ <?php if ($unreadMessagesCount > 0){ ?>
+    <div class="notification">
+        <p><?= $unreadMessagesCount ?></p>
+    </div>
+<?php } ?>
 
 <div class="container-home" >
     <div class="alert">

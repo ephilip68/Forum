@@ -1072,7 +1072,7 @@ nav {
 
 /*********** Publication ***********/
 
-.main {flex-grow: 1;display: flex;flex-direction: column;background-color: none;width: 50%;font-family: "Inter", sans-serif;}
+.main {flex-grow: 1;display: flex;flex-direction: column;background-color: none;width: 50%;}
 
 .main-container-home {width: 75%;flex-grow: 1;overflow: auto;background-color: var(--base);}
 
@@ -1080,6 +1080,9 @@ nav {
 
 .timeline-center { flex-grow: 1;justify-items: center;width: 70%;}
 
+.notification{position: absolute;top: 1.5%;left: 39.8%; z-index: 2;background: red;border-radius: 50%;height: 1.8%;min-width: 1%;display: flex;flex-direction: column;justify-content: center;align-items: center;}
+
+.notification p {margin: 0;color: white;font-size: .8em;font-family: "Inter", sans-serif;}
 .box-box {
 
     background-color: rgba(255, 255, 255, 0.782);
@@ -1367,10 +1370,69 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 
 /***************************************************************** DETAIL EVENT *********************************************************************/
 
-.profileEvent {position: relative;width: 85%;height: 450px;z-index: 1;}
+.main-container-detail { width: 100%;padding: 0 10px 0 20px;overflow: auto;background-color: var(--base);justify-items: center;min-height: 100vh;}
+
+.profileEvent {position: relative;width: 85%;height: 400px;z-index: 1;}
 
 .profile-event-cover {width: 100%;height: 100%;object-fit: cover;object-position: center;border-radius: 0 0 15px 15px;}
 
+.detailButton{width: 85%;height: 80px;}
+
+.detailBtn{display: flex;width: 100%;height: 100%; gap: 30px;justify-content: center;align-items: center;}
+
+.participant-btn{width: 15%;height: 34px;gap: 10px;display: flex; justify-content: center;align-items: center;border-radius: 5px;border: none;background-color: #74d4fd78;color: #0A4DC1;}
+
+.participant-btn:hover{color: #0a4dc1;background: #74d4fd44; text-decoration: none;}
+
+.participant-btn2{width: 15%;height: 34px;gap: 10px;display: flex; justify-content: center;align-items: center;border-radius: 5px;border: none;background-color: rgba(128, 128, 128, 0.778);color: white;}
+
+.participant-btn2:hover{color: white;background: rgba(128, 128, 128, 0.446); text-decoration: none;}
+
+.timeline-detail{width: 85%;display: flex;justify-content: space-between;}
+
+.timeline-left-detail{width: 48%;min-height: 300px;font-family: "Inter", sans-serif;justify-items: left;}
+
+.detail-box{background-color: rgb(255, 255, 255);border-radius: 15px;box-shadow: 0 7px 7px rgba(0, 0, 0, .1);width: 100%;min-height: 300px;padding: 1em 2em;}
+
+.detail-box h3{font-weight:700;font-size: 1.8em; color: #151C27;text-align: center;}
+
+.detail-title{width: 100%;height: 120px; color: #151C27;font-weight: 500;font-size: 1.2em; justify-content: space-between;display: flex;flex-direction: column;padding: .5em 0;}
+
+.detail-time{color: red !important;}
+
+.detail-title p{font-weight: 700;font-size: 1.2em;margin: 0;}
+
+.info-detail{width: 100%;min-height: 150px;padding-top: 1em;}
+
+.info-content{color: #151C27;font-weight: 400;font-size: 1.1em;display: flex;flex-direction: column;gap: 20px;height: 100%;justify-content: center;}
+
+.info-content p{margin: 0;}
+
+.info-content i{color: #0A4DC1;padding-right: .5em;}
+
+.timeline-right-detail{width: 48%;min-height: 300px;font-family: "Inter", sans-serif;color: #151C27;}
+
+.detail-box-right{background-color: rgb(255, 255, 255);border-radius: 15px;box-shadow: 0 7px 7px rgba(0, 0, 0, .1);width: 100%;height: 355px;padding: 1em 2em;}
+
+.detail-box-right h3{font-weight:700;font-size: 1.8em; color: #151C27;text-align: center;}
+
+.detail-box-img{border: 1px solid #b7b7b7;width: 100%;height: 260px;border-radius: 15px;box-shadow: 0 7px 7px rgba(0, 0, 0, .1);}
+
+.detail-img{width: 100%; display: flex;flex-direction: column;align-items: center;justify-content: center; height: 200px;padding: 1em 0;border-bottom: 1px solid #cacaca;}
+
+.detail-img img{width: 120px;height: 120px;border-radius: 50%;}
+
+.detail-img a{font-weight: 500;font-size: 1.2em;}
+
+.detail-img a:hover{color: #151C27;}
+
+.info-button{width: 100%;height: 60px;}
+
+.info-btn{width: 100%;height: 100%; display: flex; justify-content: center;align-items: center;}
+
+.info-btn a{width: 90%;height: 40px;gap: 10px;display: flex; justify-content: center;align-items: center;border-radius: 5px;border: none;background-color: #0A4DC1;color: white;}
+
+.info-btn a:hover{text-decoration: none;color: white;background: #151C27}
 /***************************************************************** ENREGISTREMENT *********************************************************************/
 
 .timeline-favorites{width: 100%;padding: 40px;display: flex;gap: 20px;}

@@ -6,6 +6,7 @@ use App\ControllerInterface;
 use App\Session;
 use Model\Managers\EventManager;
 use Model\Managers\ParticipantManager;
+use Model\Managers\FollowManager;
 
 class EventController extends AbstractController implements ControllerInterface {
 
@@ -77,7 +78,7 @@ class EventController extends AbstractController implements ControllerInterface 
             $eventHours = filter_input(INPUT_POST, "eventHours", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $city = filter_input(INPUT_POST, "city", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $country = filter_input(INPUT_POST, "country", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $limit = filter_input(INPUT_POST, "limit", FILTER_VALIDATE_INT);
+            $limit = filter_input(INPUT_POST, "limits", FILTER_VALIDATE_INT);
             
             if($title && $text && $eventDate && $eventHours && $city && $country && $limit){
 
@@ -87,7 +88,7 @@ class EventController extends AbstractController implements ControllerInterface 
                     // Liste des extensions et types MIME autorisés pour l'image
                     $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png", "webp" => "image/webp");
                     
-                    // Récupère le nom du fichier, son type MIME et sa taille
+                    // Récupère le nom du fichier
                     $filename = $_FILES["photo"]["name"];
                     $filetype = $_FILES["photo"]["type"];
                     $filesize = $_FILES["photo"]["size"];
@@ -97,13 +98,14 @@ class EventController extends AbstractController implements ControllerInterface 
 
                     // Vérifie si l'extension du fichier est dans la liste des extensions autorisées
                     if(!array_key_exists($ext, $allowed)) {
-                        die("Erreur : Veuillez sélectionner un format de fichier valide."); // Si l'extension n'est pas valide, on arrête l'exécution
+                        SESSION::addFlash('error', "Sélectionner un format de fichier valide !");die; // Si l'extension n'est pas valide, on arrête l'exécution
                     }
 
                     // Vérifie la taille du fichier, ici on limite à 5Mo
                     $maxsize = 5 * 1024 * 1024;
                     if($filesize > $maxsize) {
-                        die("Erreur : La taille du fichier est supérieure à la limite autorisée."); // Si la taille est trop grande, on arrête
+                        // Si la taille est trop grande, on arrête le téléchargement
+                        SESSION::addFlash('error', "La taille du fichier est supérieure à la limite autorisée !");die; 
                     }
 
                     // Vérifie que le type MIME du fichier est valide
@@ -113,26 +115,27 @@ class EventController extends AbstractController implements ControllerInterface 
                         if(file_exists("upload/" . $_FILES["photo"]["name"])){
 
                             // Si le fichier existe déjà, on affiche un message d'erreur
-                            echo $_FILES["photo"]["name"] . " existe déjà."; 
+                            SESSION::addFlash('error', "le fichier existe déjà !"); 
 
                         } else{
+                            
                             // Si tout est correct, on déplace le fichier téléchargé vers le dossier "public/upload"
                             move_uploaded_file($_FILES["photo"]["tmp_name"], "public/upload/" . $_FILES["photo"]["name"]);
-
+                            
                             // Si le téléchargement a réussi
-                            echo "Votre fichier a été téléchargé avec succès."; 
+                            SESSION::addFlash('success', "Votre fichier a été téléchargé avec succès !"); 
                         }
 
                     } else{
 
                         // Si le type MIME n'est pas autorisé
-                        echo "Erreur : Il y a eu un problème de téléchargement de votre fichier. Veuillez réessayer."; 
+                        SESSION::addFlash('error', "Problème lors du téléchargement. Réessayer !");
                     }
 
                 } else{
 
-                    // Si le téléchargement du fichier a échoué, on affiche l'erreur associée
-                    echo "Erreur: " . $_FILES["photo"]["error"];
+                    // Si le téléchargement du fichier a échoué
+                    SESSION::addFlash('error', "Erreur !");
                 }
 
                 // Créer une nouvelle instance de PublicationManager 
@@ -145,16 +148,16 @@ class EventController extends AbstractController implements ControllerInterface 
                 $userId = Session::getUser()->getId();
 
                 // Crée un tableau associatif contenant les données à insérer dans la base de données
-                $data = ['photo'=>$photo, 'title'=>$title, 'text'=>$text, 'eventDate'=>$eventDate, 'eventHours'=>$eventHours, 'city'=>$city, 'country'=>$country, 'user_id'=>$userId, 'limit'=>$limit];
+                $data = ['photo'=>$photo, 'title'=>$title, 'text'=>$text, 'eventDate'=>$eventDate, 'eventHours'=>$eventHours, 'city'=>$city, 'country'=>$country, 'limits'=>$limit, 'user_id'=>$userId];
 
                 // Appelle la méthode 'add' de PublicationManager pour ajouter la nouvelle publication dans la base de données
                 $eventManager->add($data);
-
-                SESSION::addFlash('success', "L'évnèment a bien été ajouté !");
-
+            
                 // Redirige vers la page principale des publications après l'ajout
                 $this->redirectTo("event", "index");
-            
+
+                SESSION::addFlash('success', "L'évnèment a bien été ajouté !");
+           
                 return [
 
                     "view" => VIEW_DIR."reseauSocial/listEvents.php",
@@ -203,6 +206,9 @@ class EventController extends AbstractController implements ControllerInterface 
 
         $participantManager = new ParticipantManager();
 
+        // Créer une nouvelle instance de FollowManager 
+        $followManager = new FollowManager();
+
         $event = $eventManager->findOneById($eventId);
 
         if ($isParticipant = $participantManager->isParticipant($eventId, $userId)) {
@@ -215,6 +221,15 @@ class EventController extends AbstractController implements ControllerInterface 
 
         $limitMax = ($nombreParticipants >= $limit);
 
+        // Vérifier si l'utilisateur connecté suit déjà cet utilisateur
+        $isFollowing = $followManager->following($userId, $event->getUser()->getId());
+
+        if ($isFollowing && $_GET['action'] !== 'detailEvents') {
+            $this->redirectTo("event", "event&action=detailEvents&id=$eventId");
+            return;
+        }
+        
+
         return [
 
             "view" => VIEW_DIR."reseauSocial/detailEvent.php",
@@ -224,7 +239,9 @@ class EventController extends AbstractController implements ControllerInterface 
                 "limit" => $limit,
                 "nombreParticipants" => $nombreParticipants,
                 "limitMax" => $limitMax,
-                "isParticipant" => $isParticipant
+                "isParticipant" => $isParticipant,
+                "isFollowing" => $isFollowing
+
             ]
             
         ];
@@ -301,4 +318,7 @@ class EventController extends AbstractController implements ControllerInterface 
 
         ];
     }
+
 }
+
+

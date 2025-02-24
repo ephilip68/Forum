@@ -83,18 +83,21 @@
                 <?php } ?>
                  <!-- Affichage de la notification si des messages non lus existent -->
                 <?php if ($unreadMessagesCount > 0){ ?>
-                    <div class="notification" style="color:black">
+                    <div class="notification-message" style="color:black">
                         <p>Vous avez <?= $unreadMessagesCount ?> nouveaux message(s)</p>
                     </div>
                 <?php } ?>
                 <?php if(!empty($conversations)){ ?>
                     <?php foreach ($conversations as $conversation){ ?>
-                        <div class="contacts">
-                           <a class="contacts-menu" href="index.php?ctrl=message&action=index&id=<?= $conversation['id_user'] ?>">
-                                <img src="public/upload/<?= $conversation['avatar']?>" alt="photo de <?= ucfirst($conversation['nickName']) ?>">
-                                <p><?= ucfirst($conversation['nickName']) ?></p>
-                            </a> 
-                        </div>
+                        <?php if ($unreadMessagesCount > 0){ ?>
+                            <div class="contacts">
+                                <a class="contacts-menu" href="index.php?ctrl=message&action=index&id=<?= $conversation['id_user'] ?>">
+                                    <img src="public/upload/<?= $conversation['avatar']?>" alt="photo de <?= ucfirst($conversation['nickName']) ?>">
+                                    <p><?= ucfirst($conversation['nickName']) ?></p>
+                                    <p><?= $unreadMessagesCount ?> </p>
+                                </a> 
+                            </div>
+                        <?php } ?>
                     <?php } ?>
                 <?php } ?>    
             </div>

@@ -186,6 +186,12 @@ class ForumController extends AbstractController implements ControllerInterface{
 
         // Vérifie si le formulaire a été soumis via la méthode POST
         if (isset($_POST["submit"])) {
+
+            // // Vérification du token CSRF
+            $csrf_token = filter_input(INPUT_POST, "csrf_token", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            if (!\App\Session::verifyCsrfToken($csrf_token)) {
+                die("Token CSRF invalide, requête annulée.");
+            }
             
             // La fonction filter_input() permet de valider et nettoyer les données transmises via le formulaire.
             // Le filtre FILTER_SANITIZE_FULL_SPECIAL_CHARS supprime les caractères spéciaux et les balises HTML, les encodant pour éviter des problèmes de sécurité (XSS).

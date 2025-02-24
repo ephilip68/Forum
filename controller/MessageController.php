@@ -44,7 +44,7 @@ class MessageController extends AbstractController implements ControllerInterfac
         if ($recipientId > 0) {
 
             // Marquer les messages comme lus 
-            $messageManager->markAsRead($user_id, $recipientId);
+            $readMessage = $messageManager->markAsRead($user_id, $recipientId);
 
             $messages = $messageManager->messagesBetweenUsers($user_id, $recipientId);
     
