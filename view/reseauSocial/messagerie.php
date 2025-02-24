@@ -89,15 +89,12 @@
                 <?php } ?>
                 <?php if(!empty($conversations)){ ?>
                     <?php foreach ($conversations as $conversation){ ?>
-                        <?php if ($unreadMessagesCount > 0){ ?>
-                            <div class="contacts">
-                                <a class="contacts-menu" href="index.php?ctrl=message&action=index&id=<?= $conversation['id_user'] ?>">
-                                    <img src="public/upload/<?= $conversation['avatar']?>" alt="photo de <?= ucfirst($conversation['nickName']) ?>">
-                                    <p><?= ucfirst($conversation['nickName']) ?></p>
-                                    <p><?= $unreadMessagesCount ?> </p>
-                                </a> 
-                            </div>
-                        <?php } ?>
+                        <div class="contacts">
+                           <a class="contacts-menu" href="index.php?ctrl=message&action=index&id=<?= $conversation['id_user'] ?>">
+                                <img src="public/upload/<?= $conversation['avatar']?>" alt="photo de <?= ucfirst($conversation['nickName']) ?>">
+                                <p><?= ucfirst($conversation['nickName']) ?></p>
+                            </a> 
+                        </div>
                     <?php } ?>
                 <?php } ?>    
             </div>
