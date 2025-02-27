@@ -11,50 +11,43 @@ use Model\Managers\FollowManager;
 class EventController extends AbstractController implements ControllerInterface {
 
     public function index() {
-
+        // Crée une instance du gestionnaire d'événements
         $eventManager = new EventManager();
-
+        // Crée une instance du gestionnaire de participants
         $participantManager = new ParticipantManager();
-
+        // Définit le nombre maximum d'événements à afficher par page
         $limit = 8; 
-
+        // Récupère le numéro de la page actuelle depuis l'URL (paramètre 'page'), sinon définit la page à 1 par défaut
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
-        
+        // Récupère le nombre total d'événements dans la base de données
         $totalEvents = $eventManager->totalEvents();
-        
-        // Calcul du nombre total de pages
+        // Calcule le nombre total de pages en divisant le nombre total d'événements par la limite (arrondi à l'entier supérieur)
         $totalPages = ceil($totalEvents / $limit);
-    
-        // Si la page est au-delà du nombre total de pages, on la redirige à la dernière page
+        // Si la page demandée est supérieure au nombre total de pages, redirige l'utilisateur vers la dernière page
         if ($page > $totalPages) {
             $page = $totalPages;
         }
-        
-        // Récupérer les événements pour la page actuelle
+        // Calcule l'index de départ pour récupérer les événements de la page actuelle
         $start = ($page - 1) * $limit;
-
+        // Récupère les événements pour la page actuelle à partir de la méthode findAllEvents et les convertit en tableau
         $events = iterator_to_array($eventManager->findAllEvents($start, $limit));
-
+        // Initialise un tableau pour stocker les informations sur le nombre de participants et la limite pour chaque événement
         $countParticipants = [];
-
+        // Parcourt chaque événement récupéré pour calculer et stocker les informations nécessaires
         foreach($events as $event){
-
+            // Récupère la limite maximale de participants pour l'événement courant
             $limitPlace = $eventManager->limitMax($event->getId());
-            
+            // Récupère le nombre actuel de participants à l'événement
             $nombreParticipants = $participantManager->countNumberParticipants($event->getId());
-
+            // Vérifie si le nombre de participants a atteint ou dépassé la limite maximale
             $limitMax = ($nombreParticipants >= $limitPlace);
-
+            // Ajoute un tableau avec l'ID de l'événement, le nombre de participants et un indicateur de limite atteinte
             $countParticipants [] = [
-
-                'id' => $event->getId(),  
-                'numberParticipants' => $nombreParticipants,  
-                'limitMax' => $limitMax
-
+                'id' => $event->getId(),  // ID de l'événement
+                'numberParticipants' => $nombreParticipants,  // Nombre actuel de participants
+                'limitMax' => $limitMax  // Indicateur de si la limite maximale de participants est atteinte
             ];
-        
         }
-        
         return [
             "view" => VIEW_DIR . "reseauSocial/listEvents.php",
             "meta_description" => "Liste des évènements",
@@ -62,8 +55,7 @@ class EventController extends AbstractController implements ControllerInterface 
                 "events" => $events,
                 "totalPages" => $totalPages,
                 "page" => $page,
-                "countParticipants" => $countParticipants
-                
+                "countParticipants" => $countParticipants   
             ]
         ];
     }
@@ -198,37 +190,47 @@ class EventController extends AbstractController implements ControllerInterface 
         ];
     }
 
+   // Fonction pour afficher les détails d'un événement, avec l'ID de l'événement passé en paramètre
     public function detailEvents($eventId){
 
+        // Récupère l'ID de l'utilisateur actuellement connecté à partir de la session
         $userId = Session::getUser()->getId();
 
+        // Crée une instance du gestionnaire d'événements
         $eventManager = new EventManager();
 
+        // Crée une instance du gestionnaire de participants
         $participantManager = new ParticipantManager();
 
-        // Créer une nouvelle instance de FollowManager 
+        // Crée une instance du gestionnaire de suivi (FollowManager) pour gérer les relations de suivi entre utilisateurs
         $followManager = new FollowManager();
 
+        // Récupère les détails de l'événement à partir de son ID
         $event = $eventManager->findOneById($eventId);
 
+        // Vérifie si l'utilisateur est déjà inscrit à cet événement en utilisant la méthode 'isParticipant'
         if ($isParticipant = $participantManager->isParticipant($eventId, $userId)) {
-             
+            // L'action ici peut être laissée vide ou pourrait contenir des traitements supplémentaires si l'utilisateur est déjà inscrit
         }
-        
+
+        // Récupère la capacité maximale de participants pour cet événement
         $limit = $eventManager->limitMax($eventId);
 
+        // Récupère le nombre actuel de participants inscrits à l'événement
         $nombreParticipants = $participantManager->countNumberParticipants($eventId);
 
+        // Vérifie si le nombre de participants a atteint ou dépassé la capacité maximale de l'événement
         $limitMax = ($nombreParticipants >= $limit);
 
-        // Vérifier si l'utilisateur connecté suit déjà cet utilisateur
+        // Vérifie si l'utilisateur connecté suit déjà l'utilisateur qui a créé l'événement
         $isFollowing = $followManager->following($userId, $event->getUser()->getId());
 
+        // Si l'utilisateur suit déjà l'organisateur de l'événement et que l'action demandée n'est pas déjà 'detailEvents', on redirige vers les détails de l'événement
         if ($isFollowing && $_GET['action'] !== 'detailEvents') {
+            // Redirige vers la page des détails de l'événement, ajoutant l'ID de l'événement et l'action 'detailEvents'
             $this->redirectTo("event", "event&action=detailEvents&id=$eventId");
-            return;
+            return; // Arrête l'exécution du code suivant si la redirection a eu lieu
         }
-        
 
         return [
 
@@ -249,54 +251,45 @@ class EventController extends AbstractController implements ControllerInterface 
     } 
     
     public function addParticipant($id) {
-
+        // Récupère l'ID de l'utilisateur actuellement connecté à partir de la session
         $userId = Session::getUser()->getId();
-
-        $eventId = $_GET['id'];
-
+        // Récupère l'ID de l'événement depuis le paramètre 'id' dans l'URL
+        $eventId = htmlspecialchars($_GET['id']);
+        // Crée une instance du gestionnaire d'événements
         $eventManager = new EventManager();
-
+        // Crée une instance du gestionnaire de participants
         $participantManager = new ParticipantManager();
-
-        // Si l'utilisateur est déjà inscrit, on redirige
+        // Vérifie si l'utilisateur est déjà inscrit à l'événement en appelant la méthode isParticipant
         if ($isParticipant = $participantManager->isParticipant($eventId, $userId)) {
-
-            SESSION::addFlash('error', "Vous participé déja à cet évènement !");
-    
+            // Si l'utilisateur est déjà inscrit, on ajoute un message d'erreur à la session
+            SESSION::addFlash('error', "Vous participez déjà à cet évènement !");
+            // Puis, on redirige l'utilisateur vers la page des détails de l'événement
             $this->redirectTo("event", "detailEvents&id=$eventId");
-             
         }
-
+        // Récupère la capacité maximale de participants pour l'événement courant
         $limitMax = $eventManager->limitMax($eventId);
-
+        // Récupère le nombre actuel de participants à cet événement
         $nombreParticipants = $participantManager->countNumberParticipants($eventId, $userId);
-
-        // Si la capacité est atteinte, on redirige 
+        // Vérifie si le nombre de participants a atteint ou dépasse la capacité maximale
         if ($nombreParticipants >= $limitMax) {
-
+            // Si l'événement est complet, on ajoute un message d'erreur à la session
             SESSION::addFlash('error', "Cet évènement est complet !");
-
+            // Puis, on redirige l'utilisateur vers la page des détails de l'événement
             $this->redirectTo("event", "detailEvents&id=$eventId");
-
         }
-
+        // Prépare les données nécessaires à l'ajout de l'utilisateur à la liste des participants
         $data = ['event_id' => $eventId, 'user_id' => $userId];
-
+        // Ajoute l'utilisateur à la liste des participants pour cet événement
         $participantManager->add($data);
-
-        SESSION::addFlash('success', "Votre inscription a bien été effectué !");
-
+        // Ajoute un message de succès à la session pour informer l'utilisateur de son inscription
+        SESSION::addFlash('success', "Votre inscription a bien été effectuée !");
+        // Enfin, on redirige l'utilisateur vers la page des détails de l'événement
         $this->redirectTo("event", "detailEvents&id=$eventId");
-            
-    
-        return [
 
+        return [
             "view" => VIEW_DIR."reseauSocial/detailEvent.php",
-            "meta_description" => "Ajouter participants"
-            
-            
-        ];
-        
+            "meta_description" => "Ajouter participants"   
+        ]; 
     }  
     
     public function deleteParticipant($event_id) {

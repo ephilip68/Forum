@@ -13,16 +13,18 @@ include VIEW_DIR."template/nav.php";
     <div class="categoryContent">
         <div class="categoryTitle">
             <div class="underTitle">
-                <span class="populaire">POPULAIRE</span>
                 <span class="categories">CATEGORIES</span>
             </div>
-            <div class="addTopic">
-                <button class="btnCategorie" type="button" uk-toggle="target: #modal-example6">
-                    <a href="#"></a>
-                    <i class="fa-solid fa-plus"></i>
-                    CATEGORIE
-                </button>
-            </div>
+            <?php if (App\Session::isAdmin()){ ?>
+                <div class="addTopic">
+                    <button class="btnCategorie" type="button" uk-toggle="target: #modal-example6">
+                        <a href="#"></a>
+                        <i class="fa-solid fa-plus"></i>
+                        CATEGORIE
+                    </button>
+                </div>
+            <?php } else { ?>
+            <?php } ?>
         </div>
         
         <!-- Modal -->
@@ -77,7 +79,7 @@ include VIEW_DIR."template/nav.php";
                         <span class="title_info">TOPICS</span>
                         <?php foreach ($countTopic as $topic){
 
-                        if ($category->getId() == $topic['id_category']){?>
+                         if ($category->getId() == $topic['id_category']){?>
 
                         <span class="last_info"><?= $topic['COUNT(*)'] ?></span> 
                     </div>
@@ -101,7 +103,10 @@ include VIEW_DIR."template/nav.php";
                     <?php } ?>
                     </div>
                 </div>
-                <a href="index.php?ctrl=forum&action=deleteCategory&id=<?= $category->getId() ?>"><i class="fa-solid fa-xmark close"></i></a>
+                <?php if (App\Session::isAdmin()){ ?>
+                    <a href="index.php?ctrl=forum&action=deleteCategory&id=<?= $category->getId() ?>"><i class="fa-solid fa-xmark close"></i></a>
+                <?php } else { ?>
+                <?php } ?>
             </div>        
         <?php } ?>
         </div>

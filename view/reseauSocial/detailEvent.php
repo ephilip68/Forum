@@ -95,16 +95,24 @@
             </div>
             <div class="detailButton">
                 <div class="detailBtn">
+                    <!-- Vérifie si l'utilisateur connecté est le créateur de l'événement -->
                     <?php if(App\Session::getUser() == $event->getUser()){ ?>
-                        
+                        <!-- Si l'utilisateur est le créateur de l'événement, il n'y a pas de bouton, donc aucune action n'est faite ici -->
                     <?php }elseif($isParticipant) { ?>
-                            <a class="participant-btn" href="index.php?ctrl=event&action=deleteParticipant&id=<?= $event->getId() ?>"><i class="fa-solid fa-circle-check"></i>Je participe</a>
+                        <!-- Si l'utilisateur est déjà inscrit à l'événement, afficher un bouton pour annuler sa participation -->
+                        <a class="participant-btn" href="index.php?ctrl=event&action=deleteParticipant&id=<?= $event->getId() ?>">
+                            <!-- Icône pour signifier que l'utilisateur participe déjà à l'événement -->
+                            <i class="fa-solid fa-circle-check"></i>Je participe
+                        </a>
                     <?php } else { ?>
-                        <a class="participant-btn2" href="index.php?ctrl=event&action=addParticipant&id=<?= $event->getId() ?>"><i class="fa-regular fa-circle-check"></i>Je participe</a>
+                        <!-- Si l'utilisateur n'est pas encore inscrit, afficher un bouton pour s'inscrire à l'événement -->
+                        <a class="participant-btn2" href="index.php?ctrl=event&action=addParticipant&id=<?= $event->getId() ?>">
+                            <!-- Icône pour signifier que l'utilisateur peut s'inscrire à l'événement -->
+                            <i class="fa-regular fa-circle-check"></i>Je participe
+                        </a>
                     <?php } ?>
-                    
-                    <div class="sharethis-inline-share-buttons"></div>
-                </div>
+                <!-- Intégration d'un widget de partage social -->
+                <div class="sharethis-inline-share-buttons"></div>
             </div>
             <div class="timeline-detail">
                 <div class="timeline-left-detail">

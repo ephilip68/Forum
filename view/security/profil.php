@@ -61,8 +61,11 @@
                         <img src="public/upload/<?=$user->getAvatar()?>" alt="photo de profil" class="profile-img">
                     <?php }else{ ?>
                         <img src="public/upload/default-avatar.webp" alt="photo de profil par défaut" class="profile-img">
-                    <?php } ?>      
-                    <a href="#modal-avatar" uk-toggle ><i class="fa-solid fa-camera"></i></a>
+                    <?php } ?> 
+                    <?php if (App\Session::getUser()->getId() != $user->getId()) { ?>     
+                    <?php }else{ ?>
+                        <a href="#modal-avatar" uk-toggle ><i class="fa-solid fa-camera"></i></a>
+                    <?php } ?> 
                     <div class="profile-name"><?=ucfirst($user->getNickName())?></div>
                     <div class="containerPublication">
                         <!-- Modal -->
@@ -170,11 +173,6 @@
                                 <span uk-icon="icon: social"></span>
                                 Inscrit le 
                                 <a href="#"><?=$user->getFormattedDateInscription()?></a>
-                            </div>
-                            <div class="info-item">
-                                <span uk-icon="icon: mail"></span>
-                                Email 
-                                <a href="#"><?=ucfirst($user->getEmail())?></a> 
                             </div>
                         </div>
                     </div>
@@ -312,7 +310,7 @@
                                         <div class="album-dates"><?=$publication->getFormattedPublicationDate()?></div>
                                     </div>
                                     <div class="home-option">
-                                        <?php if(App\Session::getUser()->getId() == $publication->getUser()->getId()) { ?>
+                                        <?php if(App\Session::getUser()->getId() && App\Session::isAdmin() == $publication->getUser()->getId()) { ?>
                                             <button type="button" class="options-btn"><span uk-icon="icon: more"></span></button>
                                             <a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?> "><i class="fa-solid fa-xmark home-close"></i></a>
                                         <?php }else{ ?>

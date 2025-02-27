@@ -166,7 +166,7 @@
                                         <div class="album-date-home"><?= htmlspecialchars($publication->getFormattedPublicationDate()) ?></div>
                                     </div>
                                     <div class="home-option">
-                                        <?php if(App\Session::getUser()->getId() == $publication->getUser()->getId()) { ?>
+                                        <?php if(App\Session::getUser()->getId() && App\Session::isAdmin() == $publication->getUser()->getId()) { ?>
                                             <button type="button" class="options-btn"><span uk-icon="icon: more"></span></button>
                                             <a href="index.php?ctrl=publication&action=deletePublication&id=<?= $publication->getId() ?>"><i class="fa-solid fa-xmark home-close"></i></a>
                                         <?php }else{ ?>
