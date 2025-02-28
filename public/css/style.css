@@ -1671,7 +1671,7 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 
 .discussion-users{display: flex;justify-content: left;width: 100%;gap: 10px;}
 
-.discussion-users p{color: white;font-size: 1em;font-weight: 500;background: #151C27;text-align: right;border-radius: 25px;padding: .5em 1em;margin: 0;}
+.discussion-users p{color: white;font-size: 1em;font-weight: 500;background: #74D4FD;text-align: right;border-radius: 25px;padding: .5em 1em;margin: 0;}
 
 .messages-users small{color: #151C27;font-size: .8em;font-weight: 300;text-align: left;width: 100%;padding: .5em 0 0 4em;}
 
