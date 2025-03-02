@@ -814,25 +814,19 @@ form.formulaire2 {
     width: 90%;
     display: inline-flex;
     justify-content: space-between;
+    align-content: center;
 
 }
 
-.menu i {
+.menu i {font-size: 1.1em;color: #000;padding-right: 1em;gap: 10px;display: flex;}
 
-    font-size: 1.1em;
-    color: #000;
-    padding-right: 1em;
+.menu i span{font-family: "Inter", sans-serif;font-weight: 600;}
 
-}
+.menu i:hover {color: white;}
 
-.menu a {
+.menu a {color: #000;}
 
-    color: #000;
-    text-decoration: none;
-    font-weight: 600;
-
-
-}
+.menu a:hover {color: white;text-decoration: none;}
 
 .menuList {
 
@@ -1213,6 +1207,8 @@ nav {
 .action-reactions{display: flex;width: 90%;padding-top: .5em;justify-content: space-between;}
 
 .action-reactions a{font-size: 1em;color: #151C27;}
+
+.like button{background: none;border: none;cursor: pointer;}
 
 .action-reactions i{font-size: 1.2em;padding-right: 10px;}
 
@@ -1671,7 +1667,7 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 
 .discussion-users{display: flex;justify-content: left;width: 100%;gap: 10px;}
 
-.discussion-users p{color: white;font-size: 1em;font-weight: 500;background: #151C27;text-align: right;border-radius: 25px;padding: .5em 1em;margin: 0;}
+.discussion-users p{color: white;font-size: 1em;font-weight: 500;background: #74D4FD;text-align: right;border-radius: 25px;padding: .5em 1em;margin: 0;}
 
 .messages-users small{color: #151C27;font-size: .8em;font-weight: 300;text-align: left;width: 100%;padding: .5em 0 0 4em;}
 
@@ -1686,8 +1682,6 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 .send_message form button:hover{background: #151C27;}
 
 .send_message form button i{color: white;}
-
-
 
 /*===================================================================== FORUM ===========================================================================*/
 
@@ -1888,6 +1882,7 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 }
 
 .cardCategoryTitle figure { width: 100%; margin: 0;}
+
 .cardCategoryTitle img {object-fit: cover;object-position: center;}
 
 .cardCategoryTitle p {
@@ -2211,8 +2206,183 @@ h2 {font-family: "Inter", sans-serif;font-weight: 600;font-size: 1.5em;text-alig
 
 .album-ucomment-date{color: #151C27;font-weight: 400;font-size: .8em;}
 
+/***************************************************************** RESPONSE DESIGN **************************************************************************/
 
+@media screen and (min-width:750px) and (max-width:1280px){
 
+    .connexion {
+
+        height: 100vh;
+        font-family: "Inter", sans-serif;
+        font-weight: 300;
+        background-color: #011A46;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    
+    }
+
+    .grid2 {
+        width: 100%;
+        height: 90vh;
+        display: flex;
+        padding: .5em 0 .5em 0;
+    }
+    
+    /********************************* Grid Left ***************************/
+    
+    .left {
+        width: 50%;
+        height: 100%;
+        
+    }
+    
+    .left-logo  {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        align-content: center;
+       
+        
+    }
+    .left-logo img {
+        width: 100%;  
+    }
+    
+    /******************************** Grid Right *************************/
+    
+    .right {width: 50%;height: 100%;margin: 1em 0;}
+    
+    /****************** Title ******************/
+    
+    .welcomeTitle {width: 85%;}
+    
+    .welcomeTitle h1 {font-size: 2.5em;}
+    
+    .titleInscription h3 {width: 80%;font-size: 1.5em;margin-top: 0;}
+    
+    .titleInscription h4 { width: 100%;margin-top: 1em;}
+    
+    /****************** S'inscrire avec Google ******************/
+    
+    .btnInscription {width: 60%;margin: 1em 0 .2em 0;}
+    
+    /****************** Divider ******************/
+    
+    .separation2 {width: 60%;margin-top: .5em;}
+    
+    .separation2 span {font-size: .8em;}
+    
+    .divider5 {width: 40%}
+    
+    .divider6 {width: 40%;}
+    
+    /****************** Button Sign in / Login ******************/
+    
+    .formInscription { width: 60%;}
+    
+    .submit2 {margin-top: .5em;}
+    
+    .submit3 {margin-top: .5em;}
+    
+    /****************** Modal ******************/
+    
+    .uk-modal-dialog {top: 0%;border-radius: 15px;box-shadow: 0px 7px 7px rgba(0, 0, 0, .1);}
+
+    .main-container-home {width: 68%;}
+
+    #card {width: 27%;position: absolute;position: fixed;top: 11%;right: 0;display: flex;flex-direction: column;align-items: center;gap: 30px;}
+
+    .cardCategory {margin: 1em 2em;padding: 2.5em 1.5em 0 1.5em;}
+}
+
+@media screen and (max-width:749px){
+
+    /*********** Logo ***********/
+
+    .logoPage {width: 25%;margin-left: 0;}
+
+    /*********** Menu ***********/
+
+    .center {
+        display: none;
+    }
+
+    /*********** Show Nav Menu Burger ***********/
+
+    nav {
+
+        position: fixed;
+        top: 64px;
+        right: 0;
+        width: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        
+
+    }
+
+    .show-nav nav {width: 100%;height: 100%;z-index: 2;}
+
+    .menuBurger{margin-top: 20px; display: flex;flex-direction: column;align-items: center; font-size: 1.5em;gap: 30px;}
+
+    .menuBurger i{padding-right: .5em;}
+
+    /*************** ALERT **************/
+
+    .alert{position: absolute;height: 50px;width: 100%;}
+
+    /****************** NAV ****************/
+
+    /*********** Nav Menu ***********/
+
+    .left-side-home {display: none;}
+
+    /*********** Publication ***********/
+
+    .main {width: 100%;z-index: 0;}
+
+    .main-container-home {width: 100%;}
+
+    .timeline-home {margin-top: 10px;}
+
+    .timeline-center {width: 100%;}
+
+    .box-box {border-radius: 0;width: 100%;margin-bottom: 10px;}
+
+    .status { height: 80px;padding: 1em;}
+
+    /*********** Publication Divider ***********/
+
+    .divider2 { border-bottom: none;}
+
+    /*********** Publication Icone ***********/
+
+    .publicationIcone {display: none;}
+
+    /*********** Fil d'Actualité ***********/
+
+    .home-option{width: 12%;display: flex;justify-content: space-between;}
+
+    .home-option span{font-size: 1.5em;}
+
+    .home-close{font-size: 1.5em;}
+
+    .album-detail-home {width: calc(100% - 110px);}
+
+    .album-title-home a{font-size: 1em;}
+
+    .album-date-home{font-size: .8em;}
+
+    /*********** Card ***********/
+
+    #card {display: none;}
+
+}
 
 
 

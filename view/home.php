@@ -1,4 +1,22 @@
-<body class="connexion"> 
+<body class="connexion">
+    <div class="alert">
+        <!-- c'est ici que les messages (erreur ou succès) s'affichent-->
+        <?php 
+            $successMessage = App\Session::getFlash("success");
+            $errorMessage = App\Session::getFlash("error");
+            if($successMessage) { ?>
+            <div class="uk-alert-primary message" uk-alert>
+                <a href class="uk-alert-close" uk-close></a>
+                <p><?= $successMessage ?></p>
+            </div>
+        <?php }elseif($errorMessage){ ?>
+            <div class="uk-alert-danger message" uk-alert>
+                <a href class="uk-alert-close" uk-close></a>
+                <p><?= $errorMessage ?></p>
+            </div>
+        <?php }else{ ?>
+        <?php } ?>
+    </div> 
     <div class="grid2">
         <div class="left">
             <figure class="left-logo">
