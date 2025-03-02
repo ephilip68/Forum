@@ -110,7 +110,7 @@ class PostController extends AbstractController implements ControllerInterface{
         // $creationDate = filter_input(INPUT_POST, "creationDate", FILTER_SANITIZE_NUMBER_INT);
         // $closed = filter_input(INPUT_POST, "closed", FILTER_SANITIZE_NUMBER_INT);
         
-        // On récupère l'ID du topic à partir de l'URL, en utilisant $_GET['id']
+        // On récupère l'ID du post à partir de l'URL, en utilisant $_GET['id']
         // Cela permet d'ajouter le post au topic spécifique
         $postId = $_GET['id'];
 
@@ -131,7 +131,7 @@ class PostController extends AbstractController implements ControllerInterface{
 
             SESSION::addFlash('success', "Votre commentaire a bien été ajouté !");
 
-            $this->redirectTo("post", "listPostsByTopic&id=$topic");
+            $this->redirectTo("post", "listPostsByTopic&id=$postId");
 
                 return [
 
@@ -153,7 +153,7 @@ class PostController extends AbstractController implements ControllerInterface{
         // Le filtre FILTER_SANITIZE_FULL_SPECIAL_CHARS supprime ou encode les caractères spéciaux et les balises HTML pour prévenir les injections de code (XSS)
         $text = filter_input(INPUT_POST, "text", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         
-        // On récupère l'ID du topic à partir de l'URL, en utilisant $_GET['id']
+        // On récupère l'ID du commentaire à partir de l'URL, en utilisant $_GET['id']
         $commentId = $_GET['id'];
 
         // Récupérer l'utilisateur connecté
@@ -173,7 +173,7 @@ class PostController extends AbstractController implements ControllerInterface{
 
             SESSION::addFlash('success', "Votre commentaire a bien été ajouté !");
 
-            $this->redirectTo("post", "listPostsByTopic&id=$topicId");
+            $this->redirectTo("post", "listPostsByTopic&id=$commentId");
 
                 return [
 

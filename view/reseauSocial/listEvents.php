@@ -34,7 +34,7 @@
                         <h2 style="font-weight:700">Evènements</h2>
                         <a href="index.php?ctrl=event&action=index&page=<?= $page - 1; ?>"><li class="listContent"><i class="fa-solid fa-calendar"></i><span>Accueil</span></li></a>
                         <li class="listContent"><i class="fa-solid fa-user"></i><span>Vos évènements</span></li>
-                        <a href="#modal-event" uk-toggle class="newEvent"><i class="fa-solid fa-plus"></i>Créer un évnement</a>
+                        <a href="#modal-event" uk-toggle class="newEvent"><i class="fa-solid fa-plus"></i>Créer un évènement</a>
                     </div>
                     <div class="footerHome">
                         <a class="" href="#">A Propos</a> - 
